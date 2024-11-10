@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:controller="com.example.libarymanagementsystem.StudentController"
+            xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <HBox spacing="10" padding="10">
+            <TextField fx:id="searchField" promptText="Nhập tên sách hoặc tác giả..." />
+            <Button text="Tìm kiếm" onAction="#handleSearch" />
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="booksTable">
+            <columns>
+                <TableColumn fx:id="titleColumn" text="Tên sách" />
+                <TableColumn fx:id="authorColumn" text="Tác giả" />
+                <TableColumn fx:id="availableColumn" text="Số lượng hiện còn" />
+                <TableColumn fx:id="imageColumn" text="Ảnh" />
+            </columns>
+        </TableView>
+    </center>
+    <bottom>
+        <HBox spacing="10" padding="10">
+            <Button text="Mượn sách" onAction="#borrowBook" />
+            <Button text="Trả sách" onAction="#returnBook" />
+        </HBox>
+    </bottom>
+</BorderPane>
