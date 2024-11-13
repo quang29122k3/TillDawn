@@ -10,23 +10,27 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="685.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.LoginController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="685.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.LoginController">
     <children>
         <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0">
             <children>
-                <AnchorPane layoutY="-1.0" prefHeight="486.0" prefWidth="328.0" styleClass="left-form" stylesheets="@loginDesign.css">
-
-                    <children>
-                        <Label layoutX="38.0" layoutY="230.0" text="Library Management System" textFill="#ece8e8">
+                <AnchorPane layoutY="-1.0" prefHeight="486.0" prefWidth="340.0" styleClass="left-form" stylesheets="@loginDesign.css">
+               <children>
+                        <Label layoutX="36.0" layoutY="147.0" text="Library Management System" textAlignment="CENTER" textFill="#ece8e8">
                             <font>
-                                <Font name="Tahoma" size="20.0" />
+                                <Font name="Times New Roman Bold Italic" size="21.0" />
                             </font>
                         </Label>
-                    </children>
+                  <Label layoutX="138.0" layoutY="452.0" prefHeight="20.0" prefWidth="62.0" text="TillDawn" textFill="#f2eaea">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
                 </AnchorPane>
-                <AnchorPane layoutX="328.0" layoutY="-1.0" prefHeight="486.0" prefWidth="358.0" AnchorPane.rightAnchor="-0.7999999999999545">
+                <AnchorPane layoutX="328.0" layoutY="-1.0" prefHeight="486.0" prefWidth="364.0" AnchorPane.rightAnchor="-1.0">
                     <children>
-                        <Label layoutX="149.0" layoutY="170.0" text="Welcome!" textFill="#298e61">
+                        <Label layoutX="145.0" layoutY="171.0" text="Welcome!" textFill="#298e61">
                             <font>
                                 <Font name="Tahoma Bold" size="19.0" />
                             </font>
@@ -34,16 +38,16 @@
                         <TextField fx:id="username" layoutX="82.0" layoutY="212.0" onAction="#loginAdmin" onKeyTyped="#numbersOnly" prefHeight="30.0" prefWidth="220.0" promptText="Username" />
                         <PasswordField fx:id="password" layoutX="82.0" layoutY="262.0" onAction="#loginAdmin" onKeyTyped="#numbersOnly" prefHeight="30.0" prefWidth="220.0" promptText="Password" />
                         <Button fx:id="loginBtr" layoutX="83.0" layoutY="323.0" mnemonicParsing="false" onAction="#loginAdmin" prefHeight="40.0" prefWidth="220.0" text="Login" />
-                        <ImageView fitHeight="122.0" fitWidth="201.0" layoutX="106.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@pexels-pixabay-159866.jpg" />
-                            </image>
-                        </ImageView>
                         <Button fx:id="close" layoutX="293.0" layoutY="14.0" mnemonicParsing="false" onAction="#close" prefHeight="26.0" prefWidth="24.0" text="X" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Button>
+                        <ImageView fitHeight="122.0" fitWidth="201.0" layoutX="131.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@pngtree-open-book-icon-vector-illustration-clipart-design-png-image_9031608.png" />
+                            </image>
+                        </ImageView>
                     </children>
                 </AnchorPane>
             </children>

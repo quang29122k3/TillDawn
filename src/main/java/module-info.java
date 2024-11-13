@@ -5,6 +5,7 @@ module com.example.libarymanagementsystem {
     requires com.dlsc.formsfx;
     requires java.sql;
     requires fontawesomefx;
+    requires mysql.connector.java;
 
     opens com.example.libarymanagementsystem to javafx.fxml;
     exports com.example.libarymanagementsystem;

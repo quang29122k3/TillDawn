@@ -1,122 +1,234 @@
 package com.example.libarymanagementsystem;
 
+import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.time.LocalDate;
 
 public class StudentController {
+
     @FXML
     private TextField searchField;
     @FXML
-    private TableView<Book> booksTable;
+    private Button searchButton;
     @FXML
-    private TableColumn<Book, String> titleColumn;
+    private Button borrowButton;
     @FXML
-    private TableColumn<Book, String> authorColumn;
+    private Button returnButton;
     @FXML
-    private TableColumn<Book, Integer> availableColumn;
+    private TableView<Book> bookTable;
     @FXML
-    private TableColumn<Book, ImageView> imageColumn;
+    private TableColumn<Book, String> bookTitleColumn;
+    @FXML
+    private TableColumn<Book, String> bookAuthorColumn;
+    @FXML
+    private TableColumn<Book, Integer> bookAvailableColumn;
+    @FXML
+    private TableView<Book> borrowedBooksTable;
+    @FXML
+    private TableColumn<Book, String> borrowedBookTitleColumn;
+    @FXML
+    private TableColumn<Book, String> borrowedBookAuthorColumn;
+    @FXML
+    private ImageView bookImage;
+    @FXML
+    private ImageView borrowedBookImage;
+    @FXML
+    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
 
-    private ObservableList<Book> booksData = FXCollections.observableArrayList();
+    private ObservableList<Book> availableBooks = FXCollections.observableArrayList();
+    private ObservableList<Book> borrowedBooks = FXCollections.observableArrayList();
 
-    // Hàm khởi tạo các cột cho bảng sách
     @FXML
     public void initialize() {
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
-        availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
-        imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
-        booksTable.setItems(booksData);
+        // Cấu hình cột cho bảng sách có sẵn
+        bookTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        bookAuthorColumn.setCellValueFactory(cellData -> cellData.getValue().authorProperty());
+        bookAvailableColumn.setCellValueFactory(cellData -> cellData.getValue().availableProperty().asObject());
+
+        // Cấu hình cột cho bảng sách đang mượn
+        borrowedBookTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        borrowedBookAuthorColumn.setCellValueFactory(cellData -> cellData.getValue().authorProperty());
+        borrowedBookBorrowDateColumn.setCellValueFactory(cellData -> cellData.getValue().borrowDateProperty());
+
+        // Gán danh sách vào bảng
+        bookTable.setItems(availableBooks);
+        borrowedBooksTable.setItems(borrowedBooks);
+
+        // Tải dữ liệu ban đầu
+        loadAvailableBooks();
+        loadBorrowedBooks();
+
+        // Xử lý sự kiện khi chọn một cuốn sách từ bảng
+        bookTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedBook) -> {
+            if (selectedBook != null && selectedBook.getImage() != null) {
+                bookImage.setImage(new Image(selectedBook.getImage()));
+            } else {
+                bookImage.setImage(null); // Không có ảnh
+            }
+        });
+
+        // Xử lý sự kiện khi chọn một cuốn sách từ bảng borrowedBooksTable
+        borrowedBooksTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedBorrowedBook) -> {
+            if (selectedBorrowedBook != null && selectedBorrowedBook.getImage() != null) {
+                borrowedBookImage.setImage(new Image(selectedBorrowedBook.getImage()));
+            } else {
+                borrowedBookImage.setImage(null); // Không có ảnh
+            }
+        });
     }
 
-    // Hàm tìm kiếm sách
-    @FXML
-    private void handleSearch() {
-        String keyword = searchField.getText();
-        booksData.clear();
+    private void loadAvailableBooks() {
+        availableBooks.clear();
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             Statement stmt = conn.createStatement()) {
+            String query = "SELECT * FROM books WHERE available > 0";
+            ResultSet rs = stmt.executeQuery(query);
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/tilldawn", "root", "password")) {
-            String query = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, "%" + keyword + "%");
-            statement.setString(2, "%" + keyword + "%");
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String title = resultSet.getString("title");
-                String author = resultSet.getString("author");
-                int available = resultSet.getInt("available");
-                String imagePath = resultSet.getString("image"); // Đường dẫn ảnh từ CSDL
-
-                ImageView imageView = new ImageView(new Image(getClass().getResource(imagePath).toExternalForm()));
-                imageView.setFitHeight(50);
-                imageView.setFitWidth(50);
-
-                booksData.add(new Book(title, author, available, imageView));
+            while (rs.next()) {
+                Book book = new Book(rs.getInt("id"), rs.getString("title"), rs.getString("author"),
+                        rs.getInt("available"), rs.getString("image"));
+                availableBooks.add(book);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // Hàm mượn sách
-    @FXML
-    private void borrowBook() {
-        Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
-        if (selectedBook != null && selectedBook.getAvailable() > 0) {
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/tilldawn", "root", "password")) {
-                String updateBookQuery = "UPDATE books SET available = available - 1 WHERE title = ?";
-                PreparedStatement updateBookStmt = connection.prepareStatement(updateBookQuery);
-                updateBookStmt.setString(1, selectedBook.getTitle());
-                updateBookStmt.executeUpdate();
+    private void loadBorrowedBooks() {
+        borrowedBooks.clear();
+        String personId = GetData.username; // Sử dụng mã người dùng hiện tại
 
-                String insertLoanQuery = "INSERT INTO loans (person_id, book_id, borrow_date) VALUES (?, ?, CURDATE())";
-                PreparedStatement insertLoanStmt = connection.prepareStatement(insertLoanQuery);
-                insertLoanStmt.setString(1, "student_id"); // ID sinh viên (lấy từ session hoặc thông tin đăng nhập)
-                insertLoanStmt.setInt(2, selectedBook.getId());
-                insertLoanStmt.executeUpdate();
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT books.id, books.title, books.author, books.image, loans.borrow_date " +
+                             "FROM loans INNER JOIN books ON loans.book_id = books.id " +
+                             "WHERE loans.person_id = ? AND loans.returned = 0")) {
+            stmt.setString(1, personId);
+            ResultSet rs = stmt.executeQuery();
 
-                selectedBook.setAvailable(selectedBook.getAvailable() - 1);
-                booksTable.refresh();
-            } catch (Exception e) {
-                e.printStackTrace();
+            while (rs.next()) {
+                Book book = new Book(rs.getInt("id"), rs.getString("title"), rs.getString("author"),
+                        0, rs.getString("image"));
+                book.setBorrowDate(rs.getDate("borrow_date").toLocalDate()); // Thiết lập thời gian mượn
+                borrowedBooks.add(book);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-//    // Hàm trả sách
-//    @FXML
-//    private void returnBook() {
-//        Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
-//        if (selectedBook != null) {
-//            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/tilldawn", "root", "password")) {
-//                String updateBookQuery = "UPDATE books SET available = available + 1 WHERE title = ?";
-//                PreparedStatement updateBookStmt = connection.prepareStatement(updateBookQuery);
-//                updateBookStmt.setString(1, selectedBook.getTitle());
-//                updateBookStmt.executeUpdate();
-//
-//                String updateLoanQuery = "UPDATE loans SET return_date = CURDATE(), returned = 1 WHERE book_id = ? AND person_id = ? AND returned = 0";
-//                PreparedStatement updateLoanStmt = connection.prepareStatement(updateLoanQuery);
-//                updateLoanStmt.setInt(1, selectedBook.getId());
-//                updateLoanStmt.setString(2, student.getId()); // ID sinh viên (lấy từ session hoặc thông tin đăng nhập)
-//                updateLoanStmt.executeUpdate();
-//
-//                selectedBook.setAvailable(selectedBook.getAvailable() + 1);
-//                booksTable.refresh();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    @FXML
+    private void handleSearchAction() {
+        String searchText = searchField.getText().trim();
+        if (searchText.isEmpty()) {
+            loadAvailableBooks();
+            return;
+        }
+
+        availableBooks.clear();
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT * FROM books WHERE (title LIKE ? OR author LIKE ?) AND available > 0")) {
+            stmt.setString(1, "%" + searchText + "%");
+            stmt.setString(2, "%" + searchText + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book(rs.getInt("id"), rs.getString("title"), rs.getString("author"),
+                        rs.getInt("available"), rs.getString("image"));
+                availableBooks.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleBorrowAction() {
+        Book selectedBook = bookTable.getSelectionModel().getSelectedItem();
+        if (selectedBook == null) {
+            showAlert("Chọn sách", "Vui lòng chọn sách để mượn.");
+            return;
+        }
+
+        String personId = GetData.username;
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection()) {
+            conn.setAutoCommit(false);
+
+            // Thêm bản ghi vào bảng loans
+            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, returned, status) VALUES (?, ?, ?, 0, 'borrowed')";
+            try (PreparedStatement stmt = conn.prepareStatement(loanQuery)) {
+                stmt.setString(1, personId);
+                stmt.setInt(2, selectedBook.getId());
+                stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                stmt.executeUpdate();
+            }
+
+            // Cập nhật số lượng sách
+            String updateBookQuery = "UPDATE books SET available = available - 1 WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
+                stmt.setInt(1, selectedBook.getId());
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+            loadAvailableBooks();
+            loadBorrowedBooks();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleReturnAction() {
+        Book selectedBook = borrowedBooksTable.getSelectionModel().getSelectedItem();
+        if (selectedBook == null) {
+            showAlert("Chọn sách", "Vui lòng chọn sách để trả.");
+            return;
+        }
+
+        String personId = GetData.username;
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection()) {
+            conn.setAutoCommit(false);
+
+            // Cập nhật bản ghi trong bảng loans
+            String updateLoanQuery = "UPDATE loans SET returned = 1, return_date = ?, status = 'returned' WHERE person_id = ? AND book_id = ? AND returned = 0";
+            try (PreparedStatement stmt = conn.prepareStatement(updateLoanQuery)) {
+                stmt.setDate(1, Date.valueOf(LocalDate.now()));
+                stmt.setString(2, personId);
+                stmt.setInt(3, selectedBook.getId());
+                stmt.executeUpdate();
+            }
+
+            // Cập nhật số lượng sách
+            String updateBookQuery = "UPDATE books SET available = available + 1 WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
+                stmt.setInt(1, selectedBook.getId());
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+            loadAvailableBooks();
+            loadBorrowedBooks();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
