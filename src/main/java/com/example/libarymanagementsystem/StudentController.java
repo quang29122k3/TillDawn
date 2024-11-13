@@ -58,12 +58,12 @@ public class StudentController {
                 String author = resultSet.getString("author");
                 int available = resultSet.getInt("available");
                 String imagePath = resultSet.getString("image"); // Đường dẫn ảnh từ CSDL
-
+                int totalCopies = resultSet.getInt("total_copies");
                 ImageView imageView = new ImageView(new Image(getClass().getResource(imagePath).toExternalForm()));
                 imageView.setFitHeight(50);
                 imageView.setFitWidth(50);
 
-                booksData.add(new Book(title, author, available, imageView));
+                booksData.add(new Book(title, author, available, imageView,totalCopies));
             }
         } catch (Exception e) {
             e.printStackTrace();

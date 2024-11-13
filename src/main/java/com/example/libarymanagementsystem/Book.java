@@ -8,12 +8,14 @@ public class Book {
     private String author;
     private int available;
     private ImageView imageView;
+    private int totalCopies;
 
-    public Book(String title, String author, int available, ImageView imageView) {
+    public Book(String title, String author, int available, ImageView imageView,int totalCopies) {
         this.title = title;
         this.author = author;
         this.available = available;
         this.imageView = imageView;
+        this.totalCopies = totalCopies;
     }
 
     public int getId() {
@@ -54,5 +56,13 @@ public class Book {
 
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
+    }
+
+    public int getTotalCopies() {
+        return totalCopies;
+    }
+
+    public void setTotalCopies(int totalCopies) {
+        this.totalCopies = totalCopies;
     }
 }
