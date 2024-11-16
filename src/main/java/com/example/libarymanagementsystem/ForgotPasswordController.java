@@ -91,7 +91,7 @@ public class ForgotPasswordController {
         props.put("mail.smtp.auth", "true"); // Enable authentication
         props.put("mail.smtp.starttls.enable", "true"); // Enable STARTTLS
 
-        // Tạo đối tượng Session
+        // Tạo Session
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(fromEmail, password);
