@@ -5,6 +5,9 @@ module com.example.libarymanagementsystem {
     requires com.dlsc.formsfx;
     requires java.sql;
     requires fontawesomefx;
+    requires java.desktop;
+    requires com.google.protobuf;
+    requires java.mail;
 
     opens com.example.libarymanagementsystem to javafx.fxml;
     exports com.example.libarymanagementsystem;

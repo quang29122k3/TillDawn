@@ -51,8 +51,8 @@ public class LoginController {
             connect = ConnectionJDBCUtils.getConnection();
             Alert alert;
             prepare = connect.prepareStatement(sql);
-            prepare.setString(1, username.getText());
-            prepare.setString(2, password.getText());
+            prepare.setString(1, username.getText().trim());
+            prepare.setString(2, password.getText().trim());
 
             result = prepare.executeQuery();
 
@@ -115,6 +115,38 @@ public class LoginController {
             e.printStackTrace();
         }
     }
+    public void openForgotPasswordForm() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("forgotPassword.fxml"));
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.setScene(scene);
+            stage.show();
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void openRegisterForm() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("register.fxml"));
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.setScene(scene);
+            stage.show();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void numbersOnly(KeyEvent event) {
 

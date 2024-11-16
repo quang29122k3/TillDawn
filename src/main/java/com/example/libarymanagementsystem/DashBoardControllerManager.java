@@ -15,6 +15,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.scene.input.MouseEvent;
+
 
 import java.io.IOException;
 import java.sql.*;
@@ -23,7 +26,8 @@ import java.util.Optional;
 public class DashBoardControllerManager {
     @FXML
     private Button minimizeButton;
-
+    @FXML
+    private Button logout;
     @FXML
     private Button closeButton;
 
@@ -86,6 +90,9 @@ public class DashBoardControllerManager {
         }
     }
 
+    private double x = 0;
+    private double y = 0;
+
     private void showForm(String formName) {
         availableBooks_form.setVisible(false);
         issue_form.setVisible(false);
@@ -125,6 +132,7 @@ public class DashBoardControllerManager {
 
     @FXML
     private Label managerName;
+
     @FXML
     public void initialize() {
         // Cấu hình các cột của TableView
@@ -141,9 +149,37 @@ public class DashBoardControllerManager {
         // Tải dữ liệu vào TableView
         loadBooks();
     }
+
     @FXML
-    private void handleLogout() {
-        // Xử lý đăng xuất
+    private void handleLogout(ActionEvent event) {
+        try {
+            if (event.getSource() == logout) {
+                Parent root = FXMLLoader.load(getClass().getResource("hello-view.fxml"));
+
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+
+                root.setOnMousePressed((MouseEvent e) -> {
+                    x = e.getSceneX();
+                    y = e.getSceneY();
+
+                });
+
+                root.setOnMouseDragged((MouseEvent e) -> {
+                    stage.setX(e.getScreenX() - x);
+                    stage.setY(e.getScreenY() - y);
+                });
+
+                stage.initStyle(StageStyle.TRANSPARENT);
+
+                stage.setScene(scene);
+                stage.show();
+
+                logout.getScene().getWindow().hide();
+            }
+        } catch ( Exception e){
+            e.printStackTrace();
+        }
     }
 
 

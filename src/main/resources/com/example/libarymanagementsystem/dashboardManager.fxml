@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane prefHeight="600.0" prefWidth="986.0" style="-fx-background-color: #f0f4f7;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23" fx:controller="com.example.libarymanagementsystem.DashBoardControllerManager">
+<AnchorPane prefHeight="600.0" prefWidth="986.0" style="-fx-background-color: #f0f4f7;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.DashBoardControllerManager">
     <children>
         <!-- Thanh trên cùng với nút thu nhỏ và đóng -->
         <HBox fx:id="topBar" alignment="CENTER_RIGHT" prefHeight="40.0" spacing="10.0" style="-fx-background-color: #263238;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -54,7 +54,7 @@
                                 <Button fx:id="returnBooks_btn" layoutX="29.0" layoutY="329.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Trả Sách" />
                                 <Button fx:id="savedBooks_btn" layoutX="29.0" layoutY="369.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Sách Đã Lưu" />
                                 <!-- Nút đăng xuất -->
-                                <Button fx:id="logout_btn" layoutX="29.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Đăng Xuất" />
+                                <Button fx:id="logout" layoutX="29.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Đăng Xuất" />
                                   <Label fx:id="managerName" layoutX="36.0" layoutY="174.0" style="-fx-font-size: 18px;" text="Tên Người Quản Lý" textFill="WHITE" />
                             </children>
                         </AnchorPane>
