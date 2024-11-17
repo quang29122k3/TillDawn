@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.libarymanagementsystem.BookFormController">
+    <children>
+        <VBox spacing="10.0" AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+            <children>
+                <GridPane hgap="10" vgap="10">
+                    <children>
+                        <Label text="Tiêu Đề:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="titleField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Tác Giả:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="authorField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Số Lượng Còn:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <TextField fx:id="availableField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                        <Label text="Tổng Số:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <TextField fx:id="totalCopiesField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                        <Label text="Hình Ảnh:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <HBox spacing="10" GridPane.rowIndex="4" GridPane.columnIndex="1">
+                            <children>
+                                <ImageView fx:id="imageView" fitWidth="100" fitHeight="150"/>
+                                <Button text="Chọn Ảnh" fx:id="chooseImageButton" onAction="#handleChooseImage"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </GridPane>
+                <HBox spacing="10.0" alignment="CENTER_RIGHT">
+                    <children>
+                        <Button text="Lưu" onAction="#handleSave"/>
+                        <Button text="Hủy" onAction="#handleCancel"/>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -1,14 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="986.0" style="-fx-background-color: #f0f4f7;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.DashBoardControllerManager">
     <children>
-        <TextField alignment="CENTER" layoutX="177.0" layoutY="132.0" prefHeight="158.0" prefWidth="218.0" text="dashBoard cho Manager">
-            <font>
-                <Font size="16.0" />
-            </font></TextField>
+        <!-- Thanh trên cùng với nút thu nhỏ và đóng -->
+        <HBox fx:id="topBar" alignment="CENTER_RIGHT" prefHeight="40.0" spacing="10.0" style="-fx-background-color: #263238;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label style="-fx-font-size: 16px;" text="Library Management" textFill="WHITE" HBox.hgrow="ALWAYS" />
+                <Button fx:id="minimizeButton" onAction="#minimizeWindow" style="-fx-background-color: transparent;">
+                    <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphName="MINUS" size="1.2em" />
+                    </graphic>
+                </Button>
+                <Button fx:id="closeButton" onAction="#closeWindow" style="-fx-background-color: transparent;">
+                    <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphName="CLOSE" size="1.2em" />
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+
+        <!-- Nội dung chính -->
+        <BorderPane layoutY="40.0" prefHeight="560.0" prefWidth="986.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+            <!-- Thanh bên trái -->
+            <left>
+                <AnchorPane prefWidth="224.0" styleClass="nav-form" stylesheets="@dashboardDesign.css">
+                    <children>
+                        <!-- Thanh điều hướng đầy đủ -->
+                        <AnchorPane fx:id="nav_form" prefWidth="224.0" styleClass="nav-form" stylesheets="@dashboardDesign.css">
+                            <children>
+                                <Circle fx:id="circle_image" fill="#293036" layoutX="112.0" layoutY="84.0" radius="70.0" stroke="BLACK" strokeType="INSIDE" />
+                                <!-- Avatar và tên quản lý -->
+                                <VBox alignment="CENTER" layoutX="37.0" layoutY="30.0" spacing="10.0">
+                                    <children>
+                                        <ImageView fx:id="managerAvatar" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                                    </children>
+                                </VBox>
+                                <!-- Các nút điều hướng -->
+                                <Button fx:id="availableBooks_btn" layoutX="29.0" layoutY="249.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Sách Có Sẵn" />
+                                <Button fx:id="issueBooks_btn" layoutX="29.0" layoutY="289.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Mượn Sách" />
+                                <Button fx:id="returnBooks_btn" layoutX="29.0" layoutY="329.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Trả Sách" />
+                                <Button fx:id="savedBooks_btn" layoutX="29.0" layoutY="369.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Sách Đã Lưu" />
+                                <!-- Nút đăng xuất -->
+                                <Button fx:id="logout" layoutX="29.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Đăng Xuất" />
+                                <Label fx:id="managerName" layoutX="36.0" layoutY="174.0" style="-fx-font-size: 18px;" text="Tên Người Quản Lý" textFill="WHITE" />
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </AnchorPane>
+            </left>
+
+            <!-- Khu vực trung tâm -->
+            <center>
+                <StackPane fx:id="mainCenter_form">
+                    <!-- Form Sách Có Sẵn -->
+                    <AnchorPane fx:id="availableBooks_form" prefHeight="560.0" prefWidth="762.0" visible="true">
+                        <children>
+                            <!-- Các nút thêm, sửa, xóa sách -->
+                            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0">
+                                <children>
+                                    <Button onAction="#handleAddBook" text="Thêm Sách" />
+                                    <Button onAction="#handleEditBook" text="Chỉnh Sửa Sách" />
+                                    <Button onAction="#handleDeleteBook" text="Xóa Sách" />
+                                </children>
+                            </HBox>
+
+                            <!-- Bảng hiển thị sách -->
+                            <TableView fx:id="bookTableView" layoutX="10.0" layoutY="50.0" prefHeight="500.0" prefWidth="740.0">
+                                <columns>
+                                    <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
+                                    <TableColumn fx:id="titleColumn" prefWidth="150" text="Tiêu Đề" />
+                                    <TableColumn fx:id="authorColumn" prefWidth="100" text="Tác Giả" />
+                                    <TableColumn fx:id="availableColumn" prefWidth="100" text="Số Lượng Còn" />
+                                    <TableColumn fx:id="totalCopiesColumn" prefWidth="100" text="Tổng Số" />
+                                    <TableColumn fx:id="imageColumn" prefWidth="100" text="Hình Ảnh" />
+                                </columns>
+                            </TableView>
+                        </children>
+                    </AnchorPane>
+
+                    <!-- Các form khác như issue_form, returnBook_form, savedBook_form -->
+                    <!-- Bạn có thể thêm nội dung cho các form này tương tự -->
+                    <AnchorPane fx:id="issue_form" prefHeight="560.0" prefWidth="762.0" visible="false">
+                        <!-- Nội dung của issue_form -->
+                    </AnchorPane>
+                    <AnchorPane fx:id="returnBook_form" prefHeight="560.0" prefWidth="762.0" visible="false">
+                        <!-- Nội dung của returnBook_form -->
+                    </AnchorPane>
+                    <AnchorPane fx:id="savedBook_form" prefHeight="560.0" prefWidth="762.0" visible="false">
+                        <!-- Nội dung của savedBook_form -->
+                    </AnchorPane>
+                </StackPane>
+            </center>
+        </BorderPane>
     </children>
 </AnchorPane>
