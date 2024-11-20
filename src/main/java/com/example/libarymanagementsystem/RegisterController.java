@@ -3,6 +3,8 @@ package com.example.libarymanagementsystem;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,7 +61,8 @@ public class RegisterController {
                     String insert = "INSERT INTO person (id, password, email, role_id, is_active) VALUES (?, ?, ?, ?, ?)";
                     prepare = connect.prepareStatement(insert);
                     prepare.setString(1, username);
-                    prepare.setString(2, password); // Nên mã hóa mật khẩu trước khi lưu
+                    String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                    prepare.setString(2, encryptedPassword);
                     prepare.setString(3, email);
                     prepare.setInt(4, 2); // Giả sử '2' là role_id cho 'student'
                     prepare.setInt(5, 1); // is_active = 1

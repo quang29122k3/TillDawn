@@ -1,5 +1,6 @@
 package com.example.libarymanagementsystem;
 
+import org.mindrot.jbcrypt.BCrypt;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -131,10 +132,11 @@ public class ResetPasswordController {
             alert.showAndWait();
         }else {
             try {
+                String encryptedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
                 connect = ConnectionJDBCUtils.getConnection();
                 String updatePassword = "UPDATE person SET password = ?, reset_code = NULL, reset_code_expiry = NULL WHERE id = ?";
                 prepare = connect.prepareStatement(updatePassword);
-                prepare.setString(1, newPassword);
+                prepare.setString(1, encryptedPassword);
                 prepare.setString(2, username);
                 prepare.executeUpdate();
 
