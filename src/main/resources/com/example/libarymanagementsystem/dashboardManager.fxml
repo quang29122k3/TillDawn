@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
+<?import javafx.scene.control.TextField?>
 <AnchorPane prefHeight="600.0" prefWidth="986.0" style="-fx-background-color: #f0f4f7;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.DashBoardControllerManager">
     <children>
         <!-- Thanh trên cùng với nút thu nhỏ và đóng -->
@@ -71,6 +72,16 @@
                             <!-- Các nút thêm, sửa, xóa sách -->
                             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0">
                                 <children>
+                                    <Button onAction="#handleAddBook" text="Thêm Sách" />
+                                    <Button onAction="#handleEditBook" text="Chỉnh Sửa Sách" />
+                                    <Button onAction="#handleDeleteBook" text="Xóa Sách" />
+                                </children>
+                            </HBox>
+                            <!-- Thêm thanh tìm kiếm -->
+                            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0">
+                                <children>
+                                    <TextField fx:id="searchField" promptText="Nhập tên sách hoặc tác giả" prefWidth="500.0" />
+                                    <Button fx:id="searchButton" text="Tìm kiếm" onAction="#handleSearchAction" />
                                     <Button onAction="#handleAddBook" text="Thêm Sách" />
                                     <Button onAction="#handleEditBook" text="Chỉnh Sửa Sách" />
                                     <Button onAction="#handleDeleteBook" text="Xóa Sách" />

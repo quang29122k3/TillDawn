@@ -77,6 +77,11 @@ public class DashBoardControllerManager {
     @FXML
     private Button savedBooks_btn;
 
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button searchButton;
+
     // Các phương thức xử lý sự kiện
     @FXML
     private void navButtonDesign(ActionEvent event) {
@@ -136,9 +141,6 @@ public class DashBoardControllerManager {
 
     @FXML
     public void initialize() {
-        // Cấu hình các cột của TableView
-
-        // Set manager's name
         managerName.setText("Tên Người Quản Lý");
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -146,9 +148,14 @@ public class DashBoardControllerManager {
         availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
         totalCopiesColumn.setCellValueFactory(new PropertyValueFactory<>("totalCopies"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
+
         showForm("availableBooks_form");
-        // Tải dữ liệu vào TableView
+
+        // Tải tất cả sách ban đầu
         loadBooks();
+
+        // Gán sự kiện cho nút tìm kiếm
+        searchButton.setOnAction(event -> handleSearchAction());
     }
 
     @FXML
@@ -179,6 +186,64 @@ public class DashBoardControllerManager {
                 logout.getScene().getWindow().hide();
             }
         } catch ( Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleSearchAction() {
+        String searchText = searchField.getText().trim();
+        ObservableList<Book> bookList = FXCollections.observableArrayList();
+
+        // Nếu thanh tìm kiếm trống, hiển thị tất cả sách
+        String query;
+        if (searchText.isEmpty()) {
+            query = "SELECT * FROM books";
+        } else {
+            query = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
+        }
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            if (!searchText.isEmpty()) {
+                pstmt.setString(1, "%" + searchText + "%");
+                pstmt.setString(2, "%" + searchText + "%");
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                int available = rs.getInt("available");
+                int totalCopies = rs.getInt("total_copies");
+                String imagePath = rs.getString("image");
+
+                // Tạo ImageView từ imagePath
+                ImageView imageView = null;
+                if (imagePath != null && !imagePath.trim().isEmpty()) {
+                    try {
+                        Image image = new Image(imagePath, 50, 50, false, true);
+                        imageView = new ImageView(image);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Invalid image URL for book ID " + id + ": " + imagePath);
+                        imageView = getDefaultImageView(); // Hình mặc định
+                    }
+                } else {
+                    imageView = getDefaultImageView(); // Hình mặc định
+                }
+
+                // Tạo đối tượng Book
+                Book book = new Book(id, title, author, available, imageView);
+                book.setTotalCopies(totalCopies); // Gán totalCopies
+                bookList.add(book);
+            }
+
+            // Đặt dữ liệu vào TableView
+            bookTableView.setItems(bookList);
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
