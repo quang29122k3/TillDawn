@@ -89,5 +89,19 @@
     -fx-padding: 5;
 }
 
+.anchor-background {
+    -fx-background-image: url("images/image.png");
+    -fx-background-repeat: no-repeat;
+     -fx-background-size: contain;
+}
 
+.action-btn2 {
+    -fx-background-color: linear-gradient(to right, #023047, #8ecae6); /* Xanh đồng bộ với bìa */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+    -fx-padding: 5 15;
+}
 

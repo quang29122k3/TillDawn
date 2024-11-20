@@ -5,6 +5,7 @@
 
 #topBar Label {
     -fx-text-fill: white;
+    -fx-text-fill: white;
     -fx-font-size: 16px;
 }
 
@@ -74,4 +75,5 @@
 #topBar FontAwesomeIcon {
     -fx-fill: white;
 }
+
 
