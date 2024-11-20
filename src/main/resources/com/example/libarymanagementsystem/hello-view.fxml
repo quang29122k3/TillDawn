@@ -75,7 +75,7 @@
                     </GridPane>
 
                     <!-- Login button -->
-                    <Button fx:id="loginBtn" onAction="#loginAdmin" styleClass="action-btn" stylesheets="@loginDesign.css" text="LOGIN" />
+                    <Button fx:id="loginBtr" onAction="#loginAdmin" styleClass="action-btn" stylesheets="@loginDesign.css" text="LOGIN" />
 
                 </children>
                 <padding>
