@@ -22,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class DashBoardControllerManager {
@@ -55,11 +56,11 @@ public class DashBoardControllerManager {
     @FXML
     private AnchorPane availableBooks_form;
 
-    @FXML
-    private AnchorPane issue_form;
-
-    @FXML
-    private AnchorPane returnBook_form;
+//    @FXML
+//    private AnchorPane issue_form;
+//
+//    @FXML
+//    private AnchorPane returnBook_form;
 
     @FXML
     private AnchorPane savedBook_form;
@@ -101,20 +102,20 @@ public class DashBoardControllerManager {
 
     private void showForm(String formName) {
         availableBooks_form.setVisible(false);
-        issue_form.setVisible(false);
-        returnBook_form.setVisible(false);
+//        issue_form.setVisible(false);
+//        returnBook_form.setVisible(false);
         savedBook_form.setVisible(false);
 
         switch (formName) {
             case "availableBooks_form":
                 availableBooks_form.setVisible(true);
                 break;
-            case "issue_form":
-                issue_form.setVisible(true);
-                break;
-            case "returnBook_form":
-                returnBook_form.setVisible(true);
-                break;
+//            case "issue_form":
+//                issue_form.setVisible(true);
+//                break;
+//            case "returnBook_form":
+//                returnBook_form.setVisible(true);
+//                break;
             case "savedBook_form":
                 savedBook_form.setVisible(true);
                 break;
@@ -134,10 +135,20 @@ public class DashBoardControllerManager {
     }
 
     @FXML
+    private TableView<Book> borrowedBooksTable;
+
+    @FXML
     private ImageView managerAvatar;
 
     @FXML
     private Label managerName;
+
+    @FXML
+    private TableColumn<Book, String> borrowedBookTitleColumn;
+    @FXML
+    private TableColumn<Book, String> borrowedBookAuthorColumn;
+    @FXML
+    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
 
     @FXML
     public void initialize() {
@@ -149,10 +160,17 @@ public class DashBoardControllerManager {
         totalCopiesColumn.setCellValueFactory(new PropertyValueFactory<>("totalCopies"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
 
+        // Cấu hình bảng sách đã mượn
+        borrowedBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        borrowedBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        borrowedBookBorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+
+
         showForm("availableBooks_form");
 
         // Tải tất cả sách ban đầu
         loadBooks();
+        loadBorrowedBooks();
 
         // Gán sự kiện cho nút tìm kiếm
         searchButton.setOnAction(event -> handleSearchAction());
@@ -248,6 +266,76 @@ public class DashBoardControllerManager {
         }
     }
 
+    @FXML
+    private void handleBorrowAction() {
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+        if (selectedBook == null) {
+            showAlert("Chọn sách Vui lòng chọn sách để mượn.");
+            return;
+        }
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection()) {
+            conn.setAutoCommit(false);
+            String personId = GetData.username; // Sử dụng mã người dùng hiện tại
+
+            // Thêm bản ghi mượn vào loans
+            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, returned, status) VALUES (?, ?, ?, 0, 'borrowed')";
+            try (PreparedStatement stmt = conn.prepareStatement(loanQuery)) {
+                stmt.setString(1, personId); // ID của người quản lý
+                stmt.setInt(2, selectedBook.getId());
+                stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                stmt.executeUpdate();
+            }
+
+            // Giảm số lượng sách có sẵn
+            String updateBookQuery = "UPDATE books SET available = available - 1 WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
+                stmt.setInt(1, selectedBook.getId());
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+            loadBooks();
+            loadBorrowedBooks();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleReturnAction() {
+        Book selectedBook = borrowedBooksTable.getSelectionModel().getSelectedItem();
+        if (selectedBook == null) {
+            showAlert("Chọn sách vui lòng chọn sách để trả.");
+            return;
+        }
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection()) {
+            conn.setAutoCommit(false);
+
+            // Cập nhật trạng thái mượn
+            String returnQuery = "UPDATE loans SET returned = 1, return_date = ?, status = 'returned' WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(returnQuery)) {
+                stmt.setDate(1, Date.valueOf(LocalDate.now()));
+                stmt.setInt(2, selectedBook.getLoanId());
+                stmt.executeUpdate();
+            }
+
+            // Tăng số lượng sách có sẵn
+            String updateBookQuery = "UPDATE books SET available = available + 1 WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
+                stmt.setInt(1, selectedBook.getId());
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+            loadBooks();
+            loadBorrowedBooks();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void loadBooks() {
         ObservableList<Book> bookList = FXCollections.observableArrayList();
@@ -292,6 +380,36 @@ public class DashBoardControllerManager {
             // Đặt dữ liệu vào TableView
             bookTableView.setItems(bookList);
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private ObservableList<Book> borrowedBooks = FXCollections.observableArrayList();
+
+    private void loadBorrowedBooks() {
+        borrowedBooks.clear();
+        String query = "SELECT loans.id AS loan_id, books.id AS book_id, books.title, books.author, loans.borrow_date " +
+                "FROM loans INNER JOIN books ON loans.book_id = books.id " +
+                "WHERE loans.returned = 0";
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                Book book = new Book(
+                        rs.getInt("book_id"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        0, // Không cần quan tâm số lượng
+                        null
+                );
+                book.setLoanId(rs.getInt("loan_id"));
+                book.setBorrowDate(rs.getDate("borrow_date").toLocalDate());
+                borrowedBooks.add(book);
+            }
+            borrowedBooksTable.setItems(borrowedBooks);
         } catch (SQLException e) {
             e.printStackTrace();
         }

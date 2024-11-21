@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -13,8 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<?import javafx.scene.control.TextField?>
-<AnchorPane prefHeight="600.0" prefWidth="986.0" style="-fx-background-color: #f0f4f7;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.DashBoardControllerManager">
+<AnchorPane prefHeight="600.0" prefWidth="986.0" style="-fx-background-color: #f0f4f7;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.DashBoardControllerManager">
     <children>
         <!-- Thanh trên cùng với nút thu nhỏ và đóng -->
         <HBox fx:id="topBar" alignment="CENTER_RIGHT" prefHeight="40.0" spacing="10.0" style="-fx-background-color: #263238;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -51,9 +51,7 @@
                                 </VBox>
                                 <!-- Các nút điều hướng -->
                                 <Button fx:id="availableBooks_btn" layoutX="29.0" layoutY="249.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Sách Có Sẵn" />
-                                <Button fx:id="issueBooks_btn" layoutX="29.0" layoutY="289.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Mượn Sách" />
-                                <Button fx:id="returnBooks_btn" layoutX="29.0" layoutY="329.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Trả Sách" />
-                                <Button fx:id="savedBooks_btn" layoutX="29.0" layoutY="369.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Sách Đã Lưu" />
+                                <Button fx:id="savedBooks_btn" layoutX="28.0" layoutY="323.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Sách Đã Lưu" />
                                 <!-- Nút đăng xuất -->
                                 <Button fx:id="logout" layoutX="29.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Đăng Xuất" />
                                 <Label fx:id="managerName" layoutX="36.0" layoutY="174.0" style="-fx-font-size: 18px;" text="Tên Người Quản Lý" textFill="WHITE" />
@@ -75,13 +73,14 @@
                                     <Button onAction="#handleAddBook" text="Thêm Sách" />
                                     <Button onAction="#handleEditBook" text="Chỉnh Sửa Sách" />
                                     <Button onAction="#handleDeleteBook" text="Xóa Sách" />
+<!--                                    <Button fx:id="borrowBookButton" onAction="#handleBorrowAction" text="Mượn Sách" />-->
                                 </children>
                             </HBox>
                             <!-- Thêm thanh tìm kiếm -->
                             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0">
                                 <children>
-                                    <TextField fx:id="searchField" promptText="Nhập tên sách hoặc tác giả" prefWidth="500.0" />
-                                    <Button fx:id="searchButton" text="Tìm kiếm" onAction="#handleSearchAction" />
+                                    <TextField fx:id="searchField" prefWidth="500.0" promptText="Nhập tên sách hoặc tác giả" />
+                                    <Button fx:id="searchButton" onAction="#handleSearchAction" text="Tìm kiếm" />
                                     <Button onAction="#handleAddBook" text="Thêm Sách" />
                                     <Button onAction="#handleEditBook" text="Chỉnh Sửa Sách" />
                                     <Button onAction="#handleDeleteBook" text="Xóa Sách" />
@@ -99,19 +98,30 @@
                                     <TableColumn fx:id="imageColumn" prefWidth="100" text="Hình Ảnh" />
                                 </columns>
                             </TableView>
+                     <Button fx:id="borrowBookButton" layoutX="765.0" layoutY="71.0" mnemonicParsing="false" onAction="#handleBorrowAction" text="Mượn sách" />
                         </children>
                     </AnchorPane>
 
                     <!-- Các form khác như issue_form, returnBook_form, savedBook_form -->
                     <!-- Bạn có thể thêm nội dung cho các form này tương tự -->
-                    <AnchorPane fx:id="issue_form" prefHeight="560.0" prefWidth="762.0" visible="false">
-                        <!-- Nội dung của issue_form -->
-                    </AnchorPane>
-                    <AnchorPane fx:id="returnBook_form" prefHeight="560.0" prefWidth="762.0" visible="false">
-                        <!-- Nội dung của returnBook_form -->
-                    </AnchorPane>
                     <AnchorPane fx:id="savedBook_form" prefHeight="560.0" prefWidth="762.0" visible="false">
-                        <!-- Nội dung của savedBook_form -->
+                        <children>
+                            <!-- Thêm nút "Trả Sách" -->
+                            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0">
+                                <children>
+                                    <Button fx:id="returnBookButton" onAction="#handleReturnAction" text="Trả Sách" />
+                                </children>
+                            </HBox>
+
+                            <!-- Thêm bảng hiển thị sách đã mượn -->
+                            <TableView fx:id="borrowedBooksTable" layoutX="10.0" layoutY="50.0" prefHeight="500.0" prefWidth="740.0">
+                                <columns>
+                                    <TableColumn fx:id="borrowedBookTitleColumn" prefWidth="150" text="Tên Sách" />
+                                    <TableColumn fx:id="borrowedBookAuthorColumn" prefWidth="150" text="Tác Giả" />
+                                    <TableColumn fx:id="borrowedBookBorrowDateColumn" prefWidth="150" text="Thời Gian Mượn" />
+                                </columns>
+                            </TableView>
+                        </children>
                     </AnchorPane>
                 </StackPane>
             </center>
