@@ -36,6 +36,7 @@ public class Book {
         this.totalCopies = available; // Giả sử totalCopies ban đầu bằng available
         this.loanId = loanId;
     }
+    
 
     // Getters và Setters cho tất cả các thuộc tính
 
