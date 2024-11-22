@@ -83,17 +83,79 @@ public class DashBoardControllerManager {
     @FXML
     private Button searchButton;
 
+    @FXML
+    private AnchorPane member_form;
+
+    @FXML
+    private TextField searchMemberField;
+
+    @FXML
+    private Button searchMemberButton;
+
+    @FXML
+    private TableView<Person> memberTableView;
+
+    @FXML
+    private TableColumn<Person, String> memberIdColumn;
+
+    @FXML
+    private TableColumn<Person, String> memberNameColumn;
+
+    @FXML
+    private TableColumn<Person, String> memberClassColumn;
+
+    @FXML
+    private TableColumn<Person, String> memberStatusColumn;
+
+    @FXML
+    private Button memberButton;
+
+    @FXML
+    private Button blockMemberButton;
+
+    @FXML
+    private Button unblockMemberButton;
+
     // Các phương thức xử lý sự kiện
     @FXML
     private void navButtonDesign(ActionEvent event) {
+        availableBooks_form.setVisible(false);
+        savedBook_form.setVisible(false);
+        member_form.setVisible(false);
+
         if (event.getSource() == availableBooks_btn) {
-            showForm("availableBooks_form");
-        } else if (event.getSource() == issueBooks_btn) {
-            showForm("issue_form");
-        } else if (event.getSource() == returnBooks_btn) {
-            showForm("returnBook_form");
+            availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
-            showForm("savedBook_form");
+            savedBook_form.setVisible(true);
+        } else if (event.getSource() == memberButton) { // memberButton là ID của nút "Thành viên"
+            member_form.setVisible(true);
+            loadMembers(); // Tải danh sách thành viên
+        }
+    }
+
+    private ObservableList<Person> members = FXCollections.observableArrayList();
+
+    private void loadMembers() {
+        members.clear();
+        String query = "SELECT id, fullname, class, is_active FROM person";
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String fullname = rs.getString("fullname");
+                String className = rs.getString("class");
+                boolean isActive = rs.getBoolean("is_active");
+
+                String status = isActive ? "Kích Hoạt" : "Bị Chặn";
+                members.add(new Person(id, fullname, className, status));
+            }
+
+            memberTableView.setItems(members);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -164,6 +226,15 @@ public class DashBoardControllerManager {
         borrowedBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         borrowedBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         borrowedBookBorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+
+        // Cấu hình cột cho bảng thành viên
+        memberIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        memberNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullname"));
+        memberClassColumn.setCellValueFactory(new PropertyValueFactory<>("className"));
+        memberStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        // Cấu hình sự kiện tìm kiếm thành viên
+        searchMemberButton.setOnAction(event -> handleSearchMemberAction());
 
 
         showForm("availableBooks_form");
@@ -261,6 +332,81 @@ public class DashBoardControllerManager {
             // Đặt dữ liệu vào TableView
             bookTableView.setItems(bookList);
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleSearchMemberAction() {
+        String searchText = searchMemberField.getText().trim();
+        members.clear();
+
+        String query = "SELECT id, fullname, class, is_active FROM person WHERE id LIKE ? OR fullname LIKE ? OR class LIKE ?";
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, "%" + searchText + "%");
+            stmt.setString(2, "%" + searchText + "%");
+            stmt.setString(3, "%" + searchText + "%");
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String fullname = rs.getString("fullname");
+                String className = rs.getString("class");
+                boolean isActive = rs.getBoolean("is_active");
+
+                String status = isActive ? "Kích Hoạt" : "Bị Chặn";
+                members.add(new Person(id, fullname, className, status));
+            }
+
+            memberTableView.setItems(members);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleBlockMemberAction() {
+        Person selectedMember = memberTableView.getSelectionModel().getSelectedItem();
+        if (selectedMember == null) {
+            showAlert("Lỗi, vui lòng chọn thành viên để chặn.");
+            return;
+        }
+
+        String query = "UPDATE person SET is_active = 0 WHERE id = ?";
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, selectedMember.getId());
+            stmt.executeUpdate();
+
+            showAlert("Thành công, thành viên đã bị chặn.");
+            loadMembers();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleUnblockMemberAction() {
+        Person selectedMember = memberTableView.getSelectionModel().getSelectedItem();
+        if (selectedMember == null) {
+            showAlert("Lỗi, vui lòng chọn thành viên để mở chặn.");
+            return;
+        }
+
+        String query = "UPDATE person SET is_active = 1 WHERE id = ?";
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, selectedMember.getId());
+            stmt.executeUpdate();
+
+            showAlert("Thành công, thành viên đã được mở chặn.");
+            loadMembers();
         } catch (SQLException e) {
             e.printStackTrace();
         }

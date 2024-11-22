@@ -55,6 +55,10 @@
                                 <!-- Nút đăng xuất -->
                                 <Button fx:id="logout" layoutX="29.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="167.0" styleClass="nav-btn" stylesheets="@dashboardDesign.css" text="Đăng Xuất" />
                                 <Label fx:id="managerName" layoutX="36.0" layoutY="174.0" style="-fx-font-size: 18px;" text="Tên Người Quản Lý" textFill="WHITE" />
+                                <Button fx:id="memberButton" layoutX="28.0" layoutY="373.0" mnemonicParsing="false"
+                                        prefHeight="30.0" prefWidth="167.0"
+                                        styleClass="nav-btn" stylesheets="@dashboardDesign.css"
+                                        text="Thành viên" onAction="#navButtonDesign" />
                             </children>
                         </AnchorPane>
                     </children>
@@ -121,6 +125,35 @@
                                     <TableColumn fx:id="borrowedBookBorrowDateColumn" prefWidth="150" text="Thời Gian Mượn" />
                                 </columns>
                             </TableView>
+                        </children>
+                    </AnchorPane>
+                    <AnchorPane fx:id="member_form" prefHeight="560.0" prefWidth="762.0" visible="false">
+                        <children>
+                            <!-- Thanh tìm kiếm -->
+                            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0">
+                                <children>
+                                    <TextField fx:id="searchMemberField" prefWidth="400.0" promptText="Nhập ID, tên, hoặc lớp" />
+                                    <Button fx:id="searchMemberButton" onAction="#handleSearchMemberAction" text="Tìm kiếm" />
+                                </children>
+                            </HBox>
+
+                            <!-- Bảng hiển thị thành viên -->
+                            <TableView fx:id="memberTableView" layoutX="10.0" layoutY="50.0" prefHeight="400.0" prefWidth="740.0">
+                                <columns>
+                                    <TableColumn fx:id="memberIdColumn" prefWidth="150.0" text="ID" />
+                                    <TableColumn fx:id="memberNameColumn" prefWidth="200.0" text="Tên" />
+                                    <TableColumn fx:id="memberClassColumn" prefWidth="150.0" text="Lớp" />
+                                    <TableColumn fx:id="memberStatusColumn" prefWidth="150.0" text="Trạng Thái" />
+                                </columns>
+                            </TableView>
+
+                            <!-- Các nút hành động -->
+                            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="470.0" spacing="10.0">
+                                <children>
+                                    <Button fx:id="blockMemberButton" onAction="#handleBlockMemberAction" text="Chặn" />
+                                    <Button fx:id="unblockMemberButton" onAction="#handleUnblockMemberAction" text="Mở Chặn" />
+                                </children>
+                            </HBox>
                         </children>
                     </AnchorPane>
                 </StackPane>

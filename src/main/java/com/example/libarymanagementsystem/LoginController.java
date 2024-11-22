@@ -42,10 +42,10 @@ public class LoginController {
 
     public void loginAdmin() {
         // Cập nhật query để lấy role từ bảng `role`
-        String sql = "SELECT person.id, person.password, role.code " +
+        String sql = "SELECT person.id, person.password, role.code, person.is_active " +
                 "FROM person " +
                 "INNER JOIN role ON person.role_id = role.id " +
-                "WHERE person.id = ? AND person.password = ? AND person.is_active = 1";
+                "WHERE person.id = ? AND person.password = ? ";
 
         try {
             connect = ConnectionJDBCUtils.getConnection();
@@ -64,6 +64,18 @@ public class LoginController {
                 alert.showAndWait();
             } else {
                 if (result.next()) {
+
+//                     Kiểm tra trạng thái tài khoản
+                    boolean isActive = result.getBoolean("is_active");
+
+                    if (!isActive) {
+                        alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Thông báo");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Tài khoản của bạn đã bị chặn. Vui lòng liên hệ quản trị viên!");
+                        alert.showAndWait();
+                        return; // Kết thúc nếu tài khoản bị chặn
+                    }
                     // Lấy role code (manager/student)
                     String roleCode = result.getString("code");
                     GetData.username = username.getText();
