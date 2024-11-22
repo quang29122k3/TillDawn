@@ -1,6 +1,7 @@
 package com.example.libarymanagementsystem;
 
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
+import com.example.libarymanagementsystem.utils.GoogleBooksService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,13 +18,18 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.input.MouseEvent;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 public class DashBoardControllerManager {
     @FXML
@@ -116,14 +122,22 @@ public class DashBoardControllerManager {
     @FXML
     private Button unblockMemberButton;
 
+    @FXML
+    private Button googleBooksButton;
+
     // Các phương thức xử lý sự kiện
     @FXML
     private void navButtonDesign(ActionEvent event) {
         availableBooks_form.setVisible(false);
         savedBook_form.setVisible(false);
         member_form.setVisible(false);
+        googleBooks_form.setVisible(false);
 
-        if (event.getSource() == availableBooks_btn) {
+        if (event.getSource() == googleBooksButton) {
+            googleBooks_form.setVisible(true);
+        }
+
+        else if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
             savedBook_form.setVisible(true);
@@ -164,20 +178,12 @@ public class DashBoardControllerManager {
 
     private void showForm(String formName) {
         availableBooks_form.setVisible(false);
-//        issue_form.setVisible(false);
-//        returnBook_form.setVisible(false);
         savedBook_form.setVisible(false);
 
         switch (formName) {
             case "availableBooks_form":
                 availableBooks_form.setVisible(true);
                 break;
-//            case "issue_form":
-//                issue_form.setVisible(true);
-//                break;
-//            case "returnBook_form":
-//                returnBook_form.setVisible(true);
-//                break;
             case "savedBook_form":
                 savedBook_form.setVisible(true);
                 break;
@@ -232,6 +238,13 @@ public class DashBoardControllerManager {
         memberNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullname"));
         memberClassColumn.setCellValueFactory(new PropertyValueFactory<>("className"));
         memberStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        // Cấu hình bảng tra cứu google
+        googleBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        googleBookAuthorsColumn.setCellValueFactory(new PropertyValueFactory<>("authors"));
+        googleBookPublisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+        googleBookLinkColumn.setCellValueFactory(new PropertyValueFactory<>("infoLink"));
+
+        googleBooksTableView.setItems(googleBooksList);
 
         // Cấu hình sự kiện tìm kiếm thành viên
         searchMemberButton.setOnAction(event -> handleSearchMemberAction());
@@ -710,5 +723,40 @@ public class DashBoardControllerManager {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private AnchorPane googleBooks_form;
+
+    @FXML
+    private TextField googleBooksSearchField;
+
+    @FXML
+    private Button googleBooksSearchButton;
+
+    @FXML
+    private TableView<BookItem> googleBooksTableView;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookTitleColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookAuthorsColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookPublisherColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookLinkColumn;
+
+    private ObservableList<BookItem> googleBooksList = FXCollections.observableArrayList();
+
+    @FXML
+    private void handleGoogleBooksSearch() {
+        String query = googleBooksSearchField.getText();
+        List<BookItem> books = GoogleBooksService.searchBooks(query);
+
+        googleBooksTableView.getItems().clear();
+        googleBooksTableView.getItems().addAll(books);
     }
 }
