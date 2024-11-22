@@ -1,56 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="685.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.LoginController">
+<AnchorPane prefHeight="486.0" prefWidth="685.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.LoginController">
     <children>
-        <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0">
-            <children>
-                <AnchorPane layoutY="-1.0" prefHeight="486.0" prefWidth="340.0" styleClass="left-form" stylesheets="@loginDesign.css">
-               <children>
-                        <Label layoutX="36.0" layoutY="147.0" text="Library Management System" textAlignment="CENTER" textFill="#ece8e8">
-                            <font>
-                                <Font name="Times New Roman Bold Italic" size="21.0" />
-                            </font>
-                        </Label>
-                  <Label layoutX="138.0" layoutY="452.0" prefHeight="20.0" prefWidth="62.0" text="TillDawn" textFill="#f2eaea">
-                     <font>
-                        <Font name="System Italic" size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-                </AnchorPane>
-                <AnchorPane layoutX="328.0" layoutY="-1.0" prefHeight="486.0" prefWidth="364.0" AnchorPane.rightAnchor="-1.0">
-                    <children>
-                        <Label layoutX="145.0" layoutY="171.0" text="Welcome!" textFill="#298e61">
-                            <font>
-                                <Font name="Tahoma Bold" size="19.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="username" layoutX="82.0" layoutY="212.0" onAction="#loginAdmin" onKeyTyped="#numbersOnly" prefHeight="30.0" prefWidth="220.0" promptText="Username" />
-                        <PasswordField fx:id="password" layoutX="82.0" layoutY="262.0" onAction="#loginAdmin" onKeyTyped="#numbersOnly" prefHeight="30.0" prefWidth="220.0" promptText="Password" />
-                        <Button fx:id="loginBtr" layoutX="83.0" layoutY="323.0" mnemonicParsing="false" onAction="#loginAdmin" prefHeight="40.0" prefWidth="220.0" text="Login" />
-                        <Button fx:id="close" layoutX="293.0" layoutY="14.0" mnemonicParsing="false" onAction="#close" prefHeight="26.0" prefWidth="24.0" text="X" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
-                            <font>
-                                <Font name="System Bold" size="12.0" />
-                            </font>
-                        </Button>
-                        <ImageView fitHeight="122.0" fitWidth="201.0" layoutX="131.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@pngtree-open-book-icon-vector-illustration-clipart-design-png-image_9031608.png" />
-                            </image>
-                        </ImageView>
-                    </children>
-                </AnchorPane>
-            </children>
-        </AnchorPane>
+        <!-- Header bar with close and minimize buttons -->
+        <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="438.0" spacing="10" style="-fx-background-color: linear-gradient(to right, #6a11cb, #2575fc); -fx-padding: 5;" stylesheets="@loginDesign.css" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="0" />
+
+        <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="30">
+            <!-- Left side: Welcome message -->
+            <VBox alignment="CENTER" prefHeight="456.0" prefWidth="471.0" style="-fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);" stylesheets="@loginDesign.css">
+                <children>
+                    <Text fill="WHITE" text="📖 " wrappingWidth="124.0">
+                        <font>
+                            <Font name="Arial Bold" size="96.0" />
+                        </font>
+                    </Text>
+                    <Text fill="#f2efef" strokeType="OUTSIDE" strokeWidth="0.0" text="Library Management System">
+                        <font>
+                            <Font size="30.0" />
+                        </font>
+                    </Text>
+                </children>
+                <padding>
+                    <Insets bottom="50" left="30" right="30" top="50" />
+                </padding>
+            </VBox>
+
+            <!-- Right side: Login form -->
+            <VBox alignment="CENTER" prefWidth="300.0" spacing="20" style="-fx-background-color: #ffffff;">
+                <children>
+                    <Text text="User Login" wrappingWidth="199.0">
+                        <font>
+                            <Font name="Arial Bold" size="24" />
+                        </font>
+                    </Text>
+                    <GridPane hgap="10" vgap="15">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints />
+                        </columnConstraints>
+                        <children>
+                            <!-- Username field -->
+                            <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                            <TextField fx:id="username" prefHeight="25.0" prefWidth="124.0" promptText="Enter your username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                            <!-- Password field -->
+                            <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <PasswordField fx:id="password" promptText="Enter your password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                            <Hyperlink fx:id="forgotPasswordLink" onAction="#openForgotPasswordForm" text="Forgot password?" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            <Hyperlink fx:id="registerLink" onAction="#openRegisterForm" text="Register here" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        </children>
+                        <rowConstraints>
+                            <RowConstraints />
+                            <RowConstraints />
+                            <RowConstraints />
+                            <RowConstraints />
+                            <RowConstraints />
+                        </rowConstraints>
+                    </GridPane>
+
+                    <!-- Login button -->
+                    <Button fx:id="loginBtr" onAction="#loginAdmin" styleClass="action-btn" stylesheets="@loginDesign.css" text="LOGIN" />
+
+                </children>
+                <padding>
+                    <Insets bottom="30" left="30" right="30" top="30" />
+                </padding>
+            </VBox>
+        </HBox>
+        <Button fx:id="minimize" layoutX="631.0" layoutY="5.0" onAction="#minimizeWindow" onDragDetected="#minimizeWindow" prefHeight="23.0" prefWidth="36.0" styleClass="minimize" stylesheets="@loginDesign.css" text="-" AnchorPane.topAnchor="0.0">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="close" layoutX="666.0" layoutY="5.0" onAction="#close" onDragDetected="#close" prefHeight="27.0" prefWidth="36.0" styleClass="close" stylesheets="@loginDesign.css" text="x" AnchorPane.topAnchor="0.0">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
     </children>
-</StackPane>
+</AnchorPane>
