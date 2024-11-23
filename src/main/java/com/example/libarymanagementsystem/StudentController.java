@@ -1,16 +1,20 @@
 package com.example.libarymanagementsystem;
 
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
+import com.example.libarymanagementsystem.utils.GoogleBooksService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.List;
 
 public class StudentController {
 
@@ -43,11 +47,58 @@ public class StudentController {
     @FXML
     private ImageView borrowedBookImage;
 
+    @FXML
+    private AnchorPane availableBooks_form;
+
+    @FXML
+    private AnchorPane savedBook_form;
+
+    @FXML
+    private Button availableBooks_btn;
+
+    @FXML
+    private Button savedBooks_btn;
+    @FXML
+    private AnchorPane googleBooks_form;
+
+    @FXML
+    private TextField googleBooksSearchField;
+
+    @FXML
+    private Button googleBooksSearchButton;
+
+    @FXML
+    private TableView<BookItem> googleBooksTableView;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookTitleColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookAuthorsColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookPublisherColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookLinkColumn;
+
+    @FXML
+    private Button googleBooks_btn;
+
+    private ObservableList<BookItem> googleBooksList = FXCollections.observableArrayList();
+
     private ObservableList<Book> availableBooks = FXCollections.observableArrayList();
     private ObservableList<Book> borrowedBooks = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        // Cấu hình bảng sách Google Books
+        googleBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        googleBookAuthorsColumn.setCellValueFactory(new PropertyValueFactory<>("authors"));
+        googleBookPublisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+        googleBookLinkColumn.setCellValueFactory(new PropertyValueFactory<>("infoLink"));
+        googleBooksTableView.setItems(googleBooksList);
+
         // Cấu hình cột cho bảng sách có sẵn sử dụng PropertyValueFactory
         bookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         bookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
@@ -83,6 +134,15 @@ public class StudentController {
                 borrowedBookImage.setImage(null); // Không có ảnh
             }
         });
+    }
+
+    @FXML
+    private void handleGoogleBooksSearch() {
+        String query = googleBooksSearchField.getText();
+        List<BookItem> books = GoogleBooksService.searchBooks(query);
+
+        googleBooksTableView.getItems().clear();
+        googleBooksTableView.getItems().addAll(books);
     }
 
     private void loadAvailableBooks() {
@@ -276,5 +336,20 @@ public class StudentController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+
+    @FXML
+    private void navButtonDesign(ActionEvent event) {
+        availableBooks_form.setVisible(false);
+        savedBook_form.setVisible(false);
+        googleBooks_form.setVisible(false);
+        if (event.getSource() == availableBooks_btn) {
+            availableBooks_form.setVisible(true);
+        } else if (event.getSource() == savedBooks_btn) {
+            savedBook_form.setVisible(true);
+        } else if (event.getSource() == googleBooks_btn) {
+            googleBooks_form.setVisible(true);
+        }
     }
 }
