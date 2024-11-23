@@ -22,6 +22,9 @@ public class RegisterController {
     @FXML
     private Button registerButton;
 
+    @FXML
+    private TextField adminCode;
+
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
@@ -31,6 +34,7 @@ public class RegisterController {
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
         String email = emailField.getText();
+        String adminCodeInput = adminCode.getText(); // Lấy input mã admin
 
         Alert alert;
 
@@ -57,6 +61,20 @@ public class RegisterController {
                     alert.setContentText("Tên đăng nhập đã tồn tại.");
                     alert.showAndWait();
                 } else {
+                    // Xác định role_id dựa trên adminCode
+                    int roleId = 2; // 1 la student theo database cua quang
+                    if (!adminCodeInput.isEmpty()) {
+                        String adminCodeCorrect = "12345"; // Mã admin đúng
+                        if (adminCodeInput.equals(adminCodeCorrect)) {
+                            roleId = 1; // 2 là role_id cho admin theo database cua quang
+                        } else {
+                            alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setContentText("Mã admin không chính xác.");
+                            alert.showAndWait();
+                            return; // Dừng thực thi nếu mã admin sai
+                        }
+                    }
+
                     // Thêm người dùng mới vào cơ sở dữ liệu
                     String insert = "INSERT INTO person (id, password, email, role_id, is_active) VALUES (?, ?, ?, ?, ?)";
                     prepare = connect.prepareStatement(insert);
@@ -64,7 +82,7 @@ public class RegisterController {
                     String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                     prepare.setString(2, encryptedPassword);
                     prepare.setString(3, email);
-                    prepare.setInt(4, 2); // Giả sử '2' là role_id cho 'student'
+                    prepare.setInt(4, roleId);
                     prepare.setInt(5, 1); // is_active = 1
 
                     prepare.executeUpdate();
@@ -82,4 +100,5 @@ public class RegisterController {
             }
         }
     }
+
 }
