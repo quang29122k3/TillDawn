@@ -2,96 +2,111 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="486.0" prefWidth="685.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.LoginController">
+<?import javafx.scene.control.PasswordField?>
+<AnchorPane prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.LoginController">
     <children>
-        <!-- Header bar with close and minimize buttons -->
-        <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="438.0" spacing="10" style="-fx-background-color: linear-gradient(to right, #6a11cb, #2575fc); -fx-padding: 5;" stylesheets="@loginDesign.css" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="0" />
-
-        <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="30">
-            <!-- Left side: Welcome message -->
-            <VBox alignment="CENTER" prefHeight="456.0" prefWidth="471.0" style="-fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);" stylesheets="@loginDesign.css">
-                <children>
-                    <Text fill="WHITE" text="📖 " wrappingWidth="124.0">
-                        <font>
-                            <Font name="Arial Bold" size="96.0" />
-                        </font>
-                    </Text>
-                    <Text fill="#f2efef" strokeType="OUTSIDE" strokeWidth="0.0" text="Library Management System">
-                        <font>
-                            <Font size="30.0" />
-                        </font>
-                    </Text>
-                </children>
-                <padding>
-                    <Insets bottom="50" left="30" right="30" top="50" />
-                </padding>
-            </VBox>
-
-            <!-- Right side: Login form -->
-            <VBox alignment="CENTER" prefWidth="300.0" spacing="20" style="-fx-background-color: #ffffff;">
-                <children>
-                    <Text text="User Login" wrappingWidth="199.0">
-                        <font>
-                            <Font name="Arial Bold" size="24" />
-                        </font>
-                    </Text>
-                    <GridPane hgap="10" vgap="15">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints />
-                        </columnConstraints>
-                        <children>
-                            <!-- Username field -->
-                            <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                            <TextField fx:id="username" prefHeight="25.0" prefWidth="124.0" promptText="Enter your username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-                            <!-- Password field -->
-                            <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                            <PasswordField fx:id="password" promptText="Enter your password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-                            <Hyperlink fx:id="forgotPasswordLink" onAction="#openForgotPasswordForm" text="Forgot password?" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                            <Hyperlink fx:id="registerLink" onAction="#openRegisterForm" text="Register here" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        </children>
-                        <rowConstraints>
-                            <RowConstraints />
-                            <RowConstraints />
-                            <RowConstraints />
-                            <RowConstraints />
-                            <RowConstraints />
-                        </rowConstraints>
-                    </GridPane>
-
-                    <!-- Login button -->
-                    <Button fx:id="loginBtr" onAction="#loginAdmin" styleClass="action-btn" stylesheets="@loginDesign.css" text="LOGIN" />
-
-                </children>
-                <padding>
-                    <Insets bottom="30" left="30" right="30" top="30" />
-                </padding>
-            </VBox>
-        </HBox>
-        <Button fx:id="minimize" layoutX="631.0" layoutY="5.0" onAction="#minimizeWindow" onDragDetected="#minimizeWindow" prefHeight="23.0" prefWidth="36.0" styleClass="minimize" stylesheets="@loginDesign.css" text="-" AnchorPane.topAnchor="0.0">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
-        <Button fx:id="close" layoutX="666.0" layoutY="5.0" onAction="#close" onDragDetected="#close" prefHeight="27.0" prefWidth="36.0" styleClass="close" stylesheets="@loginDesign.css" text="x" AnchorPane.topAnchor="0.0">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
+        <ImageView fitHeight="295.0" fitWidth="447.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="/images/Screenshot_2.png" />
+            </image>
+        </ImageView>
+        <VBox alignment="TOP_CENTER" layoutX="472.0" layoutY="-4.0" prefHeight="463.0" prefWidth="328.0" style="-fx-background-color: #fb8500;">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="LOG IN" textAlignment="JUSTIFY">
+                    <VBox.margin>
+                        <Insets top="100.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="Montserrat Black" size="36.0" />
+                    </font>
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên đăng nhập">
+                    <VBox.margin>
+                        <Insets right="150.0" top="30.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="Montserrat Medium" size="13.0" />
+                    </font>
+                </Text>
+                <TextField fx:id="username" prefHeight="26.0" prefWidth="288.0" promptText="user name" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon" stylesheets="@signup.css">
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" top="5.0" />
+                    </VBox.margin>
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font name="Montserrat Regular" size="12.0" />
+                    </font>
+                </TextField>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu">
+                    <font>
+                        <Font name="Montserrat Medium" size="13.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets right="190.0" top="15.0" />
+                    </VBox.margin>
+                </Text>
+                <PasswordField fx:id="password" layoutX="40.0" layoutY="185.0" prefHeight="26.0" prefWidth="288.0" promptText="password" style="-fx-background-radius: 30;" styleClass="text-field-password-with-icon" stylesheets="@signup.css">
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font name="Montserrat Regular" size="12.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" top="5.0" />
+                    </VBox.margin>
+                </PasswordField>
+                <Button fx:id="loginBtr" mnemonicParsing="false" onAction="#loginAdmin" prefHeight="32.0" prefWidth="73.0" style="-fx-background-color: #023047; -fx-background-radius: 30;" text="Log in" textFill="#efefef">
+                    <VBox.margin>
+                        <Insets top="22.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="Montserrat Medium" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="forgotPasswordLink" mnemonicParsing="false" onAction="#openForgotPasswordForm" style="-fx-background-color: fb8500;" text="Forgot password?" underline="true">
+                    <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </Button>
+                <HBox prefHeight="35.0" prefWidth="310.0">
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Don't have an account?">
+                            <font>
+                                <Font name="Montserrat Light" size="12.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="55.0" top="5.0" />
+                            </HBox.margin>
+                        </Text>
+                        <Button fx:id="registerLink" mnemonicParsing="false" onAction="#openRegisterForm" style="-fx-background-color: #fb8500;" text="Sign up" underline="true">
+                            <padding>
+                                <Insets top="5.0" />
+                            </padding>
+                            <HBox.margin>
+                                <Insets left="10.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font name="Montserrat Black" size="12.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
     </children>
 </AnchorPane>

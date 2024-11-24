@@ -1,0 +1,89 @@
+.text-field-user-with-icon {
+    -fx-background-image: url("images/user.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-password-with-icon {
+    -fx-background-image: url("images/password.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+.text-field-password2-with-icon {
+    -fx-background-image: url("images/password2.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-email-with-icon {
+    -fx-background-image: url("images/email.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-menu-with-icon {
+    -fx-background-image: url("images/menuu.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-search-with-icon {
+    -fx-background-image: url("images/search.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-return-with-icon {
+    -fx-background-image: url("images/book.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-repair-with-icon {
+    -fx-background-image: url("images/bookRepair.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-delete-with-icon {
+    -fx-background-image: url("images/bookDelete.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-add-with-icon {
+    -fx-background-image: url("images/addBook.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-manager-with-icon {
+    -fx-background-image: url("images/profile.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-logout-with-icon {
+    -fx-background-image: url("images/logout.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.text-field-menuW-with-icon {
+    -fx-background-image: url("images/menu.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-insets: 0 0 0 0;
+}

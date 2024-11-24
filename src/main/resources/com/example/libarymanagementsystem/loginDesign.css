@@ -10,14 +10,6 @@
     -fx-border-width: 4px 4px 4px 0px;
 }
 
-.close{
-    -fx-background-color:transparent;
-    -fx-cursor:hand;
-}
-.close:hover{
-    -fx-background-color:#fb3d63;
-}
-
 .textfield{
     -fx-background-color:linear-gradient(to bottom, #efefef, #eee);
     -fx-background-radius:5px;
@@ -33,16 +25,82 @@
     -fx-border-width:.8px;
 }
 
-.login-btn{
-    -fx-background-color:linear-gradient(to bottom, #2968a7, #14405d);
-    -fx-background-radius:4px;
-    -fx-cursor:hand;
-    -fx-text-fill:#fff;
-    -fx-font-size:14px;
-    -fx-font-family:"Arial";
-}
-.login-btn:hover{
-    -fx-background-color:linear-gradient(to bottom, #277bd0, #1b6fa4);
+/* Close Button */
+.close {
+    -fx-background-color: transparent; /* Làm nền trong suốt */
+    -fx-text-fill: black; /* Chữ màu trắng */
+    -fx-font-weight: bold; /* Chữ đậm để dễ nhìn */
+    -fx-border-width: 0; /* Không có viền */
+    -fx-padding: 5;
 }
 
+.close:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2); /* Hiện nhẹ nền khi hover */
+    -fx-cursor: hand;
+}
 
+/* Minimize Button */
+.minimize {
+    -fx-background-color: transparent; /* Màu đỏ */
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-padding: 5;
+}
+
+.minimize:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2); /* Hiện nhẹ nền khi hover */
+    -fx-cursor: hand;
+}
+
+/* Login Button */
+.loginBtr {
+    -fx-background-color: linear-gradient(to bottom, #2968a7, #14405d); /* Màu xanh */
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial";
+}
+
+.loginBtr:hover {
+    -fx-background-color: linear-gradient(to bottom, #277bd0, #1b6fa4); /* Màu xanh sáng hơn */
+}
+/* Action Buttons: Close, Minimize, and Login */
+.action-btn {
+    -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc); /* Xanh đồng bộ với bìa */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+    -fx-padding: 5 15;
+}
+
+.action-btn:hover {
+    -fx-background-color: linear-gradient(to right, #2575fc, #6a11cb); /* Đảo ngược gradient khi hover */
+    -fx-text-fill: #ffffff;
+}
+
+/* Header bar */
+.hbox {
+    -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc); /* Đồng bộ với bìa */
+    -fx-padding: 5;
+}
+
+/*.anchor-background {*/
+/*    -fx-background-image: url("images/image.png");*/
+/*    -fx-background-repeat: no-repeat;*/
+/*    -fx-background-size: contain;*/
+/*}*/
+
+.action-btn2 {
+    -fx-background-color: linear-gradient(to right, #023047, #8ecae6); /* Xanh đồng bộ với bìa */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+    -fx-padding: 5 15;
+}

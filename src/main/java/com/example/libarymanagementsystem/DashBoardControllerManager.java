@@ -136,7 +136,6 @@ public class DashBoardControllerManager {
         if (event.getSource() == googleBooksButton) {
             googleBooks_form.setVisible(true);
         }
-
         else if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {

@@ -128,6 +128,7 @@
                             </TableView>
                         </children>
                     </AnchorPane>
+
                     <AnchorPane fx:id="member_form" prefHeight="560.0" prefWidth="762.0" visible="false">
                         <children>
                             <!-- Thanh tìm kiếm -->
