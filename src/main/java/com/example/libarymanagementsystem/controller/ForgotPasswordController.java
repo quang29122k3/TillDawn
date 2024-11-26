@@ -1,4 +1,4 @@
-package com.example.libarymanagementsystem;
+package com.example.libarymanagementsystem.controller;
 
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import javafx.fxml.FXML;

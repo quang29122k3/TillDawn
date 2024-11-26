@@ -17,7 +17,7 @@ public class LibraryManagementSystem extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(LibraryManagementSystem.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 685, 486);
+        Scene scene = new Scene(fxmlLoader.load(), 800, 450);
         // Đặt tiêu đề cho cửa sổ
         stage.setTitle("Hello!");
 

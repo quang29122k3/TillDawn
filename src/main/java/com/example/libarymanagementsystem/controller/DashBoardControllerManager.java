@@ -1,5 +1,9 @@
-package com.example.libarymanagementsystem;
+package com.example.libarymanagementsystem.controller;
 
+import com.example.libarymanagementsystem.model.Book;
+import com.example.libarymanagementsystem.model.BookItem;
+import com.example.libarymanagementsystem.model.GetData;
+import com.example.libarymanagementsystem.model.Person;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import com.example.libarymanagementsystem.utils.GoogleBooksService;
 import javafx.collections.FXCollections;
@@ -18,18 +22,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.input.MouseEvent;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 public class DashBoardControllerManager {
     @FXML
@@ -61,12 +61,6 @@ public class DashBoardControllerManager {
     private TableColumn<Book, ImageView> imageColumn;
     @FXML
     private AnchorPane availableBooks_form;
-
-//    @FXML
-//    private AnchorPane issue_form;
-//
-//    @FXML
-//    private AnchorPane returnBook_form;
 
     @FXML
     private AnchorPane savedBook_form;
@@ -125,6 +119,46 @@ public class DashBoardControllerManager {
     @FXML
     private Button googleBooksButton;
 
+    @FXML
+    private TableView<Book> borrowedBooksTable;
+
+    @FXML
+    private ImageView managerAvatar;
+
+    @FXML
+    private Label managerName;
+
+    @FXML
+    private TableColumn<Book, String> borrowedBookTitleColumn;
+    @FXML
+    private TableColumn<Book, String> borrowedBookAuthorColumn;
+    @FXML
+    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
+
+    @FXML
+    private AnchorPane googleBooks_form;
+
+    @FXML
+    private TextField googleBooksSearchField;
+
+    @FXML
+    private Button googleBooksSearchButton;
+
+    @FXML
+    private TableView<BookItem> googleBooksTableView;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookTitleColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookAuthorsColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookPublisherColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookLinkColumn;
+
     // Các phương thức xử lý sự kiện
     @FXML
     private void navButtonDesign(ActionEvent event) {
@@ -135,8 +169,7 @@ public class DashBoardControllerManager {
 
         if (event.getSource() == googleBooksButton) {
             googleBooks_form.setVisible(true);
-        }
-        else if (event.getSource() == availableBooks_btn) {
+        } else if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
             savedBook_form.setVisible(true);
@@ -200,22 +233,6 @@ public class DashBoardControllerManager {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
-
-    @FXML
-    private TableView<Book> borrowedBooksTable;
-
-    @FXML
-    private ImageView managerAvatar;
-
-    @FXML
-    private Label managerName;
-
-    @FXML
-    private TableColumn<Book, String> borrowedBookTitleColumn;
-    @FXML
-    private TableColumn<Book, String> borrowedBookAuthorColumn;
-    @FXML
-    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
 
     @FXML
     public void initialize() {
@@ -286,7 +303,7 @@ public class DashBoardControllerManager {
 
                 logout.getScene().getWindow().hide();
             }
-        } catch ( Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -434,7 +451,7 @@ public class DashBoardControllerManager {
 
         try (Connection conn = ConnectionJDBCUtils.getConnection()) {
             conn.setAutoCommit(false);
-            String personId = GetData.username; // Sử dụng mã người dùng hiện tại
+            String personId = GetData.getUsername(); // Sử dụng mã người dùng hiện tại
 
             // Thêm bản ghi mượn vào loans
             String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, returned, status) VALUES (?, ?, ?, 0, 'borrowed')";
@@ -724,29 +741,6 @@ public class DashBoardControllerManager {
         alert.showAndWait();
     }
 
-    @FXML
-    private AnchorPane googleBooks_form;
-
-    @FXML
-    private TextField googleBooksSearchField;
-
-    @FXML
-    private Button googleBooksSearchButton;
-
-    @FXML
-    private TableView<BookItem> googleBooksTableView;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookTitleColumn;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookAuthorsColumn;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookPublisherColumn;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookLinkColumn;
 
     private ObservableList<BookItem> googleBooksList = FXCollections.observableArrayList();
 

@@ -1,5 +1,8 @@
-package com.example.libarymanagementsystem;
+package com.example.libarymanagementsystem.controller;
 
+import com.example.libarymanagementsystem.model.Book;
+import com.example.libarymanagementsystem.model.BookItem;
+import com.example.libarymanagementsystem.model.GetData;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import com.example.libarymanagementsystem.utils.GoogleBooksService;
 import javafx.collections.FXCollections;
@@ -178,7 +181,7 @@ public class StudentController {
 
     private void loadBorrowedBooks() {
         borrowedBooks.clear();
-        String personId = GetData.username; // Sử dụng mã người dùng hiện tại
+        String personId = GetData.getUsername(); // Sử dụng mã người dùng hiện tại
 
         String query = "SELECT loans.id AS loan_id, books.id AS book_id, books.title, books.author, books.image, loans.borrow_date " +
                 "FROM loans INNER JOIN books ON loans.book_id = books.id " +
@@ -264,7 +267,7 @@ public class StudentController {
             return;
         }
 
-        String personId = GetData.username;
+        String personId = GetData.getUsername();
 
         try (Connection conn = ConnectionJDBCUtils.getConnection()) {
             conn.setAutoCommit(false);
@@ -301,7 +304,7 @@ public class StudentController {
             return;
         }
 
-        String personId = GetData.username;
+        String personId = GetData.getUsername();
         int loanId = selectedBook.getLoanId();
 
         try (Connection conn = ConnectionJDBCUtils.getConnection()) {

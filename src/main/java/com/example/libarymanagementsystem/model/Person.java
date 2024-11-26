@@ -1,4 +1,4 @@
-package com.example.libarymanagementsystem;
+package com.example.libarymanagementsystem.model;
 
 public class Person {
     private String id;

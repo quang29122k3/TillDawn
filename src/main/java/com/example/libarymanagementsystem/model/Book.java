@@ -1,6 +1,7 @@
-package com.example.libarymanagementsystem;
+package com.example.libarymanagementsystem.model;
 
 import javafx.scene.image.ImageView;
+
 import java.time.LocalDate;
 
 public class Book {
@@ -9,9 +10,9 @@ public class Book {
     private String author;
     private int available;
     private ImageView imageView;
-    private LocalDate borrowDate; // Thêm thuộc tính borrowDate
-    private int totalCopies; // Thêm thuộc tính totalCopies nếu cần
-    private int loanId; // Thêm thuộc tính loanId
+    private LocalDate borrowDate;
+    private int totalCopies;
+    private int loanId;
 
     // Constructor cho sách có sẵn (không có loanId)
     public Book(int id, String title, String author, int available, ImageView imageView) {
@@ -36,7 +37,7 @@ public class Book {
         this.totalCopies = available; // Giả sử totalCopies ban đầu bằng available
         this.loanId = loanId;
     }
-    
+
 
     // Getters và Setters cho tất cả các thuộc tính
 

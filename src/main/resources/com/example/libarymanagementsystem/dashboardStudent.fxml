@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.layout.HBox?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="747.0" prefWidth="974.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.StudentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="747.0" prefWidth="974.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.StudentController">
    <children>
       <AnchorPane fx:id="availableBooks_form" layoutX="133.0" prefHeight="406.0" prefWidth="820.0" visible="false">
          <children>

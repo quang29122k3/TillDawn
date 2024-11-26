@@ -1,5 +1,6 @@
-package com.example.libarymanagementsystem;
+package com.example.libarymanagementsystem.controller;
 
+import com.example.libarymanagementsystem.model.Book;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;

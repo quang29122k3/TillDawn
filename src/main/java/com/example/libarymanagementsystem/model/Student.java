@@ -1,4 +1,4 @@
-package com.example.libarymanagementsystem;
+package com.example.libarymanagementsystem.model;
 
 public class Student {
     private String id;           // ID sinh viên

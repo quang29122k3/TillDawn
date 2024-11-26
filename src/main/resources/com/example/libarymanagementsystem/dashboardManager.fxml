@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane prefHeight="600.0" prefWidth="986.0" style="-fx-background-color: #f0f4f7;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.DashBoardControllerManager">
+<AnchorPane prefHeight="600.0" prefWidth="986.0" style="-fx-background-color: #f0f4f7;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.DashBoardControllerManager">
     <children>
         <!-- Thanh trên cùng với nút thu nhỏ và đóng -->
         <HBox fx:id="topBar" alignment="CENTER_RIGHT" prefHeight="40.0" spacing="10.0" style="-fx-background-color: #263238;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

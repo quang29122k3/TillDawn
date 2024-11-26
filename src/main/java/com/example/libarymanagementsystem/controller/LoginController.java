@@ -1,5 +1,6 @@
-package com.example.libarymanagementsystem;
+package com.example.libarymanagementsystem.controller;
 
+import com.example.libarymanagementsystem.model.GetData;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,11 +58,6 @@ public class LoginController {
         try {
             connect = ConnectionJDBCUtils.getConnection();
             Alert alert;
-//            prepare = connect.prepareStatement(sql);
-//            prepare.setString(1, username.getText());
-//            prepare.setString(2, password.getText());
-//
-//            result = prepare.executeQuery();
             String enteredUsername = username.getText().trim();
             String enteredPassword = password.getText().trim();
 
@@ -77,10 +73,10 @@ public class LoginController {
                 result = prepare.executeQuery();
                 if (result.next()) {
                     String storedHashedPassword = result.getString("password");
-                    if(BCrypt.checkpw(enteredPassword, storedHashedPassword)) {
+                    if (BCrypt.checkpw(enteredPassword, storedHashedPassword)) {
                         // Lấy role code (manager/student)
                         String roleCode = result.getString("code");
-                        GetData.username = enteredUsername;
+                        GetData.setUsername(enteredUsername);
 //                     Kiểm tra trạng thái tài khoản
                         boolean isActive = result.getBoolean("is_active");
 

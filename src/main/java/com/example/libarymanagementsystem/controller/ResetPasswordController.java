@@ -1,4 +1,4 @@
-package com.example.libarymanagementsystem;
+package com.example.libarymanagementsystem.controller;
 
 import org.mindrot.jbcrypt.BCrypt;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
@@ -38,6 +38,7 @@ public class ResetPasswordController {
     public void setUsername(String username) {
         this.username = username;
     }
+
     public void verifyCode() {
         String code = codeField.getText().trim(); // Loại bỏ khoảng trắng đầu và cuối
 
@@ -118,19 +119,19 @@ public class ResetPasswordController {
 
         Alert alert;
 
-        if (newPassword.isEmpty()){
+        if (newPassword.isEmpty()) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Vui lòng nhập mật khẩu mới.");
             alert.showAndWait();
-        }else if (confirmPassword.isEmpty()){
+        } else if (confirmPassword.isEmpty()) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Xác thực mật khẩu mới");
             alert.showAndWait();
-        } else if (!newPassword.equals(confirmPassword)){
+        } else if (!newPassword.equals(confirmPassword)) {
             alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("gà thế nhập 2 cái mật khẩu cũng sai");
+            alert.setContentText("Sai mật khẩu");
             alert.showAndWait();
-        }else {
+        } else {
             try {
                 String encryptedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
                 connect = ConnectionJDBCUtils.getConnection();
@@ -145,7 +146,7 @@ public class ResetPasswordController {
                 alert.showAndWait();
 
                 resetButton.getScene().getWindow().hide();
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Đã xảy ra lỗi. Vui lòng thử lại.");

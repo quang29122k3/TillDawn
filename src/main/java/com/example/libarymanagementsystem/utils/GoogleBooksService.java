@@ -1,6 +1,6 @@
 package com.example.libarymanagementsystem.utils;
 
-import com.example.libarymanagementsystem.BookItem;
+import com.example.libarymanagementsystem.model.BookItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
