@@ -9,82 +9,140 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: fffff;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #fffff;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox prefHeight="51.0" prefWidth="600.0" style="-fx-background-color: #fb8500;">
+      <VBox alignment="CENTER" layoutY="-4.0" prefHeight="458.0" prefWidth="163.0" spacing="10.0" style="-fx-background-color: #03045e;">
          <children>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="28.0" prefWidth="192.0" style="-fx-background-color: #fb8500;" styleClass="text-field-menu-with-icon" stylesheets="@signup.css" text="Student Library" textAlignment="CENTER" textFill="WHITE">
-               <HBox.margin>
-                  <Insets left="15.0" top="12.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="Montserrat Black" size="14.0" />
-               </font>
-            </Button>
-            <Button alignment="CENTER" layoutX="25.0" layoutY="22.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="122.0" style="-fx-background-color: #fb8500;" styleClass="text-field-search-with-icon" stylesheets="@signup.css" text="Tìm sách" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="Montserrat ExtraBold" size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="50.0" top="12.0" />
-               </HBox.margin>
-            </Button>
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="28.0" prefWidth="122.0" style="-fx-background-color: #023047;" styleClass="text-field-return-with-icon" stylesheets="@signup.css" text="Trả sách" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="Montserrat ExtraBold" size="14.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="5.0" top="12.0" />
-               </HBox.margin>
-            </Button>
-            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="87.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/out.png" />
+                  <Image url="@images/avatar.png" />
                </image>
-               <HBox.margin>
-                  <Insets left="35.0" top="10.0" />
-               </HBox.margin>
             </ImageView>
-         </children>
-      </HBox>
-      <ImageView fitHeight="150.0" fitWidth="104.0" layoutX="62.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/cover.jpg" />
-         </image>
-      </ImageView>
-      <TextField layoutX="39.0" layoutY="238.0" text="Thông tin sách">
-         <font>
-            <Font name="Montserrat Medium" size="12.0" />
-         </font>
-      </TextField>
-      <Button layoutX="62.0" layoutY="326.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="104.0" style="-fx-background-color: #fb8500; -fx-background-radius: 30;" text="Trả sách">
-         <font>
-            <Font name="Montserrat ExtraBold" size="14.0" />
-         </font>
-      </Button>
-      <VBox layoutX="234.0" layoutY="57.0" prefHeight="330.0" prefWidth="362.0" style="-fx-background-color: #023047;">
-         <children>
-            <Text fill="#fb8500" strokeType="OUTSIDE" strokeWidth="0.0" text="SÁCH ĐÃ MƯỢN">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên người quản lý">
                <font>
-                  <Font name="Montserrat ExtraBold" size="14.0" />
+                  <Font name="Montserrat ExtraBold" size="15.0" />
                </font>
                <VBox.margin>
-                  <Insets left="120.0" top="10.0" />
+                  <Insets top="10.0" />
                </VBox.margin>
             </Text>
-            <TableView prefHeight="290.0" prefWidth="362.0">
-              <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-              </columns>
+            <Button fx:id="availableBooks_btn" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" stylesheets="@buttonEffect.css" text="Sách Có Sẵn" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat ExtraBold" size="12.0" />
+               </font>
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                  <Insets top="5.0" />
                </VBox.margin>
-            </TableView>
+            </Button>
+            <Button fx:id="memberButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Sách đã mượn" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat ExtraBold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="googleBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Tra cứu tài liệu" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat ExtraBold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #90e0ef;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Đăng Xuất">
+               <font>
+                  <Font name="Montserrat ExtraBold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
+      <StackPane layoutX="163.0" prefHeight="450.0" prefWidth="634.0">
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutX="28.0" layoutY="22.0" prefHeight="26.0" prefWidth="578.0" spacing="10.0">
+                     <children>
+                        <TextField fx:id="searchField" prefHeight="26.0" prefWidth="422.0" promptText="Nhập tên sách hoặc tác giả" style="-fx-background-radius: 30;">
+                           <font>
+                              <Font name="Montserrat Medium" size="12.0" />
+                           </font>
+                        </TextField>
+                        <Button fx:id="searchButton" onAction="#handleSearchAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Tìm kiếm" textFill="WHITE">
+                           <font>
+                              <Font name="Montserrat ExtraBold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="bookTableView" editable="true" layoutX="20.0" layoutY="72.0" prefHeight="325.0" prefWidth="594.0">
+                     <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
+                        <TableColumn fx:id="imageColumn" prefWidth="119.20001220703125" text="Hình Ảnh" />
+                        <TableColumn fx:id="titleColumn" prefWidth="153.60003662109375" text="Tiêu Đề" />
+                        <TableColumn fx:id="authorColumn" prefWidth="93.5999755859375" text="Tác Giả" />
+                        <TableColumn fx:id="availableColumn" prefWidth="90.39996337890625" text="Số Lượng Còn" />
+                        <TableColumn fx:id="totalCopiesColumn" prefWidth="95.199951171875" text="Tổng Số" />
+                     </columns>
+                  </TableView>
+                  <Button fx:id="searchButton1" layoutX="230.0" layoutY="412.0" onAction="#handleSearchAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn sách" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="borrowedBooksTable" layoutX="22.0" layoutY="22.0" prefHeight="377.0" prefWidth="594.0">
+                     <columns>
+                        <TableColumn fx:id="borrowedBookTitleColumn" prefWidth="216.00006103515625" text="Tên Sách" />
+                        <TableColumn fx:id="borrowedBookAuthorColumn" prefWidth="156.7999267578125" text="Tác Giả" />
+                        <TableColumn fx:id="borrowedBookBorrowDateColumn" prefWidth="219.2000732421875" text="Thời Gian Mượn" />
+                     </columns>
+                  </TableView>
+                  <Button fx:id="searchButton11" layoutX="230.0" layoutY="412.0" onAction="#handleSearchAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Trả sách" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutX="28.0" layoutY="14.0" prefHeight="26.0" prefWidth="578.0" spacing="10.0">
+                     <children>
+                        <TextField fx:id="searchField2" prefHeight="26.0" prefWidth="422.0" promptText="Nhập tên sách hoặc tác giả" style="-fx-background-radius: 30;">
+                           <font>
+                              <Font name="Montserrat Medium" size="12.0" />
+                           </font>
+                        </TextField>
+                        <Button fx:id="searchButton2" onAction="#handleSearchAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Tìm kiếm" textFill="WHITE">
+                           <font>
+                              <Font name="Montserrat ExtraBold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="googleBooksTableView" layoutX="15.0" layoutY="57.0" prefHeight="378.0" prefWidth="603.0">
+                     <columns>
+                        <TableColumn fx:id="googleBookTitleColumn" prefWidth="150.4000244140625" text="Tiêu Đề" />
+                        <TableColumn fx:id="googleBookAuthorsColumn" prefWidth="97.5999755859375" text="Tác Giả" />
+                        <TableColumn fx:id="googleBookPublisherColumn" minWidth="0.0" prefWidth="116.79998779296875" text="Nhà Xuất Bản" />
+                        <TableColumn fx:id="googleBookLinkColumn" prefWidth="380.79998779296875" text="Link" />
+                     </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>
