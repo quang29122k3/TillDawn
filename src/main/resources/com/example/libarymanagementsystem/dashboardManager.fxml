@@ -144,7 +144,7 @@
                     <children>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0">
                             <children>
-                                <Button fx:id="returnBookButton" onAction="#handleReturnAction" text="Trả Sách" />
+                                <Button fx:id="returnButton" layoutX="230.0" layoutY="412.0" onAction="#handleReturnAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Trả sách" textFill="WHITE"></Button>
                             </children>
                         </HBox>
                         <TableView fx:id="borrowedBooksTable" editable="true" layoutX="14.0" layoutY="110.0" prefHeight="325.0" prefWidth="594.0">

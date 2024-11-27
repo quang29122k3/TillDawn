@@ -1,8 +1,11 @@
 package com.example.libarymanagementsystem.controller;
 
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
@@ -99,6 +102,15 @@ public class RegisterController {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void minimizeWindow(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    public void close() {
+        System.exit(0);
     }
 
 }

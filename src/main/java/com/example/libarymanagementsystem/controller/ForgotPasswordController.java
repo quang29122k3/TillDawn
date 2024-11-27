@@ -1,8 +1,10 @@
 package com.example.libarymanagementsystem.controller;
 
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,6 +20,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 // Import java.sql
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -162,4 +165,14 @@ public class ForgotPasswordController {
             e.printStackTrace();
         }
     }
+
+    public void close() {
+        System.exit(0);
+    }
+
+    public void minimizeWindow(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setIconified(true);
+    }
+
 }

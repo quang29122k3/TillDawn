@@ -121,13 +121,14 @@ public class LoginController {
                             stage.show();
                         }
                     }
+                    else {
+                        alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Wrong Username/Password");
+                        alert.showAndWait();
+                    }
 
-                } else {
-                    alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Wrong Username/Password");
-                    alert.showAndWait();
                 }
             }
         } catch (Exception e) {

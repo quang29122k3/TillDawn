@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.RegisterController">
+<AnchorPane prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.RegisterController">
     <children>
         <ImageView fitHeight="295.0" fitWidth="447.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -20,6 +21,20 @@
         </ImageView>
         <VBox alignment="TOP_CENTER" layoutX="472.0" layoutY="-4.0" prefHeight="463.0" prefWidth="328.0" style="-fx-background-color: #fb8500;">
             <children>
+            <AnchorPane prefHeight="32.0" prefWidth="328.0">
+               <children>
+                  <Button fx:id="close" layoutX="269.0" layoutY="2.0" mnemonicParsing="false" onAction="#close" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                     <graphic>
+                        <FontAwesomeIcon glyphName="CLOSE" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="minimize" layoutX="276.0" layoutY="2.0" mnemonicParsing="false" onAction="#minimizeWindow" AnchorPane.topAnchor="5.0">
+                     <graphic>
+                        <FontAwesomeIcon glyphName="MINUS" />
+                     </graphic>
+                  </Button>
+               </children>
+            </AnchorPane>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SIGN UP" textAlignment="JUSTIFY">
                     <VBox.margin>
                         <Insets top="30.0" />
@@ -36,7 +51,7 @@
                         <Font name="Montserrat Medium" size="13.0" />
                     </font>
                 </Text>
-                <TextField fx:id="usernameField" prefHeight="26.0" prefWidth="288.0" promptText="user name" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon" stylesheets="@signup.css">
+                <TextField fx:id="usernameField" prefHeight="20.0" prefWidth="288.0" promptText="user name" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon" stylesheets="@signup.css">
                     <VBox.margin>
                         <Insets left="30.0" right="30.0" top="5.0" />
                     </VBox.margin>
@@ -55,7 +70,7 @@
                         <Insets right="190.0" top="12.0" />
                     </VBox.margin>
                 </Text>
-                <PasswordField fx:id="passwordField" prefHeight="26.0" prefWidth="288.0" promptText="password" style="-fx-background-radius: 30;" styleClass="text-field-password-with-icon" stylesheets="@signup.css">
+                <PasswordField fx:id="passwordField" prefHeight="20.0" prefWidth="288.0" promptText="password" style="-fx-background-radius: 30;" styleClass="text-field-password-with-icon" stylesheets="@signup.css">
                     <VBox.margin>
                         <Insets left="30.0" right="30.0" top="5.0" />
                     </VBox.margin>
@@ -74,7 +89,7 @@
                         <Insets right="132.0" top="12.0" />
                     </VBox.margin>
                 </Text>
-                <PasswordField fx:id="confirmPasswordField" prefHeight="26.0" prefWidth="288.0" promptText="confirm password" style="-fx-background-radius: 30;" styleClass="text-field-password2-with-icon" stylesheets="@signup.css">
+                <PasswordField fx:id="confirmPasswordField" prefHeight="20.0" prefWidth="288.0" promptText="confirm password" style="-fx-background-radius: 30;" styleClass="text-field-password2-with-icon" stylesheets="@signup.css">
                     <padding>
                         <Insets left="35.0" />
                     </padding>
@@ -93,7 +108,7 @@
                         <Insets right="215.0" top="12.0" />
                     </VBox.margin>
                 </Text>
-                <TextField fx:id="emailField" prefHeight="26.0" prefWidth="288.0" promptText="email" style="-fx-background-radius: 30;" styleClass="text-field-email-with-icon" stylesheets="@signup.css">
+                <TextField fx:id="emailField" prefHeight="20.0" prefWidth="288.0" promptText="email" style="-fx-background-radius: 30;" styleClass="text-field-email-with-icon" stylesheets="@signup.css">
                     <padding>
                         <Insets left="35.0" />
                     </padding>
@@ -112,7 +127,7 @@
                         <Insets right="127.0" top="15.0" />
                     </VBox.margin>
                 </Text>
-                <TextField fx:id="adminCode" prefHeight="26.0" prefWidth="288.0" promptText="admin code" style="-fx-background-radius: 30;" styleClass="text-field-admin-with-icon" stylesheets="@signup.css">
+                <TextField fx:id="adminCode" prefHeight="20.0" prefWidth="267.0" promptText="admin code" style="-fx-background-radius: 30;" styleClass="text-field-admin-with-icon" stylesheets="@signup.css">
                     <padding>
                         <Insets left="35.0" />
                     </padding>
