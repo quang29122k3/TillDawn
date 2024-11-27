@@ -23,14 +23,10 @@ import java.sql.ResultSet;
 import java.util.Objects;
 
 public class LoginController {
-    @FXML
-    private Button close;
 
     @FXML
     private Button loginBtr;
 
-    @FXML
-    private AnchorPane main_form;
 
     @FXML
     private PasswordField password;
@@ -50,7 +46,7 @@ public class LoginController {
 
     public void loginAdmin() {
         // Cập nhật query để lấy role từ bảng `role`
-        String sql = "SELECT person.id, person.password, role.code, person.is_active " +
+        String sql = "SELECT person.id, person.password, role.code, person.is_active, person.fullname " +
                 "FROM person " +
                 "INNER JOIN role ON person.role_id = role.id " +
                 "WHERE person.id = ? ";
@@ -76,7 +72,9 @@ public class LoginController {
                     if (BCrypt.checkpw(enteredPassword, storedHashedPassword)) {
                         // Lấy role code (manager/student)
                         String roleCode = result.getString("code");
+                        String fullname = result.getString("fullname");
                         GetData.setUsername(enteredUsername);
+                        GetData.setFullName(fullname);
 //                     Kiểm tra trạng thái tài khoản
                         boolean isActive = result.getBoolean("is_active");
 
@@ -99,9 +97,9 @@ public class LoginController {
                         // Phân quyền dựa vào roleCode
                         Parent root = null;
                         if ("manager".equals(roleCode)) {
-                            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("dashboardManager.fxml"))); // Quản lý
+                            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/libarymanagementsystem/dashboardManager.fxml"))); // Quản lý
                         } else if ("student".equals(roleCode)) {
-                            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("dashboardStudent.fxml"))); // Sinh viên
+                            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/libarymanagementsystem/dashboardStudent.fxml"))); // Sinh viên
                         }
 
                         if (root != null) {
@@ -156,7 +154,7 @@ public class LoginController {
 
     public void openForgotPasswordForm() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("forgotPassword.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/libarymanagementsystem/forgotPassword.fxml"));
             Stage stage = new Stage();
             Scene scene = new Scene(root);
 
@@ -171,7 +169,7 @@ public class LoginController {
 
     public void openRegisterForm() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("register.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/libarymanagementsystem/register.fxml"));
             Stage stage = new Stage();
             Scene scene = new Scene(root);
 

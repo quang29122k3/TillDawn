@@ -18,18 +18,23 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.input.MouseEvent;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 public class DashBoardControllerManager {
     @FXML
@@ -61,6 +66,12 @@ public class DashBoardControllerManager {
     private TableColumn<Book, ImageView> imageColumn;
     @FXML
     private AnchorPane availableBooks_form;
+
+//    @FXML
+//    private AnchorPane issue_form;
+//
+//    @FXML
+//    private AnchorPane returnBook_form;
 
     @FXML
     private AnchorPane savedBook_form;
@@ -119,46 +130,6 @@ public class DashBoardControllerManager {
     @FXML
     private Button googleBooksButton;
 
-    @FXML
-    private TableView<Book> borrowedBooksTable;
-
-    @FXML
-    private ImageView managerAvatar;
-
-    @FXML
-    private Label managerName;
-
-    @FXML
-    private TableColumn<Book, String> borrowedBookTitleColumn;
-    @FXML
-    private TableColumn<Book, String> borrowedBookAuthorColumn;
-    @FXML
-    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
-
-    @FXML
-    private AnchorPane googleBooks_form;
-
-    @FXML
-    private TextField googleBooksSearchField;
-
-    @FXML
-    private Button googleBooksSearchButton;
-
-    @FXML
-    private TableView<BookItem> googleBooksTableView;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookTitleColumn;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookAuthorsColumn;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookPublisherColumn;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookLinkColumn;
-
     // Các phương thức xử lý sự kiện
     @FXML
     private void navButtonDesign(ActionEvent event) {
@@ -169,7 +140,8 @@ public class DashBoardControllerManager {
 
         if (event.getSource() == googleBooksButton) {
             googleBooks_form.setVisible(true);
-        } else if (event.getSource() == availableBooks_btn) {
+        }
+        else if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
             savedBook_form.setVisible(true);
@@ -235,8 +207,24 @@ public class DashBoardControllerManager {
     }
 
     @FXML
+    private TableView<Book> borrowedBooksTable;
+
+    @FXML
+    private ImageView managerAvatar;
+
+    @FXML
+    private Text managerName;
+
+    @FXML
+    private TableColumn<Book, String> borrowedBookTitleColumn;
+    @FXML
+    private TableColumn<Book, String> borrowedBookAuthorColumn;
+    @FXML
+    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
+
+    @FXML
     public void initialize() {
-        managerName.setText("Tên Người Quản Lý");
+        managerName.setText(GetData.getFullName());
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
@@ -280,7 +268,7 @@ public class DashBoardControllerManager {
     private void handleLogout(ActionEvent event) {
         try {
             if (event.getSource() == logout) {
-                Parent root = FXMLLoader.load(getClass().getResource("hello-view.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/com/example/libarymanagementsystem/hello-view.fxml"));
 
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
@@ -303,7 +291,7 @@ public class DashBoardControllerManager {
 
                 logout.getScene().getWindow().hide();
             }
-        } catch (Exception e) {
+        } catch ( Exception e){
             e.printStackTrace();
         }
     }
@@ -712,7 +700,7 @@ public class DashBoardControllerManager {
 
     private void showBookForm(Book book) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("BookForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/libarymanagementsystem/BookForm.fxml"));
             Parent root = loader.load();
 
             BookFormController controller = loader.getController();
@@ -741,6 +729,29 @@ public class DashBoardControllerManager {
         alert.showAndWait();
     }
 
+    @FXML
+    private AnchorPane googleBooks_form;
+
+    @FXML
+    private TextField googleBooksSearchField;
+
+    @FXML
+    private Button googleBooksSearchButton;
+
+    @FXML
+    private TableView<BookItem> googleBooksTableView;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookTitleColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookAuthorsColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookPublisherColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookLinkColumn;
 
     private ObservableList<BookItem> googleBooksList = FXCollections.observableArrayList();
 

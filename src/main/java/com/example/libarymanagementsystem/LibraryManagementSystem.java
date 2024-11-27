@@ -16,17 +16,13 @@ public class LibraryManagementSystem extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(LibraryManagementSystem.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(LibraryManagementSystem.class.getResource("/com/example/libarymanagementsystem/hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 450);
         // Đặt tiêu đề cho cửa sổ
         stage.setTitle("Hello!");
 
-        // Bước 1: Áp dụng các hiệu ứng CSS, nếu có
+        //Áp dụng các hiệu ứng CSS
         stage.setScene(scene);
-
-        // Đặt chiều rộng và chiều cao tối thiểu
-//        stage.setMinWidth(685);
-//        stage.setMinHeight(550);
 
         // Xử lý sự kiện kéo thả cửa sổ bằng chuột
         scene.getRoot().setOnMousePressed((MouseEvent event) -> {

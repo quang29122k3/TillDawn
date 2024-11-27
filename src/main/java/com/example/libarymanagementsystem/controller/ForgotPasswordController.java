@@ -141,7 +141,7 @@ public class ForgotPasswordController {
 
     private void openResetPasswordForm(String username) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("resetPassword.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/libarymanagementsystem/resetPassword.fxml"));
             Parent root = loader.load();
 
             // Truyền tên đăng nhập sang controller của resetPassword

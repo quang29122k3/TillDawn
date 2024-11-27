@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.LoginController">
+<AnchorPane prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.RegisterController">
     <children>
         <ImageView fitHeight="295.0" fitWidth="447.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -22,7 +22,7 @@
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SIGN UP" textAlignment="JUSTIFY">
                     <VBox.margin>
-                        <Insets top="50.0" />
+                        <Insets top="30.0" />
                     </VBox.margin>
                     <font>
                         <Font name="Montserrat Black" size="36.0" />
@@ -30,7 +30,7 @@
                 </Text>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên đăng nhập">
                     <VBox.margin>
-                        <Insets right="150.0" top="30.0" />
+                        <Insets right="150.0" top="17.0" />
                     </VBox.margin>
                     <font>
                         <Font name="Montserrat Medium" size="13.0" />
@@ -52,7 +52,7 @@
                         <Font name="Montserrat Medium" size="13.0" />
                     </font>
                     <VBox.margin>
-                        <Insets right="190.0" top="15.0" />
+                        <Insets right="190.0" top="12.0" />
                     </VBox.margin>
                 </Text>
                 <PasswordField fx:id="passwordField" prefHeight="26.0" prefWidth="288.0" promptText="password" style="-fx-background-radius: 30;" styleClass="text-field-password-with-icon" stylesheets="@signup.css">
@@ -71,7 +71,7 @@
                         <Font name="Montserrat Medium" size="13.0" />
                     </font>
                     <VBox.margin>
-                        <Insets right="132.0" top="15.0" />
+                        <Insets right="132.0" top="12.0" />
                     </VBox.margin>
                 </Text>
                 <PasswordField fx:id="confirmPasswordField" prefHeight="26.0" prefWidth="288.0" promptText="confirm password" style="-fx-background-radius: 30;" styleClass="text-field-password2-with-icon" stylesheets="@signup.css">
@@ -90,10 +90,29 @@
                         <Font name="Montserrat Medium" size="13.0" />
                     </font>
                     <VBox.margin>
-                        <Insets right="215.0" top="15.0" />
+                        <Insets right="215.0" top="12.0" />
                     </VBox.margin>
                 </Text>
                 <TextField fx:id="emailField" prefHeight="26.0" prefWidth="288.0" promptText="email" style="-fx-background-radius: 30;" styleClass="text-field-email-with-icon" stylesheets="@signup.css">
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font name="Montserrat Regular" size="12.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" top="5.0" />
+                    </VBox.margin>
+                </TextField>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã admin (nếu có)">
+                    <font>
+                        <Font name="Montserrat Medium" size="13.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets right="127.0" top="15.0" />
+                    </VBox.margin>
+                </Text>
+                <TextField fx:id="adminCode" prefHeight="26.0" prefWidth="288.0" promptText="admin code" style="-fx-background-radius: 30;" styleClass="text-field-admin-with-icon" stylesheets="@signup.css">
                     <padding>
                         <Insets left="35.0" />
                     </padding>

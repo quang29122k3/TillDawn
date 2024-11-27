@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
@@ -21,6 +22,20 @@
         </ImageView>
         <VBox alignment="TOP_CENTER" layoutX="472.0" layoutY="-4.0" prefHeight="463.0" prefWidth="328.0" style="-fx-background-color: #fb8500;">
             <children>
+            <AnchorPane prefHeight="30.0" prefWidth="328.0">
+               <children>
+                  <Button fx:id="close" layoutX="302.0" layoutY="1.0" mnemonicParsing="false" onAction="#close" AnchorPane.topAnchor="5.0">
+                     <graphic>
+                        <FontAwesomeIcon glyphName="CLOSE" text="" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="minimize" layoutX="276.0" layoutY="1.0" mnemonicParsing="false" onAction="#minimizeWindow" AnchorPane.topAnchor="5.0">
+                     <graphic>
+                        <FontAwesomeIcon glyphName="MINUS" />
+                     </graphic>
+                  </Button>
+               </children>
+            </AnchorPane>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="LOG IN" textAlignment="JUSTIFY">
                     <VBox.margin>
                         <Insets top="100.0" />

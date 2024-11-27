@@ -2,183 +2,134 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.BookFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.BookFormController">
     <children>
-        <HBox prefHeight="38.0" prefWidth="600.0">
+        <VBox alignment="TOP_CENTER" layoutX="163.0" prefHeight="450.0" prefWidth="638.0" style="-fx-background-color: #fb8500;">
             <children>
-                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="274.0" style="-fx-background-color: #ffffff;" styleClass="text-field-menuW-with-icon" stylesheets="@signup.css" text="Library Management Systems" textAlignment="CENTER">
-                    <HBox.margin>
-                        <Insets left="15.0" top="8.0" />
-                    </HBox.margin>
-                    <font>
-                        <Font name="Montserrat Black" size="13.0" />
-                    </font>
-                    <padding>
-                        <Insets left="30.0" />
-                    </padding>
-                </Button>
-            </children>
-        </HBox>
-        <VBox layoutY="52.0" prefHeight="362.0" prefWidth="114.0" style="-fx-background-color: #fb8500; -fx-background-radius: 20;">
-            <children>
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #fb8500;" styleClass="text-field-manager-with-icon" stylesheets="@signup.css" text="Sinh viên" wrapText="true">
-                    <VBox.margin>
-                        <Insets left="5.0" top="20.0" />
-                    </VBox.margin>
-                    <font>
-                        <Font name="Montserrat ExtraBold" size="12.0" />
-                    </font>
-                    <padding>
-                        <Insets left="15.0" />
-                    </padding>
-                </Button>
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #ffb703;" styleClass="text-field-add-with-icon" stylesheets="@signup.css" text="Thêm sách">
-                    <VBox.margin>
-                        <Insets left="5.0" top="20.0" />
-                    </VBox.margin>
-                    <font>
-                        <Font name="Montserrat ExtraBold" size="12.0" />
-                    </font>
-                    <padding>
-                        <Insets left="17.0" />
-                    </padding>
-                </Button>
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" style="-fx-background-color: #fb8500;" styleClass="text-field-repair-with-icon" stylesheets="@signup.css" text="Sửa sách">
-                    <VBox.margin>
-                        <Insets left="5.0" top="20.0" />
-                    </VBox.margin>
-                    <font>
-                        <Font name="Montserrat ExtraBold" size="12.0" />
-                    </font>
-                    <padding>
-                        <Insets left="11.0" />
-                    </padding>
-                </Button>
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" style="-fx-background-color: #fb8500;" styleClass="text-field-logout-with-icon" stylesheets="@signup.css" text="Đăng xuất">
-                    <font>
-                        <Font name="Montserrat ExtraBold" size="12.0" />
-                    </font>
-                    <padding>
-                        <Insets left="11.0" />
-                    </padding>
-                    <VBox.margin>
-                        <Insets left="5.0" top="120.0" />
-                    </VBox.margin>
-                </Button>
-            </children>
-        </VBox>
-        <VBox alignment="TOP_CENTER" layoutX="169.0" layoutY="38.0" prefHeight="463.0" prefWidth="399.0" style="-fx-background-color: #fb8500;">
-            <children>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Thông tin sách cần thêm">
-                    <font>
-                        <Font name="Montserrat Black" size="14.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets top="15.0" />
-                    </VBox.margin>
-                </Text>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên sách">
-                    <VBox.margin>
-                        <Insets right="220.0" top="10.0" />
-                    </VBox.margin>
-                    <font>
-                        <Font name="Montserrat Medium" size="13.0" />
-                    </font>
-                </Text>
-                <TextField fx:id="titleField" prefHeight="26.0" prefWidth="288.0" promptText="title" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
-                    <VBox.margin>
-                        <Insets left="30.0" right="30.0" top="4.0" />
-                    </VBox.margin>
-                    <padding>
-                        <Insets left="10.0" />
-                    </padding>
-                    <font>
-                        <Font name="Montserrat Regular" size="12.0" />
-                    </font>
-                </TextField>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tác giả">
-                    <font>
-                        <Font name="Montserrat Medium" size="13.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets right="230.0" top="10.0" />
-                    </VBox.margin>
-                </Text>
-                <PasswordField fx:id="authorField" prefHeight="26.0" prefWidth="288.0" promptText="author" style="-fx-background-radius: 30;" styleClass="text-field-password-with-icon">
-                    <VBox.margin>
-                        <Insets left="30.0" right="30.0" top="4.0" />
-                    </VBox.margin>
-                    <padding>
-                        <Insets left="10.0" />
-                    </padding>
-                    <font>
-                        <Font name="Montserrat Regular" size="12.0" />
-                    </font>
-                </PasswordField>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng còn">
-                    <font>
-                        <Font name="Montserrat Medium" size="13.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets right="190.0" top="10.0" />
-                    </VBox.margin>
-                </Text>
-                <PasswordField fx:id="availableField" prefHeight="26.0" prefWidth="288.0" promptText="remaining quantity" style="-fx-background-radius: 30;" styleClass="text-field-password2-with-icon">
-                    <padding>
-                        <Insets left="10.0" />
-                    </padding>
-                    <font>
-                        <Font name="Montserrat Regular" size="12.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets left="30.0" right="30.0" top="4.0" />
-                    </VBox.margin>
-                </PasswordField>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số">
-                    <font>
-                        <Font name="Montserrat Medium" size="13.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets right="225.0" top="10.0" />
-                    </VBox.margin>
-                </Text>
-                <TextField fx:id="totalCopiesField" prefHeight="26.0" prefWidth="288.0" promptText="total quantity" style="-fx-background-radius: 30;" styleClass="text-field-email-with-icon">
-                    <padding>
-                        <Insets left="10.0" />
-                    </padding>
-                    <font>
-                        <Font name="Montserrat Regular" size="12.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets left="30.0" right="30.0" top="4.0" />
-                    </VBox.margin>
-                </TextField>
-                <HBox prefHeight="50.0" prefWidth="399.0">
+                <HBox prefHeight="386.0" prefWidth="638.0">
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hình ảnh">
-                            <font>
-                                <Font name="Montserrat Medium" size="13.0" />
-                            </font>
-                            <HBox.margin>
-                                <Insets left="58.0" top="20.0" />
-                            </HBox.margin>
-                        </Text>
-                        <Button fx:id="chooseImageButton" mnemonicParsing="false" onAction="#handleChooseImage" prefHeight="15.0" prefWidth="122.0" style="-fx-background-color: #ffb703; -fx-background-radius: 30;" text="Chọn ảnh">
-                            <font>
-                                <Font name="Montserrat Medium" size="13.0" />
-                            </font>
-                            <HBox.margin>
-                                <Insets left="30.0" top="15.0" />
-                            </HBox.margin>
-                        </Button>
+                        <VBox prefHeight="410.0" prefWidth="226.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hình ảnh">
+                                    <font>
+                                        <Font name="Montserrat Medium" size="13.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets bottom="15.0" left="85.0" top="80.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <ImageView fx:id="imageView" fitHeight="196.0" fitWidth="152.0" pickOnBounds="true" preserveRatio="true">
+                                    <VBox.margin>
+                                        <Insets left="40.0" />
+                                    </VBox.margin>
+                                </ImageView>
+                                <Button fx:id="chooseImageButton" mnemonicParsing="false" onAction="#handleChooseImage" prefHeight="15.0" prefWidth="122.0" style="-fx-background-color: #ffb703; -fx-background-radius: 30;" text="Chọn ảnh">
+                                    <font>
+                                        <Font name="Montserrat Medium" size="13.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="55.0" top="20.0" />
+                                    </VBox.margin>
+                                </Button>
+                            </children>
+                        </VBox>
+                        <VBox prefHeight="410.0" prefWidth="413.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="THÔNG TIN SÁCH">
+                                    <font>
+                                        <Font name="Montserrat Black" size="18.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="130.0" top="50.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tác giả">
+                                    <font>
+                                        <Font name="Montserrat Medium" size="13.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="20.0" top="10.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <TextField fx:id="titleField" prefHeight="26.0" prefWidth="364.0" promptText="title" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
+                                    <VBox.margin>
+                                        <Insets left="30.0" right="40.0" top="5.0" />
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets left="10.0" />
+                                    </padding>
+                                    <font>
+                                        <Font name="Montserrat Regular" size="12.0" />
+                                    </font>
+                                </TextField>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên sách">
+                                    <VBox.margin>
+                                        <Insets left="20.0" right="220.0" top="15.0" />
+                                    </VBox.margin>
+                                    <font>
+                                        <Font name="Montserrat Medium" size="13.0" />
+                                    </font>
+                                </Text>
+                                <TextField fx:id="authorField" prefHeight="26.0" prefWidth="364.0" promptText="author" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
+                                    <padding>
+                                        <Insets left="10.0" />
+                                    </padding>
+                                    <font>
+                                        <Font name="Montserrat Regular" size="12.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="30.0" right="40.0" top="5.0" />
+                                    </VBox.margin>
+                                </TextField>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng còn">
+                                    <font>
+                                        <Font name="Montserrat Medium" size="13.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="20.0" right="190.0" top="15.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <TextField fx:id="availableField" prefHeight="26.0" prefWidth="364.0" promptText="avaiable" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
+                                    <padding>
+                                        <Insets left="10.0" />
+                                    </padding>
+                                    <font>
+                                        <Font name="Montserrat Regular" size="12.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="30.0" right="40.0" top="5.0" />
+                                    </VBox.margin>
+                                </TextField>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số">
+                                    <font>
+                                        <Font name="Montserrat Medium" size="13.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="20.0" right="225.0" top="15.0" />
+                                    </VBox.margin>
+                                </Text>
+                                <TextField fx:id="totalCopiesField" prefHeight="26.0" prefWidth="100.0" promptText="total copies" style="-fx-background-radius: 30;" styleClass="text-field-email-with-icon">
+                                    <padding>
+                                        <Insets left="10.0" />
+                                    </padding>
+                                    <font>
+                                        <Font name="Montserrat Regular" size="12.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets left="30.0" right="40.0" top="5.0" />
+                                    </VBox.margin>
+                                </TextField>
+                            </children>
+                        </VBox>
                     </children>
                 </HBox>
                 <HBox prefHeight="50.0" prefWidth="399.0">
@@ -188,10 +139,10 @@
                                 <Font name="Montserrat Medium" size="13.0" />
                             </font>
                             <HBox.margin>
-                                <Insets left="70.0" top="15.0" />
+                                <Insets left="200.0" top="15.0" />
                             </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#handleSave" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: #023047; -fx-background-radius: 30;" text="Lưu" textFill="#efefef">
+                        <Button mnemonicParsing="false" onAction="#handleSave" prefHeight="15.0" prefWidth="122.0" style="-fx-background-color: #023047; -fx-background-radius: 30;" text="Lưu" textFill="#efefef">
                             <font>
                                 <Font name="Montserrat Medium" size="13.0" />
                             </font>
@@ -201,6 +152,31 @@
                         </Button>
                     </children>
                 </HBox>
+            </children>
+        </VBox>
+        <VBox alignment="CENTER" layoutX="-1.0" layoutY="-4.0" prefHeight="458.0" prefWidth="164.0" spacing="10.0" style="-fx-background-color: #03045e;">
+            <children>
+                <ImageView fitHeight="118.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../images/manager_avatar.png" />
+                    </image>
+                </ImageView>
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên người quản lý">
+                    <font>
+                        <Font name="Montserrat ExtraBold" size="15.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </Text>
+                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Edit Book" textFill="WHITE">
+                    <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Button>
             </children>
         </VBox>
     </children>

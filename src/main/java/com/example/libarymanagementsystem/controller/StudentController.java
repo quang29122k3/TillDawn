@@ -9,12 +9,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,19 +32,18 @@ public class StudentController {
     @FXML
     private TextField searchField;
     @FXML
-    private Button searchButton;
+    private TableView<Book> bookTableView;
     @FXML
-    private Button borrowButton;
+    private TableColumn<Book, String> titleColumn;
+
     @FXML
-    private Button returnButton;
+    private TableColumn<Book, String> authorColumn;
+
     @FXML
-    private TableView<Book> bookTable;
+    private TableColumn<Book, Integer> availableColumn;
+
     @FXML
-    private TableColumn<Book, String> bookTitleColumn;
-    @FXML
-    private TableColumn<Book, String> bookAuthorColumn;
-    @FXML
-    private TableColumn<Book, Integer> bookAvailableColumn;
+    private TableColumn<Book, ImageView> imageColumn;
     @FXML
     private TableView<Book> borrowedBooksTable;
     @FXML
@@ -45,11 +52,6 @@ public class StudentController {
     private TableColumn<Book, String> borrowedBookAuthorColumn;
     @FXML
     private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
-    @FXML
-    private ImageView bookImage;
-    @FXML
-    private ImageView borrowedBookImage;
-
     @FXML
     private AnchorPane availableBooks_form;
 
@@ -60,15 +62,11 @@ public class StudentController {
     private Button availableBooks_btn;
 
     @FXML
-    private Button savedBooks_btn;
-    @FXML
     private AnchorPane googleBooks_form;
 
     @FXML
     private TextField googleBooksSearchField;
 
-    @FXML
-    private Button googleBooksSearchButton;
 
     @FXML
     private TableView<BookItem> googleBooksTableView;
@@ -85,8 +83,12 @@ public class StudentController {
     @FXML
     private TableColumn<BookItem, String> googleBookLinkColumn;
 
+
     @FXML
-    private Button googleBooks_btn;
+    private Button logout;
+
+    @FXML
+    private Text userName;
 
     private ObservableList<BookItem> googleBooksList = FXCollections.observableArrayList();
 
@@ -95,6 +97,7 @@ public class StudentController {
 
     @FXML
     public void initialize() {
+        userName.setText(GetData.getFullName());
         // Cấu hình bảng sách Google Books
         googleBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         googleBookAuthorsColumn.setCellValueFactory(new PropertyValueFactory<>("authors"));
@@ -103,9 +106,10 @@ public class StudentController {
         googleBooksTableView.setItems(googleBooksList);
 
         // Cấu hình cột cho bảng sách có sẵn sử dụng PropertyValueFactory
-        bookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        bookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
-        bookAvailableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
+        imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
 
         // Cấu hình cột cho bảng sách đang mượn sử dụng PropertyValueFactory
         borrowedBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -113,30 +117,13 @@ public class StudentController {
         borrowedBookBorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
 
         // Gán danh sách vào bảng
-        bookTable.setItems(availableBooks);
-        borrowedBooksTable.setItems(borrowedBooks);
+        bookTableView.setItems(availableBooks);
+
 
         // Tải dữ liệu ban đầu
-        loadAvailableBooks();
+        loadBooks();
         loadBorrowedBooks();
 
-        // Xử lý sự kiện khi chọn một cuốn sách từ bảng sách có sẵn
-        bookTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedBook) -> {
-            if (selectedBook != null && selectedBook.getImageView() != null) {
-                bookImage.setImage(selectedBook.getImageView().getImage());
-            } else {
-                bookImage.setImage(null); // Không có ảnh
-            }
-        });
-
-        // Xử lý sự kiện khi chọn một cuốn sách từ bảng sách đang mượn
-        borrowedBooksTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedBorrowedBook) -> {
-            if (selectedBorrowedBook != null && selectedBorrowedBook.getImageView() != null) {
-                borrowedBookImage.setImage(selectedBorrowedBook.getImageView().getImage());
-            } else {
-                borrowedBookImage.setImage(null); // Không có ảnh
-            }
-        });
     }
 
     @FXML
@@ -148,32 +135,46 @@ public class StudentController {
         googleBooksTableView.getItems().addAll(books);
     }
 
-    private void loadAvailableBooks() {
-        availableBooks.clear();
+    public void loadBooks() {
+        ObservableList<Book> bookList = FXCollections.observableArrayList();
+
+        String query = "SELECT * FROM books";
         try (Connection conn = ConnectionJDBCUtils.getConnection();
-             Statement stmt = conn.createStatement()) {
-            String query = "SELECT * FROM books WHERE available > 0";
-            ResultSet rs = stmt.executeQuery(query);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                // Tạo ImageView từ đường dẫn hình ảnh
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                int available = rs.getInt("available");
+                String imagePath = rs.getString("image"); // Đường dẫn hình ảnh
+
+                // Tạo ImageView từ imagePath
                 ImageView imageView = null;
-                String imagePath = rs.getString("image");
-                if (imagePath != null && !imagePath.isEmpty()) {
-                    Image image = new Image(imagePath, 100, 150, true, true); // Điều chỉnh kích thước nếu cần
-                    imageView = new ImageView(image);
+                if (imagePath != null && !imagePath.trim().isEmpty()) {
+                    try {
+                        Image image = new Image(imagePath, 50, 50, false, true);
+                        imageView = new ImageView(image);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Invalid image URL for book ID " + id + ": " + imagePath);
+                        // Sử dụng hình ảnh mặc định nếu URL không hợp lệ
+                        imageView = getDefaultImageView();
+                    }
+                } else {
+                    // Sử dụng hình ảnh mặc định nếu không có imagePath
+                    imageView = getDefaultImageView();
                 }
 
-                // Tạo đối tượng Book với loanId = 0 (không mượn)
-                Book book = new Book(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("author"),
-                        rs.getInt("available"),
-                        imageView
-                );
-                availableBooks.add(book);
+                // Tạo đối tượng Book sử dụng constructor đúng
+                Book book = new Book(id, title, author, available, imageView);
+                // Thiết lập totalCopies
+                bookList.add(book);
             }
+
+            // Đặt dữ liệu vào TableView
+            bookTableView.setItems(bookList);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -181,79 +182,102 @@ public class StudentController {
 
     private void loadBorrowedBooks() {
         borrowedBooks.clear();
-        String personId = GetData.getUsername(); // Sử dụng mã người dùng hiện tại
-
-        String query = "SELECT loans.id AS loan_id, books.id AS book_id, books.title, books.author, books.image, loans.borrow_date " +
+        String query = "SELECT loans.id AS loan_id, books.id AS book_id, books.title, books.author, loans.borrow_date " +
                 "FROM loans INNER JOIN books ON loans.book_id = books.id " +
-                "WHERE loans.person_id = ? AND loans.returned = 0";
+                "WHERE loans.returned = 0";
 
         try (Connection conn = ConnectionJDBCUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, personId);
-            ResultSet rs = stmt.executeQuery();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                // Tạo ImageView từ đường dẫn hình ảnh
-                ImageView imageView = null;
-                String imagePath = rs.getString("image");
-                if (imagePath != null && !imagePath.isEmpty()) {
-                    Image image = new Image(imagePath, 100, 150, true, true); // Điều chỉnh kích thước nếu cần
-                    imageView = new ImageView(image);
-                }
-
-                // Tạo đối tượng Book với loanId
                 Book book = new Book(
                         rs.getInt("book_id"),
                         rs.getString("title"),
                         rs.getString("author"),
-                        0, // Số lượng hiện tại không quan trọng trong bảng mượn
-                        imageView,
-                        rs.getInt("loan_id") // Gán loanId
+                        0, // Không cần quan tâm số lượng
+                        null
                 );
-                book.setBorrowDate(rs.getDate("borrow_date").toLocalDate()); // Thiết lập thời gian mượn
+                book.setLoanId(rs.getInt("loan_id"));
+                book.setBorrowDate(rs.getDate("borrow_date").toLocalDate());
                 borrowedBooks.add(book);
             }
+            borrowedBooksTable.setItems(borrowedBooks);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Phương thức lấy đối tượng ImageView mặc định
+     */
+    private ImageView getDefaultImageView() {
+        String defaultImagePath = "/images/manager_avatar.png";
+        URL defaultImageURL = getClass().getResource(defaultImagePath);
+        if (defaultImageURL != null) {
+            try {
+                Image defaultImage = new Image(defaultImageURL.toExternalForm(), 50, 50, false, true);
+                return new ImageView(defaultImage);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Invalid default image URL: " + defaultImagePath);
+            }
+        } else {
+            System.err.println("Default image not found at " + defaultImagePath);
+        }
+        return null;
+    }
+
     @FXML
     private void handleSearchAction() {
         String searchText = searchField.getText().trim();
+        ObservableList<Book> bookList = FXCollections.observableArrayList();
+
+        // Nếu thanh tìm kiếm trống, hiển thị tất cả sách
+        String query;
         if (searchText.isEmpty()) {
-            loadAvailableBooks();
-            return;
+            query = "SELECT * FROM books";
+        } else {
+            query = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
         }
 
-        availableBooks.clear();
-        String query = "SELECT * FROM books WHERE (title LIKE ? OR author LIKE ?) AND available > 0";
-
         try (Connection conn = ConnectionJDBCUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, "%" + searchText + "%");
-            stmt.setString(2, "%" + searchText + "%");
-            ResultSet rs = stmt.executeQuery();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
+            if (!searchText.isEmpty()) {
+                pstmt.setString(1, "%" + searchText + "%");
+                pstmt.setString(2, "%" + searchText + "%");
+            }
+
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                // Tạo ImageView từ đường dẫn hình ảnh
-                ImageView imageView = null;
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                int available = rs.getInt("available");
                 String imagePath = rs.getString("image");
-                if (imagePath != null && !imagePath.isEmpty()) {
-                    Image image = new Image(imagePath, 100, 150, true, true); // Điều chỉnh kích thước nếu cần
-                    imageView = new ImageView(image);
+
+                // Tạo ImageView từ imagePath
+                ImageView imageView = null;
+                if (imagePath != null && !imagePath.trim().isEmpty()) {
+                    try {
+                        Image image = new Image(imagePath, 50, 50, false, true);
+                        imageView = new ImageView(image);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Invalid image URL for book ID " + id + ": " + imagePath);
+                        imageView = getDefaultImageView(); // Hình mặc định
+                    }
+                } else {
+                    imageView = getDefaultImageView(); // Hình mặc định
                 }
 
-                // Tạo đối tượng Book với loanId = 0 (không mượn)
-                Book book = new Book(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("author"),
-                        rs.getInt("available"),
-                        imageView
-                );
-                availableBooks.add(book);
+                // Tạo đối tượng Book
+                Book book = new Book(id, title, author, available, imageView);
+                bookList.add(book);
             }
+
+            // Đặt dữ liệu vào TableView
+            bookTableView.setItems(bookList);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -261,7 +285,7 @@ public class StudentController {
 
     @FXML
     private void handleBorrowAction() {
-        Book selectedBook = bookTable.getSelectionModel().getSelectedItem();
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
         if (selectedBook == null) {
             showAlert("Chọn sách", "Vui lòng chọn sách để mượn.");
             return;
@@ -289,7 +313,7 @@ public class StudentController {
             }
 
             conn.commit();
-            loadAvailableBooks();
+            loadBooks();
             loadBorrowedBooks();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -326,7 +350,7 @@ public class StudentController {
             }
 
             conn.commit();
-            loadAvailableBooks();
+            loadBooks();
             loadBorrowedBooks();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -341,6 +365,12 @@ public class StudentController {
         alert.showAndWait();
     }
 
+    @FXML
+    private Button savedBooks_btn;
+
+    @FXML
+    private Button googleBooksButton;
+
 
     @FXML
     private void navButtonDesign(ActionEvent event) {
@@ -351,8 +381,43 @@ public class StudentController {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
             savedBook_form.setVisible(true);
-        } else if (event.getSource() == googleBooks_btn) {
+        } else if (event.getSource() == googleBooksButton) {
             googleBooks_form.setVisible(true);
+        }
+    }
+
+    private double x = 0;
+    private double y = 0;
+
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        try {
+            if (event.getSource() == logout) {
+                Parent root = FXMLLoader.load(getClass().getResource("/com/example/libarymanagementsystem/hello-view.fxml"));
+
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+
+                root.setOnMousePressed((MouseEvent e) -> {
+                    x = e.getSceneX();
+                    y = e.getSceneY();
+
+                });
+
+                root.setOnMouseDragged((MouseEvent e) -> {
+                    stage.setX(e.getScreenX() - x);
+                    stage.setY(e.getScreenY() - y);
+                });
+
+                stage.initStyle(StageStyle.TRANSPARENT);
+
+                stage.setScene(scene);
+                stage.show();
+
+                logout.getScene().getWindow().hide();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

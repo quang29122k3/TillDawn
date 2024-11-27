@@ -1,89 +1,146 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.layout.HBox?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="747.0" prefWidth="974.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.StudentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #fffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.StudentController">
    <children>
-      <AnchorPane fx:id="availableBooks_form" layoutX="133.0" prefHeight="406.0" prefWidth="820.0" visible="false">
+      <VBox alignment="CENTER" layoutY="-4.0" prefHeight="458.0" prefWidth="163.0" spacing="10.0" style="-fx-background-color: #03045e;">
          <children>
-            <TextField fx:id="searchField" layoutX="53.0" layoutY="14.0" prefHeight="37.0" prefWidth="678.0" promptText="Nhập tên sách hoặc tác giả" />
-            <Button fx:id="searchButton" layoutX="645.0" layoutY="64.0" mnemonicParsing="false" onAction="#handleSearchAction" text="Tìm kiếm" />
-            <AnchorPane layoutX="46.0" layoutY="103.0" prefHeight="200.0" prefWidth="206.0">
-               <children>
-                  <ImageView fx:id="bookImage" fitHeight="200.0" fitWidth="206.0" layoutX="2.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </AnchorPane>
-            <Button fx:id="borrowButton" layoutX="125.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleBorrowAction" text="Mượn" />
-            <AnchorPane layoutX="287.0" layoutY="139.0" prefHeight="262.0" prefWidth="531.0">
-               <children>
-                  <TableView fx:id="bookTable" layoutX="194.0" layoutY="14.0" prefHeight="262.4" prefWidth="531.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <columns>
-                        <TableColumn fx:id="bookTitleColumn" prefWidth="257.60003662109375" text="Tên sách" />
-                        <TableColumn fx:id="bookAuthorColumn" prefWidth="104.0" text="Tác giả" />
-                        <TableColumn fx:id="bookAvailableColumn" prefWidth="168.0" text="Số lượng còn" />
-                     </columns>
-                  </TableView>
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="googleBooks_form" layoutX="133.0" prefHeight="406.0" prefWidth="820.0" visible="false">
-         <children>
-            <!-- Thanh tìm kiếm -->
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0">
-               <children>
-                  <TextField fx:id="googleBooksSearchField" prefWidth="500.0" promptText="Nhập từ khóa sách hoặc tác giả" />
-                  <Button fx:id="googleBooksSearchButton" onAction="#handleGoogleBooksSearch" text="Tìm kiếm" />
-               </children>
-            </HBox>
-
-            <!-- Bảng hiển thị kết quả -->
-            <TableView fx:id="googleBooksTableView" layoutX="10.0" layoutY="50.0" prefHeight="500.0" prefWidth="740.0">
-               <columns>
-                  <TableColumn fx:id="googleBookTitleColumn" prefWidth="200.0" text="Tiêu Đề" />
-                  <TableColumn fx:id="googleBookAuthorsColumn" prefWidth="200.0" text="Tác Giả" />
-                  <TableColumn fx:id="googleBookPublisherColumn" prefWidth="200.0" text="Nhà Xuất Bản" />
-                  <TableColumn fx:id="googleBookLinkColumn" prefWidth="140.0" text="Link" />
-               </columns>
-            </TableView>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="savedBook_form" layoutX="126.0" layoutY="456.0" prefHeight="288.0" prefWidth="831.0" visible="false">
-         <children>
-            <Text layoutX="331.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sách đang mượn" wrappingWidth="252.40002441406256">
+            <ImageView fitHeight="87.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/manager_avatar.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="userName" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên người dùng">
                <font>
-                  <Font size="13.0" />
+                  <Font name="Montserrat ExtraBold" size="15.0" />
                </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
             </Text>
-            <AnchorPane layoutX="14.0" layoutY="44.0" prefHeight="200.0" prefWidth="200.0">
+            <Button fx:id="availableBooks_btn" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" stylesheets="@buttonEffect.css" text="Sách Có Sẵn" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat ExtraBold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="savedBooks_btn" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Sách đã mượn" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat ExtraBold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="googleBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Tra cứu tài liệu" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat ExtraBold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #90e0ef;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Đăng Xuất">
+               <font>
+                  <Font name="Montserrat ExtraBold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <StackPane layoutX="163.0" prefHeight="450.0" prefWidth="634.0">
+         <children>
+            <AnchorPane fx:id="availableBooks_form" prefHeight="200.0" prefWidth="200.0" visible="false">
                <children>
-                  <ImageView fx:id="borrowedBookImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <HBox alignment="CENTER_LEFT" layoutX="28.0" layoutY="22.0" prefHeight="26.0" prefWidth="578.0" spacing="10.0">
+                     <children>
+                        <TextField fx:id="searchField" prefHeight="26.0" prefWidth="422.0" promptText="Nhập tên sách hoặc tác giả" style="-fx-background-radius: 30;">
+                           <font>
+                              <Font name="Montserrat Medium" size="12.0" />
+                           </font>
+                        </TextField>
+                        <Button fx:id="searchButton" onAction="#handleSearchAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Tìm kiếm" textFill="WHITE">
+                           <font>
+                              <Font name="Montserrat ExtraBold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="bookTableView" editable="true" layoutX="20.0" layoutY="72.0" prefHeight="325.0" prefWidth="594.0">
+                     <columns>
+                        <TableColumn fx:id="imageColumn" prefWidth="119.20001220703125" text="Hình Ảnh" />
+                        <TableColumn fx:id="titleColumn" prefWidth="153.60003662109375" text="Tiêu Đề" />
+                        <TableColumn fx:id="authorColumn" prefWidth="93.5999755859375" text="Tác Giả" />
+                        <TableColumn fx:id="availableColumn" prefWidth="90.39996337890625" text="Số Lượng Còn" />
+                     </columns>
+                  </TableView>
+                  <Button fx:id="borrowButton" layoutX="230.0" layoutY="412.0" onAction="#handleBorrowAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn sách" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
-            <Button fx:id="returnButton" layoutX="88.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleReturnAction" text="Trả" />
-            <AnchorPane layoutX="276.0" layoutY="35.0" prefHeight="239.0" prefWidth="551.0">
+            <AnchorPane fx:id="savedBook_form" prefHeight="200.0" prefWidth="200.0" visible="false">
                <children>
-                  <TableView fx:id="borrowedBooksTable" layoutX="176.0" layoutY="20.0" prefHeight="239.2" prefWidth="551.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="borrowedBooksTable" layoutX="22.0" layoutY="22.0" prefHeight="377.0" prefWidth="594.0">
                      <columns>
-                        <TableColumn fx:id="borrowedBookTitleColumn" prefWidth="209.5999755859375" text="Tên sách" />
-                        <TableColumn fx:id="borrowedBookAuthorColumn" prefWidth="148.0" text="Tác giả" />
-                        <TableColumn fx:id="borrowedBookBorrowDateColumn" prefWidth="192.0" text="Thời gian" />
+                        <TableColumn fx:id="borrowedBookTitleColumn" prefWidth="216.00006103515625" text="Tên Sách" />
+                        <TableColumn fx:id="borrowedBookAuthorColumn" prefWidth="156.7999267578125" text="Tác Giả" />
+                        <TableColumn fx:id="borrowedBookBorrowDateColumn" prefWidth="219.2000732421875" text="Thời Gian Mượn" />
+                     </columns>
+                  </TableView>
+                  <Button fx:id="returnButton" layoutX="230.0" layoutY="412.0" onAction="#handleReturnAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Trả sách" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="googleBooks_form" prefHeight="200.0" prefWidth="200.0" visible="false">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutX="28.0" layoutY="14.0" prefHeight="26.0" prefWidth="578.0" spacing="10.0">
+                     <children>
+                        <TextField fx:id="googleBooksSearchField" prefHeight="26.0" prefWidth="422.0" promptText="Nhập tên sách hoặc tác giả" style="-fx-background-radius: 30;">
+                           <font>
+                              <Font name="Montserrat Medium" size="12.0" />
+                           </font>
+                        </TextField>
+                        <Button fx:id="googleBooksSearchButton" onAction="#handleGoogleBooksSearch" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Tìm kiếm" textFill="WHITE">
+                           <font>
+                              <Font name="Montserrat ExtraBold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="googleBooksTableView" layoutX="15.0" layoutY="57.0" prefHeight="378.0" prefWidth="603.0">
+                     <columns>
+                        <TableColumn fx:id="googleBookTitleColumn" prefWidth="150.4000244140625" text="Tiêu Đề" />
+                        <TableColumn fx:id="googleBookAuthorsColumn" prefWidth="97.5999755859375" text="Tác Giả" />
+                        <TableColumn fx:id="googleBookPublisherColumn" minWidth="0.0" prefWidth="116.79998779296875" text="Nhà Xuất Bản" />
+                        <TableColumn fx:id="googleBookLinkColumn" prefWidth="380.79998779296875" text="Link" />
                      </columns>
                   </TableView>
                </children>
             </AnchorPane>
          </children>
-      </AnchorPane>
-      <Button fx:id="availableBooks_btn" layoutX="52.0" layoutY="168.0" mnemonicParsing="false" onAction="#navButtonDesign" text="sách có sẵn" />
-      <Button fx:id="savedBooks_btn" layoutX="43.0" layoutY="225.0" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="26.0" prefWidth="94.0" text="Sách đã mượn" />
-      <Button fx:id="googleBooks_btn" layoutX="43.0" layoutY="280.0" mnemonicParsing="false" onAction="#navButtonDesign" text="Tra cứu tài liệu" />
+      </StackPane>
    </children>
 </AnchorPane>
