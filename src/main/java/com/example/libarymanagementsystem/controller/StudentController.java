@@ -97,6 +97,7 @@ public class StudentController {
 
     @FXML
     public void initialize() {
+        availableBooks_form.setVisible(true);
         userName.setText(GetData.getFullName());
         // Cấu hình bảng sách Google Books
         googleBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -291,6 +292,12 @@ public class StudentController {
             return;
         }
 
+        // Kiểm tra nếu số lượng sách hiện có bằng 0
+        if (selectedBook.getAvailable() == 0) {
+            showAlert("Sách \"" + selectedBook.getTitle() + "\" đã hết", "Không thể mượn sách này.");
+            return; // Dừng tại đây nếu sách đã hết
+        }
+
         String personId = GetData.getUsername();
 
         try (Connection conn = ConnectionJDBCUtils.getConnection()) {
@@ -377,12 +384,17 @@ public class StudentController {
         availableBooks_form.setVisible(false);
         savedBook_form.setVisible(false);
         googleBooks_form.setVisible(false);
+        userInfoPane.setVisible(false);
         if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
             savedBook_form.setVisible(true);
         } else if (event.getSource() == googleBooksButton) {
             googleBooks_form.setVisible(true);
+        }
+        else if(event.getSource()==userIconButton){
+            userInfoPane.setVisible(true);
+            loadUserInfo();
         }
     }
 
@@ -419,5 +431,95 @@ public class StudentController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    //test
+    @FXML
+    private TextField userIdField;
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private TextField classField;
+    @FXML
+    private TextField roleField;
+    @FXML
+    private Button saveButton;
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private AnchorPane userInfoPane;
+
+    @FXML
+    private Button userIconButton;
+    @FXML
+    private TextField emailField;
+
+    // Xử lý khi nhấn vào nút User
+    private void loadUserInfo() {
+        String query = "SELECT p.id, p.fullname, p.class, p.email, r.name AS role\n" +
+                "FROM person p\n" +
+                "JOIN role r ON p.role_id = r.id\n" +
+                "WHERE p.id = ?;";
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            String currentUserId = GetData.getUsername(); // Đảm bảo phương thức này trả về ID người dùng hiện tại
+            System.out.println("Current User ID: " + currentUserId); // Debug
+
+            pstmt.setString(1, currentUserId);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            if (resultSet.next()) {
+                System.out.println("User found: " + resultSet.getString("fullname")); // Debug
+                userIdField.setText(resultSet.getString("id"));
+                fullNameField.setText(resultSet.getString("fullname"));
+                classField.setText(resultSet.getString("class"));
+                roleField.setText(resultSet.getString("role"));
+                emailField.setText(resultSet.getString("email"));
+            } else {
+                System.out.println("No user found with ID: " + currentUserId); // Debug
+                showAlert( "Lỗi", "Không tìm thấy thông tin người dùng.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Đã xảy ra lỗi khi tải thông tin người dùng.");
+        }
+    }
+
+    // Lưu thông tin sau khi chỉnh sửa
+    @FXML
+    private void handleSaveAction(ActionEvent event) {
+        String updateQuery = "UPDATE person SET fullname = ?, class = ?, email = ? WHERE id = ?";;
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+
+            pstmt.setString(1, fullNameField.getText());
+            pstmt.setString(2, classField.getText());
+            pstmt.setString(3, emailField.getText());
+            pstmt.setString(4, userIdField.getText());
+
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                showAlert( "Cập nhật thành công", "Thông tin đã được cập nhật.");
+                fullNameField.setEditable(false);
+                classField.setEditable(false);
+                emailField.setEditable(false);
+                saveButton.setDisable(true);
+            } else {
+                showAlert("Cập nhật thất bại", "Không thể cập nhật thông tin.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Đã xảy ra lỗi khi cập nhật thông tin.");
+        }
+    }
+
+    // Cho phép chỉnh sửa
+    @FXML
+    public void handleEditAction(ActionEvent event) {
+        fullNameField.setEditable(true);
+        classField.setEditable(true);
+        emailField.setEditable(true);
+        saveButton.setDisable(false);
     }
 }

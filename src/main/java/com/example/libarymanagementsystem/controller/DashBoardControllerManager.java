@@ -437,6 +437,12 @@ public class DashBoardControllerManager {
             return;
         }
 
+        // Kiểm tra nếu số lượng sách hiện có bằng 0
+        if (selectedBook.getAvailable() == 0) {
+            showAlert("Sách \"" + selectedBook.getTitle() + "\" đã hết. Không thể mượn sách này.");
+            return; // Dừng tại đây nếu sách đã hết
+        }
+
         try (Connection conn = ConnectionJDBCUtils.getConnection()) {
             conn.setAutoCommit(false);
             String personId = GetData.getUsername(); // Sử dụng mã người dùng hiện tại
