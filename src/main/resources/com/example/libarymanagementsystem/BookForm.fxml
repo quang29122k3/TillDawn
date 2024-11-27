@@ -161,14 +161,6 @@
                         <Image url="@../../../images/manager_avatar.png" />
                     </image>
                 </ImageView>
-                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên người quản lý">
-                    <font>
-                        <Font name="Montserrat ExtraBold" size="15.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets top="10.0" />
-                    </VBox.margin>
-                </Text>
                 <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Edit Book" textFill="WHITE">
                     <font>
                         <Font name="Montserrat ExtraBold" size="12.0" />
