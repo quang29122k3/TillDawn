@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
@@ -11,127 +12,141 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.LoginController">
-   <children>
-      <ImageView fitHeight="295.0" fitWidth="447.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/Screenshot_2.png" />
-         </image>
-      </ImageView>
-      <VBox alignment="TOP_CENTER" layoutX="472.0" layoutY="-4.0" prefHeight="463.0" prefWidth="328.0" style="-fx-background-color: #fb8500;">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SIGN UP" textAlignment="JUSTIFY">
-               <VBox.margin>
-                  <Insets top="30.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Montserrat Black" size="36.0" />
-               </font>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên đăng nhập">
-               <VBox.margin>
-                  <Insets right="150.0" top="17.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Montserrat Medium" size="13.0" />
-               </font>
-            </Text>
-            <TextField fx:id="usernameField" prefHeight="26.0" prefWidth="288.0" promptText="user name" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon" stylesheets="@signup.css">
-               <VBox.margin>
-                  <Insets left="30.0" right="30.0" top="5.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font name="Montserrat Regular" size="12.0" />
-               </font>
-            </TextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu">
-               <font>
-                  <Font name="Montserrat Medium" size="13.0" />
-               </font>
-               <VBox.margin>
-                  <Insets right="190.0" top="12.0" />
-               </VBox.margin>
-            </Text>
-            <PasswordField fx:id="passwordField" prefHeight="26.0" prefWidth="288.0" promptText="password" style="-fx-background-radius: 30;" styleClass="text-field-password-with-icon" stylesheets="@signup.css">
-               <VBox.margin>
-                  <Insets left="30.0" right="30.0" top="5.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font name="Montserrat Regular" size="12.0" />
-               </font>
-            </PasswordField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nhập lại mật khẩu">
-               <font>
-                  <Font name="Montserrat Medium" size="13.0" />
-               </font>
-               <VBox.margin>
-                  <Insets right="132.0" top="12.0" />
-               </VBox.margin>
-            </Text>
-            <PasswordField fx:id="confirmPasswordField" prefHeight="26.0" prefWidth="288.0" promptText="confirm password" style="-fx-background-radius: 30;" styleClass="text-field-password2-with-icon" stylesheets="@signup.css">
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font name="Montserrat Regular" size="12.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="30.0" right="30.0" top="5.0" />
-               </VBox.margin>
-            </PasswordField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
-               <font>
-                  <Font name="Montserrat Medium" size="13.0" />
-               </font>
-               <VBox.margin>
-                  <Insets right="215.0" top="12.0" />
-               </VBox.margin>
-            </Text>
-            <TextField fx:id="emailField" prefHeight="26.0" prefWidth="288.0" promptText="email" style="-fx-background-radius: 30;" styleClass="text-field-email-with-icon" stylesheets="@signup.css">
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font name="Montserrat Regular" size="12.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="30.0" right="30.0" top="5.0" />
-               </VBox.margin>
-            </TextField>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã admin (nếu có)">
-               <font>
-                  <Font name="Montserrat Medium" size="13.0" />
-               </font>
-               <VBox.margin>
-                  <Insets right="127.0" top="15.0" />
-               </VBox.margin>
-            </Text>
-            <TextField fx:id="adminCode" prefHeight="26.0" prefWidth="288.0" promptText="admin code" style="-fx-background-radius: 30;" styleClass="text-field-admin-with-icon" stylesheets="@signup.css">
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font name="Montserrat Regular" size="12.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="30.0" right="30.0" top="5.0" />
-               </VBox.margin>
-            </TextField>
-            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#registerAccount" prefHeight="32.0" prefWidth="85.0" style="-fx-background-color: #023047; -fx-background-radius: 30;" text="Sign up" textFill="#efefef">
-               <VBox.margin>
-                  <Insets top="22.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="Montserrat Medium" size="14.0" />
-               </font>
-            </Button>
-         </children>
-      </VBox>
-   </children>
+<AnchorPane prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.RegisterController">
+    <children>
+        <ImageView fitHeight="295.0" fitWidth="447.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../../images/Screenshot_2.png" />
+            </image>
+        </ImageView>
+        <VBox alignment="TOP_CENTER" layoutX="472.0" layoutY="-4.0" prefHeight="463.0" prefWidth="328.0" style="-fx-background-color: #fb8500;">
+            <children>
+            <AnchorPane prefHeight="32.0" prefWidth="328.0">
+               <children>
+                  <Button fx:id="close" layoutX="269.0" layoutY="2.0" mnemonicParsing="false" onAction="#close" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                      <graphic>
+                          <FontAwesomeIcon glyphName="CLOSE" />
+                      </graphic>
+                  </Button>
+                  <Button fx:id="minimize" layoutX="276.0" layoutY="2.0" mnemonicParsing="false" onAction="#minimizeWindow" AnchorPane.topAnchor="5.0">
+                      <graphic>
+                          <FontAwesomeIcon glyphName="MINUS" />
+                      </graphic>
+                  </Button>
+               </children>
+            </AnchorPane>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SIGN UP" textAlignment="CENTER" wrappingWidth="135.087890625">
+                    <VBox.margin>
+                        <Insets top="30.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font size="23.0" />
+                    </font>
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên đăng nhập">
+                    <VBox.margin>
+                        <Insets right="150.0" top="17.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="Montserrat Medium" size="13.0" />
+                    </font>
+                </Text>
+                <TextField fx:id="usernameField" prefHeight="24.0" prefWidth="288.0" promptText="user name" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon" stylesheets="@signup.css">
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" top="5.0" />
+                    </VBox.margin>
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font name="Montserrat Regular" size="12.0" />
+                    </font>
+                </TextField>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu">
+                    <font>
+                        <Font name="Montserrat Medium" size="13.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets right="190.0" top="12.0" />
+                    </VBox.margin>
+                </Text>
+                <PasswordField fx:id="passwordField" prefHeight="24.0" prefWidth="288.0" promptText="password" style="-fx-background-radius: 30;" styleClass="text-field-password-with-icon" stylesheets="@signup.css">
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" top="5.0" />
+                    </VBox.margin>
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font name="Montserrat Regular" size="12.0" />
+                    </font>
+                </PasswordField>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nhập lại mật khẩu">
+                    <font>
+                        <Font name="Montserrat Medium" size="13.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets right="132.0" top="12.0" />
+                    </VBox.margin>
+                </Text>
+                <PasswordField fx:id="confirmPasswordField" prefHeight="24.0" prefWidth="288.0" promptText="confirm password" style="-fx-background-radius: 30;" styleClass="text-field-password2-with-icon" stylesheets="@signup.css">
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font name="Montserrat Regular" size="12.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" top="5.0" />
+                    </VBox.margin>
+                </PasswordField>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+                    <font>
+                        <Font name="Montserrat Medium" size="13.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets right="215.0" top="12.0" />
+                    </VBox.margin>
+                </Text>
+                <TextField fx:id="emailField" prefHeight="24.0" prefWidth="288.0" promptText="email" style="-fx-background-radius: 30;" styleClass="text-field-email-with-icon" stylesheets="@signup.css">
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font name="Montserrat Regular" size="12.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" top="5.0" />
+                    </VBox.margin>
+                </TextField>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã admin (nếu có)">
+                    <font>
+                        <Font name="Montserrat Medium" size="13.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets right="127.0" top="15.0" />
+                    </VBox.margin>
+                </Text>
+                <TextField fx:id="adminCode" prefHeight="24.0" prefWidth="267.0" promptText="admin code" style="-fx-background-radius: 30;" styleClass="text-field-admin-with-icon" stylesheets="@signup.css">
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font name="Montserrat Regular" size="12.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" top="5.0" />
+                    </VBox.margin>
+                </TextField>
+                <Button fx:id="registerButton" mnemonicParsing="false" onAction="#registerAccount" prefHeight="32.0" prefWidth="85.0" style="-fx-background-color: #023047; -fx-background-radius: 30;" text="Sign up" textFill="#efefef">
+                    <VBox.margin>
+                        <Insets top="22.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="Montserrat Medium" size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>
