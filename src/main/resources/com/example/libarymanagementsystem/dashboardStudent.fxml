@@ -45,7 +45,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="savedBooks_btn" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Sách đã mượn" textFill="WHITE">
+            <Button fx:id="savedBooks_btn" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Sách đã mượn" textFill="WHITE">
                <font>
                   <Font name="Montserrat ExtraBold" size="12.0" />
                </font>
@@ -53,7 +53,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="googleBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Tra cứu tài liệu" textFill="WHITE">
+            <Button fx:id="googleBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Tra cứu tài liệu" textFill="WHITE">
                <font>
                   <Font name="Montserrat ExtraBold" size="12.0" />
                </font>
@@ -61,7 +61,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #90e0ef;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Đăng Xuất">
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #90e0ef;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Đăng Xuất">
                <font>
                   <Font name="Montserrat ExtraBold" size="12.0" />
                </font>
@@ -71,9 +71,9 @@
             </Button>
          </children>
       </VBox>
-      <StackPane layoutX="163.0" prefHeight="450.0" prefWidth="634.0">
+      <StackPane layoutX="163.0" prefHeight="450.0" prefWidth="639.0">
          <children>
-            <AnchorPane fx:id="availableBooks_form" prefHeight="200.0" prefWidth="200.0" visible="false">
+            <AnchorPane fx:id="availableBooks_form" prefHeight="450.0" prefWidth="642.0" style="-fx-background-color: #fb8500;" visible="false">
                <children>
                   <HBox alignment="CENTER_LEFT" layoutX="28.0" layoutY="22.0" prefHeight="26.0" prefWidth="578.0" spacing="10.0">
                      <children>
@@ -89,12 +89,12 @@
                         </Button>
                      </children>
                   </HBox>
-                  <TableView fx:id="bookTableView" editable="true" layoutX="20.0" layoutY="72.0" prefHeight="325.0" prefWidth="594.0">
+                  <TableView fx:id="bookTableView" editable="true" layoutX="61.0" layoutY="70.0" prefHeight="326.0" prefWidth="511.0" stylesheets="@tableDesign.css">
                      <columns>
                         <TableColumn fx:id="imageColumn" prefWidth="119.20001220703125" text="Hình Ảnh" />
                         <TableColumn fx:id="titleColumn" prefWidth="153.60003662109375" text="Tiêu Đề" />
                         <TableColumn fx:id="authorColumn" prefWidth="93.5999755859375" text="Tác Giả" />
-                        <TableColumn fx:id="availableColumn" prefWidth="90.39996337890625" text="Số Lượng Còn" />
+                        <TableColumn fx:id="availableColumn" prefWidth="140.0" text="Số Lượng Còn" />
                      </columns>
                   </TableView>
                   <Button fx:id="borrowButton" layoutX="230.0" layoutY="412.0" onAction="#handleBorrowAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn sách" textFill="WHITE">
@@ -104,9 +104,9 @@
                   </Button>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="savedBook_form" prefHeight="200.0" prefWidth="200.0" visible="false">
+            <AnchorPane fx:id="savedBook_form" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fb8500;" visible="false">
                <children>
-                  <TableView fx:id="borrowedBooksTable" layoutX="22.0" layoutY="22.0" prefHeight="377.0" prefWidth="594.0">
+                  <TableView fx:id="borrowedBooksTable" layoutX="22.0" layoutY="22.0" prefHeight="377.0" prefWidth="594.0" stylesheets="@tableDesign.css">
                      <columns>
                         <TableColumn fx:id="borrowedBookTitleColumn" prefWidth="216.00006103515625" text="Tên Sách" />
                         <TableColumn fx:id="borrowedBookAuthorColumn" prefWidth="156.7999267578125" text="Tác Giả" />
@@ -120,7 +120,7 @@
                   </Button>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="googleBooks_form" prefHeight="200.0" prefWidth="200.0" visible="false">
+            <AnchorPane fx:id="googleBooks_form" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fb8500;" visible="false">
                <children>
                   <HBox alignment="CENTER_LEFT" layoutX="28.0" layoutY="14.0" prefHeight="26.0" prefWidth="578.0" spacing="10.0">
                      <children>
@@ -136,7 +136,7 @@
                         </Button>
                      </children>
                   </HBox>
-                  <TableView fx:id="googleBooksTableView" layoutX="15.0" layoutY="57.0" prefHeight="378.0" prefWidth="603.0">
+                  <TableView fx:id="googleBooksTableView" layoutX="15.0" layoutY="57.0" prefHeight="378.0" prefWidth="603.0" stylesheets="@tableDesign.css">
                      <columns>
                         <TableColumn fx:id="googleBookTitleColumn" prefWidth="150.4000244140625" text="Tiêu Đề" />
                         <TableColumn fx:id="googleBookAuthorsColumn" prefWidth="97.5999755859375" text="Tác Giả" />
@@ -146,36 +146,126 @@
                   </TableView>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="userInfoPane" prefHeight="450.0" prefWidth="634.0" visible="false">
+            <AnchorPane fx:id="userInfoPane" prefHeight="450.0" prefWidth="634.0" style="-fx-background-color: #fb8500;" visible="false">
                <children>
-                  <VBox alignment="CENTER" spacing="20.0" prefWidth="400" layoutX="117.0" layoutY="50.0">
+                  <VBox alignment="CENTER" prefHeight="450.0" prefWidth="633.0" spacing="20.0" style="-fx-background-color: #fb8500;">
                      <children>
-                        <Text text="Thông Tin Người Dùng" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-                        <HBox spacing="10">
-                           <Text text="ID: " />
-                           <TextField fx:id="userIdField" editable="false" prefWidth="250" />
-                        </HBox>
-                        <HBox spacing="10">
-                           <Text text="Họ và Tên: " />
-                           <TextField fx:id="fullNameField" prefWidth="250" />
-                        </HBox>
-                        <HBox spacing="10">
-                           <Text text="Lớp: " />
-                           <TextField fx:id="classField" prefWidth="250" />
-                        </HBox>
-                        <HBox spacing="10">
-                           <Text text="Email: " />
-                           <TextField fx:id="emailField" prefWidth="250" />
-                        </HBox>
-                        <HBox spacing="10">
-                           <Text text="Vai Trò: " />
-                           <TextField fx:id="roleField" editable="false" prefWidth="250" />
-                        </HBox>
-                        <HBox spacing="10">
-                           <Button fx:id="editButton" text="Chỉnh Sửa" onAction="#handleEditAction" />
-                           <Button fx:id="saveButton" text="Lưu" onAction="#handleSaveAction" disable="true" />
-                        </HBox>
+                        <VBox prefHeight="450.0" prefWidth="615.0" spacing="20.0" style="-fx-background-color: #fb8500;">
+                           <children>
+                              <Text style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Thông Tin Người Dùng">
+                                 <font>
+                                    <Font name="Montserrat ExtraBold" size="12.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="165.0" top="10.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ID người dùng">
+                                 <font>
+                                    <Font name="Montserrat Medium" size="13.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="-15.0" left="35.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <TextField fx:id="userIdField" editable="false" prefHeight="26.0" prefWidth="280.0" promptText="ID" style="-fx-background-radius: 30;">
+                                 <font>
+                                    <Font name="Montserrat Light" size="12.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="30.0" right="30.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên">
+                                 <font>
+                                    <Font name="Montserrat Medium" size="13.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="-15.0" left="35.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <TextField fx:id="fullNameField" prefWidth="280.0" promptText="fullname" style="-fx-background-radius: 30;" styleClass="text-field-return-with-icon" stylesheets="@signup.css">
+                                 <font>
+                                    <Font name="Montserrat Light" size="12.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="30.0" right="30.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Lớp">
+                                 <font>
+                                    <Font name="Montserrat Medium" size="13.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="-15.0" left="35.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <TextField fx:id="classField" prefWidth="280.0" promptText="class" style="-fx-background-radius: 30;" stylesheets="@signup.css">
+                                 <font>
+                                    <Font name="Montserrat Light" size="12.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="30.0" right="30.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+                                 <font>
+                                    <Font name="Montserrat Medium" size="13.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="-15.0" left="35.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <TextField fx:id="emailField" prefWidth="280.0" promptText="email" style="-fx-background-radius: 30;">
+                                 <font>
+                                    <Font name="Montserrat Light" size="12.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="30.0" right="30.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vai trò">
+                                 <font>
+                                    <Font name="Montserrat Medium" size="13.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="-15.0" left="35.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <TextField fx:id="roleField" editable="false" prefWidth="280.0" promptText="role" style="-fx-background-radius: 30;">
+                                 <font>
+                                    <Font name="Montserrat Light" size="12.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="30.0" right="30.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <HBox spacing="10">
+                                 <children>
+                                    <Button fx:id="editButton" onAction="#handleEditAction" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Chỉnh Sửa" textFill="WHITE">
+                                       <font>
+                                          <Font name="Montserrat Black" size="12.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="200.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="saveButton" disable="true" onAction="#handleSaveAction" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Lưu" textFill="WHITE">
+                                       <font>
+                                          <Font name="Montserrat Black" size="12.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </children>
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding>
                   </VBox>
                </children>
             </AnchorPane>

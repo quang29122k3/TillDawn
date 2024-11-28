@@ -90,7 +90,7 @@
 }
 
 /*.anchor-background {*/
-/*    -fx-background-image: url("images/image.png");*/
+/*    -fx-background-image: url("/images/image.png");*/
 /*    -fx-background-repeat: no-repeat;*/
 /*    -fx-background-size: contain;*/
 /*}*/
