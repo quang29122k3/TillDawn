@@ -21,7 +21,6 @@ public class LibraryManagementSystem extends Application {
         // Đặt tiêu đề cho cửa sổ
         stage.setTitle("Hello!");
 
-        //Áp dụng các hiệu ứng CSS
         stage.setScene(scene);
 
         // Xử lý sự kiện kéo thả cửa sổ bằng chuột

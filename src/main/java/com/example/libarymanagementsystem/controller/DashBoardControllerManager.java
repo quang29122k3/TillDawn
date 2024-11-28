@@ -37,12 +37,10 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class DashBoardControllerManager {
-    @FXML
-    private Button minimizeButton;
+
     @FXML
     private Button logout;
-    @FXML
-    private Button closeButton;
+
 
     @FXML
     private TableView<Book> bookTableView;
@@ -67,12 +65,6 @@ public class DashBoardControllerManager {
     @FXML
     private AnchorPane availableBooks_form;
 
-//    @FXML
-//    private AnchorPane issue_form;
-//
-//    @FXML
-//    private AnchorPane returnBook_form;
-
     @FXML
     private AnchorPane savedBook_form;
 
@@ -80,11 +72,6 @@ public class DashBoardControllerManager {
     @FXML
     private Button availableBooks_btn;
 
-    @FXML
-    private Button issueBooks_btn;
-
-    @FXML
-    private Button returnBooks_btn;
 
     @FXML
     private Button savedBooks_btn;
@@ -122,12 +109,6 @@ public class DashBoardControllerManager {
     private Button memberButton;
 
     @FXML
-    private Button blockMemberButton;
-
-    @FXML
-    private Button unblockMemberButton;
-
-    @FXML
     private Button googleBooksButton;
 
     @FXML
@@ -136,7 +117,67 @@ public class DashBoardControllerManager {
     @FXML
     private Button userIconButton;
 
-    // Các phương thức xử lý sự kiện
+    @FXML
+    private TextField userIdField;
+
+    @FXML
+    private TextField fullNameField;
+
+    @FXML
+    private TextField classField;
+
+    @FXML
+    private TextField roleField;
+
+    @FXML
+    private Button saveButton;
+
+    @FXML
+    private TextField emailField;
+
+    @FXML
+    private TableView<Book> borrowedBooksTable;
+
+    @FXML
+    private ImageView managerAvatar;
+
+    @FXML
+    private Text managerName;
+
+    @FXML
+    private TableColumn<Book, String> borrowedBookTitleColumn;
+    @FXML
+    private TableColumn<Book, String> borrowedBookAuthorColumn;
+    @FXML
+    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
+
+    @FXML
+    private AnchorPane googleBooks_form;
+
+    @FXML
+    private TextField googleBooksSearchField;
+
+    @FXML
+    private Button googleBooksSearchButton;
+
+    @FXML
+    private TableView<BookItem> googleBooksTableView;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookTitleColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookAuthorsColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookPublisherColumn;
+
+    @FXML
+    private TableColumn<BookItem, String> googleBookLinkColumn;
+
+    /**
+     * Phuong thuc dieu huong giao dien.
+     */
     @FXML
     private void navButtonDesign(ActionEvent event) {
         availableBooks_form.setVisible(false);
@@ -147,22 +188,24 @@ public class DashBoardControllerManager {
 
         if (event.getSource() == googleBooksButton) {
             googleBooks_form.setVisible(true);
-        }
-        else if (event.getSource() == availableBooks_btn) {
+        } else if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
             savedBook_form.setVisible(true);
         } else if (event.getSource() == memberButton) { // memberButton là ID của nút "Thành viên"
             member_form.setVisible(true);
             loadMembers(); // Tải danh sách thành viên
-        }
-        else if(event.getSource()==userIconButton){
+        } else if (event.getSource() == userIconButton) {
             userInfoPane.setVisible(true);
             loadUserInfo();
         }
     }
 
     private ObservableList<Person> members = FXCollections.observableArrayList();
+
+    /**
+     * Phuong thuc load data cua Person.
+     */
 
     private void loadMembers() {
         members.clear();
@@ -205,33 +248,9 @@ public class DashBoardControllerManager {
         }
     }
 
-    @FXML
-    private void minimizeWindow() {
-        Stage stage = (Stage) minimizeButton.getScene().getWindow();
-        stage.setIconified(true);
-    }
-
-    @FXML
-    private void closeWindow() {
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
-    }
-
-    @FXML
-    private TableView<Book> borrowedBooksTable;
-
-    @FXML
-    private ImageView managerAvatar;
-
-    @FXML
-    private Text managerName;
-
-    @FXML
-    private TableColumn<Book, String> borrowedBookTitleColumn;
-    @FXML
-    private TableColumn<Book, String> borrowedBookAuthorColumn;
-    @FXML
-    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
+    /**
+     * Cau hinh cac bang.
+     */
 
     @FXML
     public void initialize() {
@@ -275,6 +294,10 @@ public class DashBoardControllerManager {
         searchButton.setOnAction(event -> handleSearchAction());
     }
 
+    /**
+     * Su dung event de chuyen ve trang hellơview.
+     */
+
     @FXML
     private void handleLogout(ActionEvent event) {
         try {
@@ -302,10 +325,14 @@ public class DashBoardControllerManager {
 
                 logout.getScene().getWindow().hide();
             }
-        } catch ( Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Phuong thuc tim kiem sach, author.
+     */
 
     @FXML
     private void handleSearchAction() {
@@ -365,6 +392,10 @@ public class DashBoardControllerManager {
         }
     }
 
+    /**
+     * Phuong thuc load person.
+     */
+
     @FXML
     private void handleSearchMemberAction() {
         String searchText = searchMemberField.getText().trim();
@@ -396,6 +427,10 @@ public class DashBoardControllerManager {
         }
     }
 
+    /**
+     * Phuong thuc chan thanh vien.
+     */
+
     @FXML
     private void handleBlockMemberAction() {
         Person selectedMember = memberTableView.getSelectionModel().getSelectedItem();
@@ -418,6 +453,10 @@ public class DashBoardControllerManager {
         }
     }
 
+    /**
+     * Phuong thuc mo chan.
+     */
+
     @FXML
     private void handleUnblockMemberAction() {
         Person selectedMember = memberTableView.getSelectionModel().getSelectedItem();
@@ -439,6 +478,10 @@ public class DashBoardControllerManager {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Phuong thuc muon sach.
+     */
 
     @FXML
     private void handleBorrowAction() {
@@ -482,6 +525,10 @@ public class DashBoardControllerManager {
         }
     }
 
+    /**
+     * Phuong thuc tra sach.
+     */
+
     @FXML
     private void handleReturnAction() {
         Book selectedBook = borrowedBooksTable.getSelectionModel().getSelectedItem();
@@ -516,6 +563,9 @@ public class DashBoardControllerManager {
         }
     }
 
+    /**
+     * Load sach.
+     */
 
     public void loadBooks() {
         ObservableList<Book> bookList = FXCollections.observableArrayList();
@@ -567,6 +617,10 @@ public class DashBoardControllerManager {
 
     private ObservableList<Book> borrowedBooks = FXCollections.observableArrayList();
 
+    /**
+     * Load sach muon.
+     */
+
     private void loadBorrowedBooks() {
         borrowedBooks.clear();
         String query = "SELECT loans.id AS loan_id, books.id AS book_id, books.title, books.author, loans.borrow_date " +
@@ -598,6 +652,7 @@ public class DashBoardControllerManager {
     /**
      * Phương thức lấy đối tượng ImageView mặc định
      */
+
     private ImageView getDefaultImageView() {
         String defaultImagePath = "/images/manager_avatar.png";
         URL defaultImageURL = getClass().getResource(defaultImagePath);
@@ -613,6 +668,10 @@ public class DashBoardControllerManager {
         }
         return null;
     }
+
+    /**
+     * Phuong thuc them sach.
+     */
 
     public void addBook(Book book) {
         String query = "INSERT INTO books (title, author, available, total_copies, image) VALUES (?, ?, ?, ?, ?)";
@@ -637,6 +696,10 @@ public class DashBoardControllerManager {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Phuong thuc cap nhat sach.
+     */
 
     public void updateBook(Book book) {
         String query = "UPDATE books SET title = ?, author = ?, available = ?, total_copies = ?, image = ? WHERE id = ?";
@@ -663,6 +726,10 @@ public class DashBoardControllerManager {
         }
     }
 
+    /**
+     * Phuong thuc xoa sach.
+     */
+
     public void deleteBook(int bookId) {
         String query = "DELETE FROM books WHERE id = ?";
 
@@ -681,11 +748,19 @@ public class DashBoardControllerManager {
         }
     }
 
+    /**
+     * Phuong thuc open.
+     */
+
     @FXML
     private void handleAddBook() {
         // Mở cửa sổ thêm sách
         showBookForm(null);
     }
+
+    /**
+     * Phuong thuc open.
+     */
 
     @FXML
     private void handleEditBook() {
@@ -696,6 +771,10 @@ public class DashBoardControllerManager {
             showAlert("Vui lòng chọn sách để chỉnh sửa.");
         }
     }
+
+    /**
+     * Phuong thuc open.
+     */
 
     @FXML
     private void handleDeleteBook() {
@@ -714,6 +793,10 @@ public class DashBoardControllerManager {
             showAlert("Vui lòng chọn sách để xóa.");
         }
     }
+
+    /**
+     * Phuong thuc dieu huong toi BookForm.
+     */
 
     private void showBookForm(Book book) {
         try {
@@ -738,6 +821,10 @@ public class DashBoardControllerManager {
         }
     }
 
+    /**
+     * Phuong thuc tra ra thong bao.
+     */
+
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Cảnh báo");
@@ -746,31 +833,11 @@ public class DashBoardControllerManager {
         alert.showAndWait();
     }
 
-    @FXML
-    private AnchorPane googleBooks_form;
-
-    @FXML
-    private TextField googleBooksSearchField;
-
-    @FXML
-    private Button googleBooksSearchButton;
-
-    @FXML
-    private TableView<BookItem> googleBooksTableView;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookTitleColumn;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookAuthorsColumn;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookPublisherColumn;
-
-    @FXML
-    private TableColumn<BookItem, String> googleBookLinkColumn;
-
     private ObservableList<BookItem> googleBooksList = FXCollections.observableArrayList();
+
+    /**
+     * Phuong thuc tim kiem sach tren GoogleAPI.
+     */
 
     @FXML
     private void handleGoogleBooksSearch() {
@@ -781,21 +848,9 @@ public class DashBoardControllerManager {
         googleBooksTableView.getItems().addAll(books);
     }
 
-    //INFORPANE
-    //test
-    @FXML
-    private TextField userIdField;
-    @FXML
-    private TextField fullNameField;
-    @FXML
-    private TextField classField;
-    @FXML
-    private TextField roleField;
-    @FXML
-    private Button saveButton;
-
-    @FXML
-    private TextField emailField;
+    /**
+     * Phuong thuc load thong tin user.
+     */
 
     // Xử lý khi nhấn vào nút User
     private void loadUserInfo() {
@@ -821,7 +876,7 @@ public class DashBoardControllerManager {
                 emailField.setText(resultSet.getString("email"));
             } else {
                 System.out.println("No user found with ID: " + currentUserId); // Debug
-                showAlert( "Không tìm thấy thông tin người dùng.");
+                showAlert("Không tìm thấy thông tin người dùng.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -829,10 +884,14 @@ public class DashBoardControllerManager {
         }
     }
 
-    // Lưu thông tin sau khi chỉnh sửa
+    /**
+     * Phuong thuc luu.
+     */
+
     @FXML
     private void handleSaveAction(ActionEvent event) {
-        String updateQuery = "UPDATE person SET fullname = ?, class = ?, email = ? WHERE id = ?";;
+        String updateQuery = "UPDATE person SET fullname = ?, class = ?, email = ? WHERE id = ?";
+        ;
         try (Connection conn = ConnectionJDBCUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
 
@@ -843,7 +902,7 @@ public class DashBoardControllerManager {
 
             int rowsUpdated = pstmt.executeUpdate();
             if (rowsUpdated > 0) {
-                showAlert( "Thông tin đã được cập nhật.");
+                showAlert("Thông tin đã được cập nhật.");
                 fullNameField.setEditable(false);
                 classField.setEditable(false);
                 emailField.setEditable(false);
@@ -857,7 +916,10 @@ public class DashBoardControllerManager {
         }
     }
 
-    // Cho phép chỉnh sửa
+    /**
+     * Phuong thuc chinh sua tren cac field.
+     */
+
     @FXML
     public void handleEditAction(ActionEvent event) {
         fullNameField.setEditable(true);

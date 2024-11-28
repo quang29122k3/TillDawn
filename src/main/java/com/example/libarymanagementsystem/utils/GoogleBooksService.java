@@ -18,7 +18,6 @@ public class GoogleBooksService {
     public static List<BookItem> searchBooks(String query) {
         List<BookItem> googleBooksList = new ArrayList<>();
         try {
-            // Build the API URL with the key
             String apiUrl = "https://www.googleapis.com/books/v1/volumes?q="
                     + query.replace(" ", "+")
                     + "&key=" + API_KEY;

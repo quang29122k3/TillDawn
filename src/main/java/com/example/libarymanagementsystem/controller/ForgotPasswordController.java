@@ -42,6 +42,10 @@ public class ForgotPasswordController {
     // Thêm thuộc tính để lưu trữ mã xác nhận
     private String resetCode;
 
+    /**
+     * Phuong thuc reset passw.
+     */
+
     public void sendResetPassword() {
         String username = usernameField.getText();
 
@@ -82,6 +86,10 @@ public class ForgotPasswordController {
             }
         }
     }
+
+    /**
+     * Phuong thuc gui code ve email.
+     */
 
     private void sendResetPasswordEmail(String email, String resetCode) {
         // Thông tin tài khoản email gửi đi
@@ -141,6 +149,10 @@ public class ForgotPasswordController {
         }
     }
 
+    /**
+     * Phuong thuc mo form resetpassword.
+     */
+
 
     private void openResetPasswordForm(String username) {
         try {
@@ -166,9 +178,17 @@ public class ForgotPasswordController {
         }
     }
 
+    /**
+     * close.
+     */
+
     public void close() {
         System.exit(0);
     }
+
+    /**
+     * minimize.
+     */
 
     public void minimizeWindow(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

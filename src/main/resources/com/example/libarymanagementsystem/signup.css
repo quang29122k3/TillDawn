@@ -47,21 +47,21 @@
 }
 
 .text-field-repair-with-icon {
-    -fx-background-image: url("images/bookRepair.png");
+    -fx-background-image: url("../../../images/bookRepair1.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-background-insets: 0 0 0 0;
 }
 
 .text-field-delete-with-icon {
-    -fx-background-image: url("images/bookDelete.png");
+    -fx-background-image: url("../../../images/bookDelete1.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-background-insets: 0 0 0 0;
 }
 
 .text-field-add-with-icon {
-    -fx-background-image: url("images/addBook.png");
+    -fx-background-image: url("../../../images/addBook1.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-background-insets: 0 0 0 0;

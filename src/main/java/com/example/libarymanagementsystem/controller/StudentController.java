@@ -90,10 +90,42 @@ public class StudentController {
     @FXML
     private Text userName;
 
+    @FXML
+    private Button savedBooks_btn;
+
+    @FXML
+    private Button googleBooksButton;
+
+    //test
+    @FXML
+    private TextField userIdField;
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private TextField classField;
+    @FXML
+    private TextField roleField;
+    @FXML
+    private Button saveButton;
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private AnchorPane userInfoPane;
+
+    @FXML
+    private Button userIconButton;
+    @FXML
+    private TextField emailField;
+
     private ObservableList<BookItem> googleBooksList = FXCollections.observableArrayList();
 
     private ObservableList<Book> availableBooks = FXCollections.observableArrayList();
     private ObservableList<Book> borrowedBooks = FXCollections.observableArrayList();
+
+    /**
+     * Phuong thuc cau hinh cac bang.
+     */
 
     @FXML
     public void initialize() {
@@ -127,6 +159,10 @@ public class StudentController {
 
     }
 
+    /**
+     * Phuong thuc tim kiem sach tren Google.
+     */
+
     @FXML
     private void handleGoogleBooksSearch() {
         String query = googleBooksSearchField.getText();
@@ -135,6 +171,10 @@ public class StudentController {
         googleBooksTableView.getItems().clear();
         googleBooksTableView.getItems().addAll(books);
     }
+
+    /**
+     * Phuong thuc load sach ra bang sach co san.
+     */
 
     public void loadBooks() {
         ObservableList<Book> bookList = FXCollections.observableArrayList();
@@ -180,6 +220,10 @@ public class StudentController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Load sach da muon.
+     */
 
     private void loadBorrowedBooks() {
         borrowedBooks.clear();
@@ -227,6 +271,10 @@ public class StudentController {
         }
         return null;
     }
+
+    /**
+     * Phuong thuc tim kiem trong local database.
+     */
 
     @FXML
     private void handleSearchAction() {
@@ -284,6 +332,10 @@ public class StudentController {
         }
     }
 
+    /**
+     * Phuong thuc muon sach.
+     */
+
     @FXML
     private void handleBorrowAction() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
@@ -327,6 +379,10 @@ public class StudentController {
         }
     }
 
+    /**
+     * Phuong thuc tra sach.
+     */
+
     @FXML
     private void handleReturnAction() {
         Book selectedBook = borrowedBooksTable.getSelectionModel().getSelectedItem();
@@ -364,6 +420,10 @@ public class StudentController {
         }
     }
 
+    /**
+     * Phuong thuc tra ra canh bao.
+     */
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -372,11 +432,9 @@ public class StudentController {
         alert.showAndWait();
     }
 
-    @FXML
-    private Button savedBooks_btn;
-
-    @FXML
-    private Button googleBooksButton;
+    /**
+     * Phuong thuc dieu huong giao dien.
+     */
 
 
     @FXML
@@ -397,6 +455,10 @@ public class StudentController {
             loadUserInfo();
         }
     }
+
+    /**
+     * Phuong thuc dang xuat.
+     */
 
     private double x = 0;
     private double y = 0;
@@ -432,29 +494,11 @@ public class StudentController {
             e.printStackTrace();
         }
     }
-    //test
-    @FXML
-    private TextField userIdField;
-    @FXML
-    private TextField fullNameField;
-    @FXML
-    private TextField classField;
-    @FXML
-    private TextField roleField;
-    @FXML
-    private Button saveButton;
-    @FXML
-    private Button editButton;
 
-    @FXML
-    private AnchorPane userInfoPane;
+    /**
+     * Phuong thuc load thong tin user.
+     */
 
-    @FXML
-    private Button userIconButton;
-    @FXML
-    private TextField emailField;
-
-    // Xử lý khi nhấn vào nút User
     private void loadUserInfo() {
         String query = "SELECT p.id, p.fullname, p.class, p.email, r.name AS role\n" +
                 "FROM person p\n" +
@@ -486,7 +530,9 @@ public class StudentController {
         }
     }
 
-    // Lưu thông tin sau khi chỉnh sửa
+    /**
+     * Phuong thuc luu thong tin.
+     */
     @FXML
     private void handleSaveAction(ActionEvent event) {
         String updateQuery = "UPDATE person SET fullname = ?, class = ?, email = ? WHERE id = ?";;
@@ -513,6 +559,10 @@ public class StudentController {
             showAlert("Lỗi", "Đã xảy ra lỗi khi cập nhật thông tin.");
         }
     }
+
+    /**
+     * Phuong thuc chinh sua tren cac field.
+     */
 
     // Cho phép chỉnh sửa
     @FXML

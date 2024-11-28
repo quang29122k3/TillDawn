@@ -46,6 +46,10 @@ public class ResetPasswordController {
         this.username = username;
     }
 
+    /**
+     * Phuong thuc xac minh code.
+     */
+
     public void verifyCode() {
         String code = codeField.getText().trim(); // Loại bỏ khoảng trắng đầu và cuối
 
@@ -120,6 +124,10 @@ public class ResetPasswordController {
         }
     }
 
+    /**
+     * Phuong thuc dat lai mat khau.
+     */
+
     public void resetPassword() {
         String newPassword = newPasswordField.getText();
         String confirmPassword = confirmPasswordField.getText();
@@ -161,6 +169,10 @@ public class ResetPasswordController {
             }
         }
     }
+
+    /**
+     * Phuong thuc quay lai.
+     */
 
     public void back(ActionEvent event) {
         try {

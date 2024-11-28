@@ -35,7 +35,6 @@ public class BookFormController {
     public void setBook(Book book) {
         this.book = book;
         if (book != null) {
-            // Điền thông tin sách vào các trường
             titleField.setText(book.getTitle());
             authorField.setText(book.getAuthor());
             availableField.setText(String.valueOf(book.getAvailable()));
@@ -49,6 +48,9 @@ public class BookFormController {
         this.mainController = mainController;
     }
 
+    /**
+     * Phuong thuc luu thong tin sach.
+     */
     @FXML
     private void handleSave() {
         String title = titleField.getText();
@@ -82,12 +84,20 @@ public class BookFormController {
         stage.close();
     }
 
+    /**
+     * Phuong thuc huy.
+     */
+
     @FXML
     private void handleCancel() {
         // Đóng cửa sổ
         Stage stage = (Stage) titleField.getScene().getWindow();
         stage.close();
     }
+
+    /**
+     * Phuong thuc chon hinh anh.
+     */
 
     @FXML
     private void handleChooseImage() {
@@ -104,6 +114,10 @@ public class BookFormController {
             imageView.setImage(image);
         }
     }
+
+    /**
+     * Phuong thuc tra ra canh bao.
+     */
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
