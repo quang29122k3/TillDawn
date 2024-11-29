@@ -13,9 +13,7 @@ This application is written by Java and uses the JavaFX library.
 2. The application is written in Java and uses the JavaFX library.
 
 
-**UML diagram:**
 
-![UML diagram](
 
 
 **Installation**
@@ -25,6 +23,7 @@ This application is written by Java and uses the JavaFX library.
 
 
 **Usage**
+
 **1. In student interface:**
    - Return books: student can return their books.
    - Borrow books: Student can borrow books in the library by click on the book and then click on the icon borrow.
@@ -40,6 +39,7 @@ This application is written by Java and uses the JavaFX library.
    - Return books: student can return their books.
    - Borrow books: Student can borrow books in the library by click on the book and then click on the icon borrow.
    - Search for books: Enter the book title, author, or genre into the search bar and click Search to find matching books.
+   - Change user information: click on the image on the left-corner in ther interface and user can change their information.
    - Google API books: can search for a book in the google api library
    - Block user: admin can blocking account of users
 
@@ -51,9 +51,10 @@ This application is written by Java and uses the JavaFX library.
    - Login: Login in the library by click on the login button.
 
      
-**Demo:**
+**Demo:**![image](https://github.com/user-attachments/assets/12073ae9-7135-46d6-97c3-d90d5d9a81ce)
 
-![Demo](
+
+
 
 **Future improvements:**
 1. Add more dictionaries
