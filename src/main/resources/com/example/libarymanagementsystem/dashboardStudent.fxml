@@ -107,9 +107,11 @@
                <children>
                   <TableView fx:id="borrowedBooksTable" layoutX="22.0" layoutY="22.0" prefHeight="377.0" prefWidth="594.0" stylesheets="@tableDesign.css">
                      <columns>
-                        <TableColumn fx:id="borrowedBookTitleColumn" prefWidth="216.00006103515625" text="Tên Sách" />
-                        <TableColumn fx:id="borrowedBookAuthorColumn" prefWidth="156.7999267578125" text="Tác Giả" />
-                        <TableColumn fx:id="borrowedBookBorrowDateColumn" prefWidth="219.2000732421875" text="Thời Gian Mượn" />
+                        <TableColumn fx:id="loanBookTitleColumn" text="Tên Sách"/>
+                        <TableColumn fx:id="loanBookAuthorColumn" text="Tác Giả"/>
+                        <TableColumn fx:id="loanBorrowDateColumn" text="Ngày Mượn"/>
+                        <TableColumn fx:id="loanDueDateColumn" text="Ngày Hẹn Trả"/>
+                        <TableColumn fx:id="loanStatusColumn" text="Trạng Thái"/>
                      </columns>
                   </TableView>
                   <Button fx:id="returnButton" layoutX="230.0" layoutY="412.0" onAction="#handleReturnAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Trả sách" textFill="WHITE">

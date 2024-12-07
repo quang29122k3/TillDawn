@@ -3,6 +3,7 @@ package com.example.libarymanagementsystem.controller;
 import com.example.libarymanagementsystem.model.Book;
 import com.example.libarymanagementsystem.model.BookItem;
 import com.example.libarymanagementsystem.model.GetData;
+import com.example.libarymanagementsystem.model.Loan;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import com.example.libarymanagementsystem.utils.GoogleBooksService;
 import javafx.collections.FXCollections;
@@ -19,9 +20,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
@@ -45,13 +48,17 @@ public class StudentController {
     @FXML
     private TableColumn<Book, ImageView> imageColumn;
     @FXML
-    private TableView<Book> borrowedBooksTable;
+    private TableView<Loan> borrowedBooksTable; // đổi từ Book sang Loan
     @FXML
-    private TableColumn<Book, String> borrowedBookTitleColumn;
+    private TableColumn<Loan, String> loanBookTitleColumn;
     @FXML
-    private TableColumn<Book, String> borrowedBookAuthorColumn;
+    private TableColumn<Loan, String> loanBookAuthorColumn;
     @FXML
-    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
+    private TableColumn<Loan, LocalDate> loanBorrowDateColumn;
+    @FXML
+    private TableColumn<Loan, LocalDate> loanDueDateColumn;
+    @FXML
+    private TableColumn<Loan, String> loanStatusColumn;
     @FXML
     private AnchorPane availableBooks_form;
 
@@ -144,10 +151,12 @@ public class StudentController {
         availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
 
-        // Cấu hình cột cho bảng sách đang mượn sử dụng PropertyValueFactory
-        borrowedBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        borrowedBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
-        borrowedBookBorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+        // Cấu hình bảng sách đã mượn
+        loanBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
+        loanBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("bookAuthor"));
+        loanBorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+        loanDueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+        loanStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         // Cấu hình cột cho bảng xếp hạng top 10 sách.
         rankedImageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
         rankedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -161,7 +170,7 @@ public class StudentController {
 
         // Tải dữ liệu ban đầu
         loadBooks();
-        loadBorrowedBooks();
+        loadBorrowedLoans();
 
     }
 
@@ -231,29 +240,63 @@ public class StudentController {
      * Load sach da muon.
      */
 
-    private void loadBorrowedBooks() {
-        borrowedBooks.clear();
-        String query = "SELECT loans.id AS loan_id, books.id AS book_id, books.title, books.author, loans.borrow_date " +
-                "FROM loans INNER JOIN books ON loans.book_id = books.id " +
-                "WHERE loans.returned = 0";
+    private ObservableList<Loan> borrowedLoans = FXCollections.observableArrayList();
+
+    private void loadBorrowedLoans() {
+        borrowedLoans.clear();
+        String query = "SELECT l.id AS loan_id, l.person_id, l.book_id, l.borrow_date, l.due_date, l.return_date, l.returned, l.status, b.title, b.author " +
+                "FROM loans l " +
+                "JOIN books b ON l.book_id = b.id " +
+                "WHERE l.returned = 0";
 
         try (Connection conn = ConnectionJDBCUtils.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
+            LocalDate now = LocalDate.now();
             while (rs.next()) {
-                Book book = new Book(
-                        rs.getInt("book_id"),
-                        rs.getString("title"),
-                        rs.getString("author"),
-                        0, // Không cần quan tâm số lượng
-                        null
+                int loanId = rs.getInt("loan_id");
+                String personId = rs.getString("person_id");
+                int bookId = rs.getInt("book_id");
+                LocalDate borrowDate = rs.getDate("borrow_date").toLocalDate();
+                Date dueDateSql = rs.getDate("due_date");
+                LocalDate dueDate = (dueDateSql != null) ? dueDateSql.toLocalDate() : null;
+                Date returnDateSql = rs.getDate("return_date");
+                LocalDate returnDate = (returnDateSql != null) ? returnDateSql.toLocalDate() : null;
+                boolean returned = rs.getBoolean("returned");
+                String dbStatus = rs.getString("status");
+                String bookTitle = rs.getString("title");
+                String bookAuthor = rs.getString("author");
+
+                Loan loan = new Loan(
+                        loanId, personId, bookId, borrowDate, dueDate, returnDate,
+                        returned, dbStatus, bookTitle, bookAuthor
                 );
-                book.setLoanId(rs.getInt("loan_id"));
-                book.setBorrowDate(rs.getDate("borrow_date").toLocalDate());
-                borrowedBooks.add(book);
+
+                // Tính status
+                String displayStatus;
+                if (returned) {
+                    displayStatus = "Đã Trả";
+                } else {
+                    // Kiểm tra null trước khi so sánh
+                    if (dueDate == null) {
+                        // Nếu không có due_date, bạn có thể đặt trạng thái mặc định
+                        // Ví dụ: "Đang Mượn" hoặc "Chưa xác định"
+                        displayStatus = "Đang Mượn";
+                    } else {
+                        if (now.isAfter(dueDate)) {
+                            displayStatus = "Quá Hạn";
+                        } else {
+                            displayStatus = "Đang Mượn";
+                        }
+                    }
+                }
+                loan.setStatus(displayStatus);
+
+                borrowedLoans.add(loan);
             }
-            borrowedBooksTable.setItems(borrowedBooks);
+
+            borrowedBooksTable.setItems(borrowedLoans);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -346,31 +389,44 @@ public class StudentController {
     private void handleBorrowAction() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
         if (selectedBook == null) {
-            showAlert("Chọn sách", "Vui lòng chọn sách để mượn.");
+            showAlert("Loi","Vui lòng chọn sách để mượn.");
             return;
         }
 
-        // Kiểm tra nếu số lượng sách hiện có bằng 0
         if (selectedBook.getAvailable() == 0) {
-            showAlert("Sách \"" + selectedBook.getTitle() + "\" đã hết", "Không thể mượn sách này.");
-            return; // Dừng tại đây nếu sách đã hết
+            showAlert("Loi","Sách \"" + selectedBook.getTitle() + "\" đã hết.");
+            return;
         }
 
-        String personId = GetData.getUsername();
+        // Mở dialog nhập số ngày mượn
+        BorrowDurationDialogController dialogController = showBorrowDurationDialog();
+        if (dialogController == null || !dialogController.isConfirmed()) {
+            return;
+        }
+
+        int days = dialogController.getDays();
+        if (days <= 0) {
+            showAlert("Loi","Số ngày mượn phải > 0.");
+            return;
+        }
+
+        LocalDate borrowDate = LocalDate.now();
+        LocalDate dueDate = borrowDate.plusDays(days);
 
         try (Connection conn = ConnectionJDBCUtils.getConnection()) {
             conn.setAutoCommit(false);
+            String personId = GetData.getUsername();
 
-            // Thêm bản ghi vào bảng loans
-            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, returned, status) VALUES (?, ?, ?, 0, 'borrowed')";
+            // Thêm vào loans có due_date
+            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, due_date, returned, status) VALUES (?, ?, ?, ?, 0, 'borrowed')";
             try (PreparedStatement stmt = conn.prepareStatement(loanQuery)) {
                 stmt.setString(1, personId);
                 stmt.setInt(2, selectedBook.getId());
-                stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                stmt.setDate(3, Date.valueOf(borrowDate));
+                stmt.setDate(4, Date.valueOf(dueDate));
                 stmt.executeUpdate();
             }
 
-            // Cập nhật số lượng sách
             String updateBookQuery = "UPDATE books SET available = available - 1 WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
                 stmt.setInt(1, selectedBook.getId());
@@ -379,9 +435,11 @@ public class StudentController {
 
             conn.commit();
             loadBooks();
-            loadBorrowedBooks();
+            loadBorrowedLoans();// Cập nhật lại trang sách có sẵn
+            // Nếu bạn có trang top 10 sách, loadRankedBooks() nếu cần
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert("Loi","Đã xảy ra lỗi khi mượn sách.");
         }
     }
 
@@ -391,36 +449,33 @@ public class StudentController {
 
     @FXML
     private void handleReturnAction() {
-        Book selectedBook = borrowedBooksTable.getSelectionModel().getSelectedItem();
-        if (selectedBook == null) {
-            showAlert("Chọn sách", "Vui lòng chọn sách để trả.");
+        Loan selectedLoan = borrowedBooksTable.getSelectionModel().getSelectedItem();
+        if (selectedLoan == null) {
+            showAlert("Loi","Vui lòng chọn lượt mượn sách để trả.");
             return;
         }
-
-        String personId = GetData.getUsername();
-        int loanId = selectedBook.getLoanId();
 
         try (Connection conn = ConnectionJDBCUtils.getConnection()) {
             conn.setAutoCommit(false);
 
-            // Cập nhật bản ghi mượn đã trả dựa trên loanId
-            String updateLoanQuery = "UPDATE loans SET returned = 1, return_date = ?, status = 'returned' WHERE id = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(updateLoanQuery)) {
+            // Cập nhật trạng thái mượn
+            String returnQuery = "UPDATE loans SET returned = 1, return_date = ?, status = 'returned' WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(returnQuery)) {
                 stmt.setDate(1, Date.valueOf(LocalDate.now()));
-                stmt.setInt(2, loanId);
+                stmt.setInt(2, selectedLoan.getId()); // Sử dụng getId() từ Loan thay cho getLoanId() của Book
                 stmt.executeUpdate();
             }
 
-            // Cập nhật số lượng sách trong bảng books
+            // Tăng số lượng sách có sẵn
             String updateBookQuery = "UPDATE books SET available = available + 1 WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
-                stmt.setInt(1, selectedBook.getId());
+                stmt.setInt(1, selectedLoan.getBookId()); // Sử dụng getBookId() từ Loan thay cho selectedBook.getId()
                 stmt.executeUpdate();
             }
 
             conn.commit();
             loadBooks();
-            loadBorrowedBooks();
+            loadBorrowedLoans(); // Gọi loadBorrowedLoans() thay cho loadBorrowedBooks()
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -594,29 +649,46 @@ public class StudentController {
     private void handleBorrowFromRankedOutsideTable(ActionEvent event) {
         Book selectedBook = rankedBooksTableView.getSelectionModel().getSelectedItem();
         if (selectedBook == null) {
-            showAlert("Lỗi","Vui lòng chọn sách để mượn.");
+            showAlert("Loi","Vui lòng chọn sách để mượn.");
             return;
         }
 
         if (selectedBook.getAvailable() == 0) {
-            showAlert("Sách \"" + selectedBook.getTitle() + "\" đã hết", "Không thể mượn sách này.");
+            showAlert("Loi","Sách \"" + selectedBook.getTitle() + "\" đã hết. Không thể mượn sách này.");
             return;
         }
+
+        // Mở dialog nhập số ngày mượn
+        BorrowDurationDialogController dialogController = showBorrowDurationDialog();
+        if (dialogController == null || !dialogController.isConfirmed()) {
+            return; // Người dùng hủy hoặc không nhập, không làm gì thêm
+        }
+
+        int days = dialogController.getDays();
+        if (days <= 0) {
+            showAlert("Loi","Số ngày mượn phải > 0.");
+            return;
+        }
+
+        LocalDate borrowDate = LocalDate.now();
+        LocalDate dueDate = borrowDate.plusDays(days);
 
         try (Connection conn = ConnectionJDBCUtils.getConnection()) {
             conn.setAutoCommit(false);
             String personId = GetData.getUsername(); // Lấy ID người dùng hiện tại
 
-            // Thêm bản ghi mượn
-            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, returned, status) VALUES (?, ?, ?, 0, 'borrowed')";
+            // Thêm bản ghi mượn vào loans với due_date
+            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, due_date, returned, status) " +
+                    "VALUES (?, ?, ?, ?, 0, 'borrowed')";
             try (PreparedStatement stmt = conn.prepareStatement(loanQuery)) {
                 stmt.setString(1, personId);
                 stmt.setInt(2, selectedBook.getId());
-                stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                stmt.setDate(3, Date.valueOf(borrowDate));
+                stmt.setDate(4, Date.valueOf(dueDate));
                 stmt.executeUpdate();
             }
 
-            // Giảm số lượng sách
+            // Giảm số lượng sách có sẵn
             String updateBookQuery = "UPDATE books SET available = available - 1 WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
                 stmt.setInt(1, selectedBook.getId());
@@ -625,14 +697,13 @@ public class StudentController {
 
             conn.commit();
 
-            // Tải lại bảng top 10 sách
+            // Cập nhật lại danh sách sách và sách đã mượn
             loadBooks();
-            loadRankedBooks();
-            loadBorrowedBooks();
-
+            loadRankedBooks(); // Cập nhật lại top 10 sách nếu cần
+            loadBorrowedLoans();
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Đã xảy ra lỗi", "Chọn lại sách.");
+            showAlert("Loi","Đã xảy ra lỗi khi mượn sách.");
         }
     }
     @FXML
@@ -695,6 +766,24 @@ public class StudentController {
             rankedBooksTableView.setItems(rankedBooksList);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    private BorrowDurationDialogController showBorrowDurationDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/libarymanagementsystem/BorrowDurationDialog.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Chọn số ngày mượn");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            return loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
