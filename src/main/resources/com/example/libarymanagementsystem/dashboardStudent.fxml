@@ -59,6 +59,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
+            <Button fx:id="rankBooksButton" mnemonicParsing="false" text="Xếp Hạng Sách" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" textFill="WHITE" />
             <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #90e0ef;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Đăng Xuất">
                <font>
                   <Font name="Montserrat ExtraBold" size="12.0" />
@@ -95,7 +96,7 @@
                         <TableColumn fx:id="availableColumn" prefWidth="140.0" text="Số Lượng Còn" />
                      </columns>
                   </TableView>
-                  <Button fx:id="borrowButton" layoutX="230.0" layoutY="412.0" onAction="#handleBorrowAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn sách" textFill="WHITE">
+                  <Button fx:id="borrowButton1" layoutX="230.0" layoutY="412.0" onAction="#handleBorrowAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn sách" textFill="WHITE">
                      <font>
                         <Font name="Montserrat ExtraBold" size="12.0" />
                      </font>
@@ -142,6 +143,22 @@
                         <TableColumn fx:id="googleBookLinkColumn" prefWidth="380.79998779296875" text="Link" />
                      </columns>
                   </TableView>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="rankedBooks_form" visible="false" style="-fx-background-color: #fb8500;">
+               <children>
+                  <TableView fx:id="rankedBooksTableView" prefHeight="400.0" prefWidth="600.0" layoutX="20.0" layoutY="20.0">
+                     <columns>
+                        <TableColumn fx:id="rankedImageColumn" text="Hình Ảnh"/>
+                        <TableColumn fx:id="rankedTitleColumn" text="Tiêu Đề"/>
+                        <TableColumn fx:id="rankedAuthorColumn" text="Tác Giả"/>
+                        <TableColumn fx:id="rankedBorrowCountColumn" text="Lượt Mượn"/>
+                        <TableColumn fx:id="rankedAvailableColumn" text="Còn"/>
+                     </columns>
+                  </TableView>
+
+                  <!-- Nút "Mượn" đặt bên ngoài TableView -->
+                  <Button fx:id="borrowButton" text="Mượn" layoutX="20.0" layoutY="430.0" onAction="#handleBorrowFromRankedOutsideTable"/>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="userInfoPane" prefHeight="450.0" prefWidth="634.0" style="-fx-background-color: #fb8500;" visible="false">

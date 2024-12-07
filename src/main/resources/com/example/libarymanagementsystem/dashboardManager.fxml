@@ -261,7 +261,7 @@
                         </TableView>
 
                         <!-- Nút "Mượn" đặt bên ngoài TableView -->
-                        <Button fx:id="borrowButton" text="Mượn" layoutX="20.0" layoutY="430.0" onAction="#handleBorrowFromRankedOutsideTable"/>
+                        <Button fx:id="borrowButton1" text="Mượn" layoutX="20.0" layoutY="430.0" onAction="#handleBorrowFromRankedOutsideTable"/>
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="userInfoPane" prefHeight="450.0" prefWidth="642.0" visible="false">

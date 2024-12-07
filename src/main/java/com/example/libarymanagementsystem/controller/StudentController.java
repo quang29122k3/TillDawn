@@ -148,6 +148,12 @@ public class StudentController {
         borrowedBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         borrowedBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         borrowedBookBorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+        // Cấu hình cột cho bảng xếp hạng top 10 sách.
+        rankedImageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
+        rankedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        rankedAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        rankedBorrowCountColumn.setCellValueFactory(new PropertyValueFactory<>("borrowCount"));
+        rankedAvailableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
 
         // Gán danh sách vào bảng
         bookTableView.setItems(availableBooks);
@@ -435,7 +441,11 @@ public class StudentController {
     /**
      * Phuong thuc dieu huong giao dien.
      */
+    @FXML
+    private Button rankBooksButton;
 
+    @FXML
+    private AnchorPane rankedBooks_form;
 
     @FXML
     private void navButtonDesign(ActionEvent event) {
@@ -443,6 +453,7 @@ public class StudentController {
         savedBook_form.setVisible(false);
         googleBooks_form.setVisible(false);
         userInfoPane.setVisible(false);
+        rankedBooks_form.setVisible(false);
         if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
@@ -453,6 +464,9 @@ public class StudentController {
         else if(event.getSource()==userIconButton){
             userInfoPane.setVisible(true);
             loadUserInfo();
+        } else if (event.getSource() == rankBooksButton) {
+            rankedBooks_form.setVisible(true);
+            loadRankedBooks();
         }
     }
 
@@ -571,5 +585,116 @@ public class StudentController {
         classField.setEditable(true);
         emailField.setEditable(true);
         saveButton.setDisable(false);
+    }
+
+    @FXML
+    private Button borrowButton; // nút Mượn
+
+    @FXML
+    private void handleBorrowFromRankedOutsideTable(ActionEvent event) {
+        Book selectedBook = rankedBooksTableView.getSelectionModel().getSelectedItem();
+        if (selectedBook == null) {
+            showAlert("Lỗi","Vui lòng chọn sách để mượn.");
+            return;
+        }
+
+        if (selectedBook.getAvailable() == 0) {
+            showAlert("Sách \"" + selectedBook.getTitle() + "\" đã hết", "Không thể mượn sách này.");
+            return;
+        }
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection()) {
+            conn.setAutoCommit(false);
+            String personId = GetData.getUsername(); // Lấy ID người dùng hiện tại
+
+            // Thêm bản ghi mượn
+            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, returned, status) VALUES (?, ?, ?, 0, 'borrowed')";
+            try (PreparedStatement stmt = conn.prepareStatement(loanQuery)) {
+                stmt.setString(1, personId);
+                stmt.setInt(2, selectedBook.getId());
+                stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                stmt.executeUpdate();
+            }
+
+            // Giảm số lượng sách
+            String updateBookQuery = "UPDATE books SET available = available - 1 WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
+                stmt.setInt(1, selectedBook.getId());
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+
+            // Tải lại bảng top 10 sách
+            loadBooks();
+            loadRankedBooks();
+            loadBorrowedBooks();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Đã xảy ra lỗi", "Chọn lại sách.");
+        }
+    }
+    @FXML
+    private TableView<Book> rankedBooksTableView;
+    @FXML
+    private TableColumn<Book, String> rankedTitleColumn;
+    @FXML
+    private TableColumn<Book, String> rankedAuthorColumn;
+    @FXML
+    private TableColumn<Book, Integer> rankedBorrowCountColumn;
+    @FXML
+    private TableColumn<Book, Integer> rankedAvailableColumn;
+    @FXML
+    private TableColumn<Book, ImageView> rankedImageColumn;
+
+    private ObservableList<Book> rankedBooksList = FXCollections.observableArrayList();
+
+    private void loadRankedBooks() {
+        rankedBooksList.clear();
+        String query = "SELECT b.id, b.title, b.author, b.available, b.image, COUNT(l.book_id) AS borrow_count " +
+                "FROM books b " +
+                "JOIN loans l ON b.id = l.book_id " +
+                "GROUP BY l.book_id " +
+                "ORDER BY borrow_count DESC " +
+                "LIMIT 10";
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                int available = rs.getInt("available");
+                int borrowCount = rs.getInt("borrow_count");
+                String imagePath = rs.getString("image");
+
+                ImageView imageView = null;
+                if (imagePath != null && !imagePath.trim().isEmpty()) {
+                    try {
+                        // Tạo Image và ImageView từ đường dẫn ảnh
+                        Image image = new Image(imagePath, 50, 50, false, true);
+                        imageView = new ImageView(image);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Invalid image URL for book ID " + id + ": " + imagePath);
+                        imageView = getDefaultImageView(); // Sử dụng hình mặc định nếu URL không hợp lệ
+                    }
+                } else {
+                    imageView = getDefaultImageView(); // Sử dụng hình mặc định nếu không có imagePath
+                }
+
+                // Tạo đối tượng Book với imageView
+                Book book = new Book(id, title, author, available, imageView);
+                book.setBorrowCount(borrowCount);
+
+                rankedBooksList.add(book);
+            }
+
+            rankedBooksTableView.setItems(rankedBooksList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
