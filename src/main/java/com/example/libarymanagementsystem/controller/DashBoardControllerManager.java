@@ -1,9 +1,7 @@
 package com.example.libarymanagementsystem.controller;
 
-import com.example.libarymanagementsystem.model.Book;
-import com.example.libarymanagementsystem.model.BookItem;
-import com.example.libarymanagementsystem.model.GetData;
-import com.example.libarymanagementsystem.model.Person;
+import com.example.libarymanagementsystem.model.*;
+import com.example.libarymanagementsystem.utils.BookExists;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import com.example.libarymanagementsystem.utils.GoogleBooksService;
 import javafx.collections.FXCollections;
@@ -136,20 +134,17 @@ public class DashBoardControllerManager {
     private TextField emailField;
 
     @FXML
-    private TableView<Book> borrowedBooksTable;
-
+    private TableView<Loan> borrowedBooksTable; // đổi từ Book sang Loan
     @FXML
-    private ImageView managerAvatar;
-
+    private TableColumn<Loan, String> loanBookTitleColumn;
     @FXML
-    private Text managerName;
-
+    private TableColumn<Loan, String> loanBookAuthorColumn;
     @FXML
-    private TableColumn<Book, String> borrowedBookTitleColumn;
+    private TableColumn<Loan, LocalDate> loanBorrowDateColumn;
     @FXML
-    private TableColumn<Book, String> borrowedBookAuthorColumn;
+    private TableColumn<Loan, LocalDate> loanDueDateColumn;
     @FXML
-    private TableColumn<Book, LocalDate> borrowedBookBorrowDateColumn;
+    private TableColumn<Loan, String> loanStatusColumn;
 
     @FXML
     private AnchorPane googleBooks_form;
@@ -175,6 +170,34 @@ public class DashBoardControllerManager {
     @FXML
     private TableColumn<BookItem, String> googleBookLinkColumn;
 
+    @FXML
+    private Button rankBooksButton;
+
+    @FXML
+    private AnchorPane rankedBooks_form;
+
+    @FXML
+    private TableView<Book> rankedBooksTableView;
+    @FXML
+    private TableColumn<Book, String> rankedTitleColumn;
+    @FXML
+    private TableColumn<Book, String> rankedAuthorColumn;
+    @FXML
+    private TableColumn<Book, Integer> rankedBorrowCountColumn;
+    @FXML
+    private TableColumn<Book, Integer> rankedAvailableColumn;
+    @FXML
+    private TableColumn<Book, ImageView> rankedImageColumn;
+
+    @FXML
+    private Text managerName;
+
+
+
+// Có thể thêm một TableColumn chứa Button mượn, bạn dùng cell factory để tạo nút
+
+
+
     /**
      * Phuong thuc dieu huong giao dien.
      */
@@ -185,6 +208,7 @@ public class DashBoardControllerManager {
         member_form.setVisible(false);
         googleBooks_form.setVisible(false);
         userInfoPane.setVisible(false);
+        rankedBooks_form.setVisible(false);
 
         if (event.getSource() == googleBooksButton) {
             googleBooks_form.setVisible(true);
@@ -198,6 +222,9 @@ public class DashBoardControllerManager {
         } else if (event.getSource() == userIconButton) {
             userInfoPane.setVisible(true);
             loadUserInfo();
+        } else if (event.getSource() == rankBooksButton) {
+            rankedBooks_form.setVisible(true);
+            loadRankedBooks();
         }
     }
 
@@ -263,9 +290,11 @@ public class DashBoardControllerManager {
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
 
         // Cấu hình bảng sách đã mượn
-        borrowedBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        borrowedBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
-        borrowedBookBorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+        loanBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
+        loanBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("bookAuthor"));
+        loanBorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+        loanDueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
+        loanStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         // Cấu hình cột cho bảng thành viên
         memberIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -278,6 +307,12 @@ public class DashBoardControllerManager {
         googleBookPublisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisher"));
         googleBookLinkColumn.setCellValueFactory(new PropertyValueFactory<>("infoLink"));
 
+        rankedImageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
+        rankedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        rankedAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        rankedBorrowCountColumn.setCellValueFactory(new PropertyValueFactory<>("borrowCount"));
+        rankedAvailableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
+
         googleBooksTableView.setItems(googleBooksList);
 
         // Cấu hình sự kiện tìm kiếm thành viên
@@ -288,7 +323,7 @@ public class DashBoardControllerManager {
 
         // Tải tất cả sách ban đầu
         loadBooks();
-        loadBorrowedBooks();
+        loadBorrowedLoans();
 
         // Gán sự kiện cho nút tìm kiếm
         searchButton.setOnAction(event -> handleSearchAction());
@@ -487,30 +522,44 @@ public class DashBoardControllerManager {
     private void handleBorrowAction() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
         if (selectedBook == null) {
-            showAlert("Chọn sách Vui lòng chọn sách để mượn.");
+            showAlert("Vui lòng chọn sách để mượn.");
             return;
         }
 
-        // Kiểm tra nếu số lượng sách hiện có bằng 0
         if (selectedBook.getAvailable() == 0) {
-            showAlert("Sách \"" + selectedBook.getTitle() + "\" đã hết. Không thể mượn sách này.");
-            return; // Dừng tại đây nếu sách đã hết
+            showAlert("Sách \"" + selectedBook.getTitle() + "\" đã hết.");
+            return;
         }
+
+        // Mở dialog nhập số ngày mượn
+        BorrowDurationDialogController dialogController = showBorrowDurationDialog();
+        if (dialogController == null || !dialogController.isConfirmed()) {
+            return;
+        }
+
+        int days = dialogController.getDays();
+        if (days <= 0) {
+            showAlert("Số ngày mượn phải > 0.");
+            return;
+        }
+
+        LocalDate borrowDate = LocalDate.now();
+        LocalDate dueDate = borrowDate.plusDays(days);
 
         try (Connection conn = ConnectionJDBCUtils.getConnection()) {
             conn.setAutoCommit(false);
-            String personId = GetData.getUsername(); // Sử dụng mã người dùng hiện tại
+            String personId = GetData.getUsername();
 
-            // Thêm bản ghi mượn vào loans
-            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, returned, status) VALUES (?, ?, ?, 0, 'borrowed')";
+            // Thêm vào loans có due_date
+            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, due_date, returned, status) VALUES (?, ?, ?, ?, 0, 'borrowed')";
             try (PreparedStatement stmt = conn.prepareStatement(loanQuery)) {
-                stmt.setString(1, personId); // ID của người quản lý
+                stmt.setString(1, personId);
                 stmt.setInt(2, selectedBook.getId());
-                stmt.setDate(3, Date.valueOf(LocalDate.now()));
+                stmt.setDate(3, Date.valueOf(borrowDate));
+                stmt.setDate(4, Date.valueOf(dueDate));
                 stmt.executeUpdate();
             }
 
-            // Giảm số lượng sách có sẵn
             String updateBookQuery = "UPDATE books SET available = available - 1 WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
                 stmt.setInt(1, selectedBook.getId());
@@ -519,9 +568,11 @@ public class DashBoardControllerManager {
 
             conn.commit();
             loadBooks();
-            loadBorrowedBooks();
+            loadBorrowedLoans();// Cập nhật lại trang sách có sẵn
+            // Nếu bạn có trang top 10 sách, loadRankedBooks() nếu cần
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert("Đã xảy ra lỗi khi mượn sách.");
         }
     }
 
@@ -531,9 +582,9 @@ public class DashBoardControllerManager {
 
     @FXML
     private void handleReturnAction() {
-        Book selectedBook = borrowedBooksTable.getSelectionModel().getSelectedItem();
-        if (selectedBook == null) {
-            showAlert("Chọn sách vui lòng chọn sách để trả.");
+        Loan selectedLoan = borrowedBooksTable.getSelectionModel().getSelectedItem();
+        if (selectedLoan == null) {
+            showAlert("Vui lòng chọn lượt mượn sách để trả.");
             return;
         }
 
@@ -544,20 +595,20 @@ public class DashBoardControllerManager {
             String returnQuery = "UPDATE loans SET returned = 1, return_date = ?, status = 'returned' WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(returnQuery)) {
                 stmt.setDate(1, Date.valueOf(LocalDate.now()));
-                stmt.setInt(2, selectedBook.getLoanId());
+                stmt.setInt(2, selectedLoan.getId()); // Sử dụng getId() từ Loan thay cho getLoanId() của Book
                 stmt.executeUpdate();
             }
 
             // Tăng số lượng sách có sẵn
             String updateBookQuery = "UPDATE books SET available = available + 1 WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
-                stmt.setInt(1, selectedBook.getId());
+                stmt.setInt(1, selectedLoan.getBookId()); // Sử dụng getBookId() từ Loan thay cho selectedBook.getId()
                 stmt.executeUpdate();
             }
 
             conn.commit();
             loadBooks();
-            loadBorrowedBooks();
+            loadBorrowedLoans(); // Gọi loadBorrowedLoans() thay cho loadBorrowedBooks()
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -615,35 +666,63 @@ public class DashBoardControllerManager {
         }
     }
 
-    private ObservableList<Book> borrowedBooks = FXCollections.observableArrayList();
+    private ObservableList<Loan> borrowedLoans = FXCollections.observableArrayList();
 
-    /**
-     * Load sach muon.
-     */
-
-    private void loadBorrowedBooks() {
-        borrowedBooks.clear();
-        String query = "SELECT loans.id AS loan_id, books.id AS book_id, books.title, books.author, loans.borrow_date " +
-                "FROM loans INNER JOIN books ON loans.book_id = books.id " +
-                "WHERE loans.returned = 0";
+    private void loadBorrowedLoans() {
+        borrowedLoans.clear();
+        String query = "SELECT l.id AS loan_id, l.person_id, l.book_id, l.borrow_date, l.due_date, l.return_date, l.returned, l.status, b.title, b.author " +
+                "FROM loans l " +
+                "JOIN books b ON l.book_id = b.id " +
+                "WHERE l.returned = 0";
 
         try (Connection conn = ConnectionJDBCUtils.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
+            LocalDate now = LocalDate.now();
             while (rs.next()) {
-                Book book = new Book(
-                        rs.getInt("book_id"),
-                        rs.getString("title"),
-                        rs.getString("author"),
-                        0, // Không cần quan tâm số lượng
-                        null
+                int loanId = rs.getInt("loan_id");
+                String personId = rs.getString("person_id");
+                int bookId = rs.getInt("book_id");
+                LocalDate borrowDate = rs.getDate("borrow_date").toLocalDate();
+                Date dueDateSql = rs.getDate("due_date");
+                LocalDate dueDate = (dueDateSql != null) ? dueDateSql.toLocalDate() : null;
+                Date returnDateSql = rs.getDate("return_date");
+                LocalDate returnDate = (returnDateSql != null) ? returnDateSql.toLocalDate() : null;
+                boolean returned = rs.getBoolean("returned");
+                String dbStatus = rs.getString("status");
+                String bookTitle = rs.getString("title");
+                String bookAuthor = rs.getString("author");
+
+                Loan loan = new Loan(
+                        loanId, personId, bookId, borrowDate, dueDate, returnDate,
+                        returned, dbStatus, bookTitle, bookAuthor
                 );
-                book.setLoanId(rs.getInt("loan_id"));
-                book.setBorrowDate(rs.getDate("borrow_date").toLocalDate());
-                borrowedBooks.add(book);
+
+                // Tính status
+                String displayStatus;
+                if (returned) {
+                    displayStatus = "Đã Trả";
+                } else {
+                    // Kiểm tra null trước khi so sánh
+                    if (dueDate == null) {
+                        // Nếu không có due_date, bạn có thể đặt trạng thái mặc định
+                        // Ví dụ: "Đang Mượn" hoặc "Chưa xác định"
+                        displayStatus = "Đang Mượn";
+                    } else {
+                        if (now.isAfter(dueDate)) {
+                            displayStatus = "Quá Hạn";
+                        } else {
+                            displayStatus = "Đang Mượn";
+                        }
+                    }
+                }
+                loan.setStatus(displayStatus);
+
+                borrowedLoans.add(loan);
             }
-            borrowedBooksTable.setItems(borrowedBooks);
+
+            borrowedBooksTable.setItems(borrowedLoans);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -674,6 +753,15 @@ public class DashBoardControllerManager {
      */
 
     public void addBook(Book book) {
+        // Tạo đối tượng BookExists với tiêu đề sách cần kiểm tra
+        BookExists bookChecker = new BookExists(book.getTitle());
+
+        // Kiểm tra nếu sách đã tồn tại
+        if (bookChecker.exists()) {
+            showAlert("Sách với tiêu đề \"" + book.getTitle() + "\" đã tồn tại trong hệ thống.");
+            return;
+        }
+
         String query = "INSERT INTO books (title, author, available, total_copies, image) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionJDBCUtils.getConnection();
@@ -702,6 +790,13 @@ public class DashBoardControllerManager {
      */
 
     public void updateBook(Book book) {
+        BookExists bookChecker = new BookExists(book.getTitle(), book.getId());
+
+        // Kiểm tra nếu sách đã tồn tại
+        if (bookChecker.exists()) {
+            showAlert("Sách với tiêu đề \"" + book.getTitle() + "\" đã tồn tại trong hệ thống.");
+            return;
+        }
         String query = "UPDATE books SET title = ?, author = ?, available = ?, total_copies = ?, image = ? WHERE id = ?";
 
         try (Connection conn = ConnectionJDBCUtils.getConnection();
@@ -731,22 +826,32 @@ public class DashBoardControllerManager {
      */
 
     public void deleteBook(int bookId) {
-        String query = "DELETE FROM books WHERE id = ?";
+        // Bước 1: Xóa các bản ghi trong bảng loans liên quan đến cuốn sách
+        String deleteLoansQuery = "DELETE FROM loans WHERE book_id = ?";
+
+        // Bước 2: Xóa sách khỏi bảng books
+        String deleteBookQuery = "DELETE FROM books WHERE id = ?";
 
         try (Connection conn = ConnectionJDBCUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmtDeleteLoans = conn.prepareStatement(deleteLoansQuery);
+             PreparedStatement pstmtDeleteBook = conn.prepareStatement(deleteBookQuery)) {
 
-            pstmt.setInt(1, bookId);
+            // Xóa các bản ghi trong bảng loans
+            pstmtDeleteLoans.setInt(1, bookId);
+            pstmtDeleteLoans.executeUpdate();
 
-            pstmt.executeUpdate();
+            // Xóa cuốn sách trong bảng books
+            pstmtDeleteBook.setInt(1, bookId);
+            pstmtDeleteBook.executeUpdate();
 
-            // Cập nhật TableView
+            // Cập nhật lại TableView (nếu có)
             loadBooks();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Phuong thuc open.
@@ -899,7 +1004,6 @@ public class DashBoardControllerManager {
             pstmt.setString(2, classField.getText());
             pstmt.setString(3, emailField.getText());
             pstmt.setString(4, userIdField.getText());
-
             int rowsUpdated = pstmt.executeUpdate();
             if (rowsUpdated > 0) {
                 showAlert("Thông tin đã được cập nhật.");
@@ -926,5 +1030,134 @@ public class DashBoardControllerManager {
         classField.setEditable(true);
         emailField.setEditable(true);
         saveButton.setDisable(false);
+    }
+
+    private ObservableList<Book> rankedBooksList = FXCollections.observableArrayList();
+
+    private void loadRankedBooks() {
+        rankedBooksList.clear();
+        String query = "SELECT b.id, b.title, b.author, b.available, b.image, COUNT(l.book_id) AS borrow_count " +
+                "FROM books b " +
+                "JOIN loans l ON b.id = l.book_id " +
+                "GROUP BY l.book_id " +
+                "ORDER BY borrow_count DESC " +
+                "LIMIT 10";
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                int available = rs.getInt("available");
+                int borrowCount = rs.getInt("borrow_count");
+                String imagePath = rs.getString("image");
+
+                ImageView imageView = null;
+                if (imagePath != null && !imagePath.trim().isEmpty()) {
+                    try {
+                        // Tạo Image và ImageView từ đường dẫn ảnh
+                        Image image = new Image(imagePath, 50, 50, false, true);
+                        imageView = new ImageView(image);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Invalid image URL for book ID " + id + ": " + imagePath);
+                        imageView = getDefaultImageView(); // Sử dụng hình mặc định nếu URL không hợp lệ
+                    }
+                } else {
+                    imageView = getDefaultImageView(); // Sử dụng hình mặc định nếu không có imagePath
+                }
+
+                // Tạo đối tượng Book với imageView
+                Book book = new Book(id, title, author, available, imageView);
+                book.setBorrowCount(borrowCount);
+
+                rankedBooksList.add(book);
+            }
+
+            rankedBooksTableView.setItems(rankedBooksList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleBorrowFromRankedOutsideTable(ActionEvent event) {
+        Book selectedBook = rankedBooksTableView.getSelectionModel().getSelectedItem();
+        if (selectedBook == null) {
+            showAlert("Vui lòng chọn sách để mượn.");
+            return;
+        }
+
+        if (selectedBook.getAvailable() == 0) {
+            showAlert("Sách \"" + selectedBook.getTitle() + "\" đã hết. Không thể mượn sách này.");
+            return;
+        }
+
+        // Mở dialog nhập số ngày mượn
+        BorrowDurationDialogController dialogController = showBorrowDurationDialog();
+        if (dialogController == null || !dialogController.isConfirmed()) {
+            return; // Người dùng hủy hoặc không nhập, không làm gì thêm
+        }
+
+        int days = dialogController.getDays();
+        if (days <= 0) {
+            showAlert("Số ngày mượn phải > 0.");
+            return;
+        }
+
+        LocalDate borrowDate = LocalDate.now();
+        LocalDate dueDate = borrowDate.plusDays(days);
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection()) {
+            conn.setAutoCommit(false);
+            String personId = GetData.getUsername(); // Lấy ID người dùng hiện tại
+
+            // Thêm bản ghi mượn vào loans với due_date
+            String loanQuery = "INSERT INTO loans (person_id, book_id, borrow_date, due_date, returned, status) " +
+                    "VALUES (?, ?, ?, ?, 0, 'borrowed')";
+            try (PreparedStatement stmt = conn.prepareStatement(loanQuery)) {
+                stmt.setString(1, personId);
+                stmt.setInt(2, selectedBook.getId());
+                stmt.setDate(3, Date.valueOf(borrowDate));
+                stmt.setDate(4, Date.valueOf(dueDate));
+                stmt.executeUpdate();
+            }
+
+            // Giảm số lượng sách có sẵn
+            String updateBookQuery = "UPDATE books SET available = available - 1 WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
+                stmt.setInt(1, selectedBook.getId());
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+
+            // Cập nhật lại danh sách sách và sách đã mượn
+            loadBooks();
+            loadRankedBooks(); // Cập nhật lại top 10 sách nếu cần
+            loadBorrowedLoans();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Đã xảy ra lỗi khi mượn sách.");
+        }
+    }
+
+    private BorrowDurationDialogController showBorrowDurationDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/libarymanagementsystem/BorrowDurationDialog.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Chọn số ngày mượn");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            return loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

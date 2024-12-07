@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.libarymanagementsystem.controller.BorrowDurationDialogController">
+    <children>
+        <Label text="Nhập số ngày muốn mượn:" layoutX="20" layoutY="20"/>
+        <TextField fx:id="daysField" layoutX="20" layoutY="50" promptText="Số ngày"/>
+        <Button fx:id="okButton" text="Xác nhận" layoutX="20" layoutY="90" onAction="#handleOk"/>
+        <Button fx:id="cancelButton" text="Hủy" layoutX="100" layoutY="90" onAction="#handleCancel"/>
+    </children>
+</AnchorPane>

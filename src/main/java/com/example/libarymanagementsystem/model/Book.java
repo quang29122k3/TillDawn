@@ -13,6 +13,16 @@ public class Book {
     private LocalDate borrowDate;
     private int totalCopies;
     private int loanId;
+    private int borrowCount;
+
+
+    public int getBorrowCount() {
+        return borrowCount;
+    }
+
+    public void setBorrowCount(int borrowCount) {
+        this.borrowCount = borrowCount;
+    }
 
     // Constructor cho sách có sẵn (không có loanId)
     public Book(int id, String title, String author, int available, ImageView imageView) {
