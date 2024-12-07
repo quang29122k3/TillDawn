@@ -44,6 +44,8 @@ public class StudentController {
 
     @FXML
     private TableColumn<Book, Integer> availableColumn;
+    @FXML
+    private TableColumn<Book, Void> pinColumn;
 
     @FXML
     private TableColumn<Book, ImageView> imageColumn;
@@ -124,6 +126,25 @@ public class StudentController {
     private Button userIconButton;
     @FXML
     private TextField emailField;
+    @FXML
+    private Button savedBooksButton; // Nút "Sách đã lưu" mới
+    @FXML
+    private AnchorPane savedBooks_form_new; // AnchorPane mới cho "Sách đã lưu"
+    @FXML
+    private TableView<Book> savedBooksTableView; // TableView cho "Sách đã lưu"
+    @FXML
+    private TableColumn<Book, ImageView> savedImageColumn;
+    @FXML
+    private TableColumn<Book, String> savedTitleColumn;
+    @FXML
+    private TableColumn<Book, String> savedAuthorColumn;
+    @FXML
+    private TableColumn<Book, Integer> savedAvailableColumn;
+    @FXML
+    private TableColumn<Book, Void> savedUnpinColumn;
+
+    // Dữ liệu cho bảng "Sách đã lưu"
+    private ObservableList<Book> savedBooksList = FXCollections.observableArrayList();
 
     private ObservableList<BookItem> googleBooksList = FXCollections.observableArrayList();
 
@@ -151,6 +172,19 @@ public class StudentController {
         availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
 
+        // Cấu hình bảng "Sách đã lưu"
+        savedImageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
+        savedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        savedAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        savedAvailableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
+
+        configurePinColumn();
+        // Cấu hình cột Hành Động (Bỏ Ghim)
+        configureUnpinColumn();
+
+        savedBooksTableView.setItems(savedBooksList);
+
+
         // Cấu hình bảng sách đã mượn
         loanBookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
         loanBookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("bookAuthor"));
@@ -166,6 +200,7 @@ public class StudentController {
 
         // Gán danh sách vào bảng
         bookTableView.setItems(availableBooks);
+
 
 
         // Tải dữ liệu ban đầu
@@ -194,10 +229,13 @@ public class StudentController {
     public void loadBooks() {
         ObservableList<Book> bookList = FXCollections.observableArrayList();
 
-        String query = "SELECT * FROM books";
+        String query = "SELECT b.*, CASE WHEN sb.book_id IS NOT NULL THEN true ELSE false END AS is_pinned " +
+                "FROM books b LEFT JOIN saved_books sb ON b.id = sb.book_id AND sb.person_id = ?";
         try (Connection conn = ConnectionJDBCUtils.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, GetData.getUsername()); // Thêm tham số person_id
+            ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -205,6 +243,7 @@ public class StudentController {
                 String author = rs.getString("author");
                 int available = rs.getInt("available");
                 String imagePath = rs.getString("image"); // Đường dẫn hình ảnh
+                boolean isPinned = rs.getBoolean("is_pinned"); // Trạng thái ghim
 
                 // Tạo ImageView từ imagePath
                 ImageView imageView = null;
@@ -224,7 +263,7 @@ public class StudentController {
 
                 // Tạo đối tượng Book sử dụng constructor đúng
                 Book book = new Book(id, title, author, available, imageView);
-                // Thiết lập totalCopies
+                book.setPinned(isPinned); // Thiết lập trạng thái ghim
                 bookList.add(book);
             }
 
@@ -233,6 +272,114 @@ public class StudentController {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void configureUnpinColumn() {
+        savedUnpinColumn.setCellFactory(col -> new TableCell<Book, Void>() {
+            private final Button unpinButton = new Button("Bỏ Ghim");
+
+            {
+                unpinButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: white;");
+                unpinButton.setOnAction(event -> {
+                    Book book = getTableView().getItems().get(getIndex());
+                    handleUnpinAction(book);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(unpinButton);
+                }
+            }
+        });
+    }
+
+    private void configureSavedUnpinColumn() {
+        savedUnpinColumn.setCellFactory(col -> new TableCell<Book, Void>() {
+            private final Button unpinButton = new Button("Bỏ Ghim");
+
+            {
+                unpinButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: white;");
+                unpinButton.setOnAction(event -> {
+                    Book book = getTableView().getItems().get(getIndex());
+                    if (book != null && book.isPinned()) {
+                        togglePin(book);
+                        showAlert("Thông báo", "Đã bỏ ghim sách: " + book.getTitle());
+                    } else {
+                        showAlert("Lỗi", "Không thể bỏ ghim sách này.");
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(unpinButton);
+                }
+            }
+        });
+    }
+
+    private void configurePinColumn() {
+        pinColumn.setCellFactory(col -> new TableCell<Book, Void>() {
+            private final Button pinButton = new Button();
+
+            {
+                // Thiết lập kiểu dáng cho nút
+                pinButton.setStyle("-fx-background-color: #FFD700; -fx-text-fill: black;");
+                pinButton.setOnAction(event -> {
+                    Book book = getTableView().getItems().get(getIndex());
+                    handlePinAction(book);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    Book book = getTableView().getItems().get(getIndex());
+                    if (book.isPinned()) {
+                        pinButton.setText("Đã Ghim");
+                    } else {
+                        pinButton.setText("Ghim");
+                    }
+                    setGraphic(pinButton);
+                }
+            }
+        });
+    }
+
+    @FXML
+    private void handlePinAction(Book book) {
+        if (book != null) {
+            if (book.isPinned()) {
+                showAlert("Thông báo", "Sách đã được ghim trước đó.");
+            } else {
+                togglePin(book); // Thực hiện ghim sách
+                showAlert("Thông báo", "Đã ghim sách: " + book.getTitle());
+                // Cập nhật lại bảng sách có sẵn và sách đã lưu
+                loadBooks();
+                loadSavedBooksNew();
+            }
+        } else {
+            showAlert("Lỗi", "Không tìm thấy sách để ghim.");
+        }
+    }
+
+
+    private void handleUnpinAction(Book book) {
+        if (book != null && book.isPinned()) {
+            togglePin(book); // Sử dụng phương thức togglePin đã có để bỏ ghim
         }
     }
 
@@ -333,17 +480,21 @@ public class StudentController {
         // Nếu thanh tìm kiếm trống, hiển thị tất cả sách
         String query;
         if (searchText.isEmpty()) {
-            query = "SELECT * FROM books";
+            query = "SELECT b.*, CASE WHEN sb.book_id IS NOT NULL THEN true ELSE false END AS is_pinned " +
+                    "FROM books b LEFT JOIN saved_books sb ON b.id = sb.book_id AND sb.person_id = ?";
         } else {
-            query = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
+            query = "SELECT b.*, CASE WHEN sb.book_id IS NOT NULL THEN true ELSE false END AS is_pinned " +
+                    "FROM books b LEFT JOIN saved_books sb ON b.id = sb.book_id AND sb.person_id = ? " +
+                    "WHERE b.title LIKE ? OR b.author LIKE ?";
         }
 
         try (Connection conn = ConnectionJDBCUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
+            pstmt.setString(1, GetData.getUsername()); // person_id
             if (!searchText.isEmpty()) {
-                pstmt.setString(1, "%" + searchText + "%");
                 pstmt.setString(2, "%" + searchText + "%");
+                pstmt.setString(3, "%" + searchText + "%");
             }
 
             ResultSet rs = pstmt.executeQuery();
@@ -353,6 +504,7 @@ public class StudentController {
                 String author = rs.getString("author");
                 int available = rs.getInt("available");
                 String imagePath = rs.getString("image");
+                boolean isPinned = rs.getBoolean("is_pinned"); // Trạng thái ghim
 
                 // Tạo ImageView từ imagePath
                 ImageView imageView = null;
@@ -370,6 +522,7 @@ public class StudentController {
 
                 // Tạo đối tượng Book
                 Book book = new Book(id, title, author, available, imageView);
+                book.setPinned(isPinned); // Thiết lập trạng thái ghim
                 bookList.add(book);
             }
 
@@ -509,6 +662,7 @@ public class StudentController {
         googleBooks_form.setVisible(false);
         userInfoPane.setVisible(false);
         rankedBooks_form.setVisible(false);
+        savedBooks_form_new.setVisible(false);
         if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
@@ -522,6 +676,83 @@ public class StudentController {
         } else if (event.getSource() == rankBooksButton) {
             rankedBooks_form.setVisible(true);
             loadRankedBooks();
+        }
+        else if (event.getSource() == savedBooksButton) { // Nút "Sách đã lưu" mới
+            savedBooks_form_new.setVisible(true);
+            loadSavedBooksNew(); // Hàm load sách đã lưu mới
+        }
+    }
+
+    private void loadSavedBooksNew() {
+        savedBooksList.clear();
+        String query = "SELECT b.* FROM books b " +
+                "JOIN saved_books sb ON b.id = sb.book_id " +
+                "WHERE sb.person_id = ?";
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, GetData.getUsername());
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                int available = rs.getInt("available");
+                String imagePath = rs.getString("image");
+
+                ImageView imageView = null;
+                if (imagePath != null && !imagePath.trim().isEmpty()) {
+                    try {
+                        Image image = new Image(imagePath, 50, 50, false, true);
+                        imageView = new ImageView(image);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Invalid image URL for book ID " + id + ": " + imagePath);
+                        imageView = getDefaultImageView();
+                    }
+                } else {
+                    imageView = getDefaultImageView();
+                }
+
+                Book book = new Book(id, title, author, available, imageView);
+                book.setPinned(true); // Đánh dấu sách đã ghim
+                savedBooksList.add(book);
+            }
+
+            savedBooksTableView.setItems(savedBooksList);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Đã xảy ra lỗi khi tải sách đã lưu.");
+        }
+    }
+
+    private void togglePin(Book book) {
+        boolean newPinnedStatus = !book.isPinned();
+        String query = newPinnedStatus ?
+                "INSERT INTO saved_books (person_id, book_id) VALUES (?, ?)" :
+                "DELETE FROM saved_books WHERE person_id = ? AND book_id = ?";
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            if (newPinnedStatus) {
+                pstmt.setString(1, GetData.getUsername());
+                pstmt.setInt(2, book.getId());
+            } else {
+                pstmt.setString(1, GetData.getUsername());
+                pstmt.setInt(2, book.getId());
+            }
+            pstmt.executeUpdate();
+
+            book.setPinned(newPinnedStatus);
+            loadBooks(); // Cập nhật bảng Sách Có Sẵn
+            loadSavedBooksNew(); // Cập nhật bảng Sách đã lưu mới
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Đã xảy ra lỗi khi ghim/bỏ ghim sách.");
         }
     }
 

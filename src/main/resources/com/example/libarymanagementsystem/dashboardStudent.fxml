@@ -60,6 +60,7 @@
                </VBox.margin>
             </Button>
             <Button fx:id="rankBooksButton" mnemonicParsing="false" text="Xếp Hạng Sách" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" textFill="WHITE" />
+            <Button fx:id="savedBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Sách đã lưu" textFill="WHITE"/>
             <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #90e0ef;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Đăng Xuất">
                <font>
                   <Font name="Montserrat ExtraBold" size="12.0" />
@@ -94,9 +95,32 @@
                         <TableColumn fx:id="titleColumn" prefWidth="153.60003662109375" text="Tiêu Đề" />
                         <TableColumn fx:id="authorColumn" prefWidth="93.5999755859375" text="Tác Giả" />
                         <TableColumn fx:id="availableColumn" prefWidth="140.0" text="Số Lượng Còn" />
+                        <TableColumn fx:id="pinColumn" prefWidth="50.0" text="Ghim"/>
                      </columns>
                   </TableView>
                   <Button fx:id="borrowButton1" layoutX="230.0" layoutY="412.0" onAction="#handleBorrowAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn sách" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="savedBooks_form_new" prefHeight="450.0" prefWidth="639.0" style="-fx-background-color: #fb8500;" visible="false">
+               <children>
+                  <TableView fx:id="savedBooksTableView" layoutX="20.0" layoutY="20.0" prefHeight="400.0" prefWidth="600.0" stylesheets="@tableDesign.css">
+                     <columns>
+                        <TableColumn fx:id="savedImageColumn" prefWidth="100.0" text="Hình Ảnh"/>
+                        <TableColumn fx:id="savedTitleColumn" prefWidth="150.0" text="Tiêu Đề"/>
+                        <TableColumn fx:id="savedAuthorColumn" prefWidth="100.0" text="Tác Giả"/>
+                        <TableColumn fx:id="savedAvailableColumn" prefWidth="100.0" text="Còn"/>
+                        <TableColumn fx:id="savedUnpinColumn" prefWidth="100.0" text="Hành Động"/>
+                     </columns>
+                  </TableView>
+
+                  <!-- Nút "Bỏ Ghim" có thể đặt trong cột Hành Động của bảng -->
+                  <!-- Nếu muốn, có thể thêm nút ở dưới bảng -->
+                  <!-- Ví dụ: -->
+                  <Button fx:id="unpinButton" layoutX="250.0" layoutY="430.0"  prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #ff0000; -fx-background-radius: 30;" text="Bỏ Ghim" textFill="WHITE">
                      <font>
                         <Font name="Montserrat ExtraBold" size="12.0" />
                      </font>
