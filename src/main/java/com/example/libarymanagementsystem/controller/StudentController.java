@@ -227,8 +227,7 @@ public class StudentController {
      */
 
     public void loadBooks() {
-        ObservableList<Book> bookList = FXCollections.observableArrayList();
-
+        availableBooks.clear();
         String query = "SELECT b.*, CASE WHEN sb.book_id IS NOT NULL THEN true ELSE false END AS is_pinned " +
                 "FROM books b LEFT JOIN saved_books sb ON b.id = sb.book_id AND sb.person_id = ?";
         try (Connection conn = ConnectionJDBCUtils.getConnection();
@@ -264,11 +263,14 @@ public class StudentController {
                 // Tạo đối tượng Book sử dụng constructor đúng
                 Book book = new Book(id, title, author, available, imageView);
                 book.setPinned(isPinned); // Thiết lập trạng thái ghim
-                bookList.add(book);
+                availableBooks.add(book);
             }
 
+            // Sắp xếp sách: ghim trước, chưa ghim sau
+            FXCollections.sort(availableBooks, (b1, b2) -> Boolean.compare(b2.isPinned(), b1.isPinned()));
+
             // Đặt dữ liệu vào TableView
-            bookTableView.setItems(bookList);
+            bookTableView.setItems(availableBooks);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -310,6 +312,8 @@ public class StudentController {
                     if (book != null && book.isPinned()) {
                         togglePin(book);
                         showAlert("Thông báo", "Đã bỏ ghim sách: " + book.getTitle());
+                        // Thêm dòng này để đảm bảo bảng Sách Có Sẵn được cập nhật
+                        loadBooks();
                     } else {
                         showAlert("Lỗi", "Không thể bỏ ghim sách này.");
                     }
@@ -747,8 +751,12 @@ public class StudentController {
             pstmt.executeUpdate();
 
             book.setPinned(newPinnedStatus);
-            loadBooks(); // Cập nhật bảng Sách Có Sẵn
-            loadSavedBooksNew(); // Cập nhật bảng Sách đã lưu mới
+
+            // Cập nhật lại danh sách Sách Có Sẵn
+            loadBooks(); // Thêm dòng này để tải lại danh sách Sách Có Sẵn
+
+            // Cập nhật bảng Sách đã lưu
+            loadSavedBooksNew();
 
         } catch (SQLException e) {
             e.printStackTrace();
