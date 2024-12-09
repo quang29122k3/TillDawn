@@ -210,6 +210,40 @@ public class DashBoardControllerManager {
     @FXML
     private TableColumn<Loan, Void> extendLoanColumn;
 
+    @FXML
+    private Button manageRequestsButton;
+
+    // AnchorPane quản lý yêu cầu
+    @FXML
+    private AnchorPane requests_form;
+
+    // TableView và các cột cho yêu cầu
+    @FXML
+    private TableView<Request> requestsTableView;
+
+    @FXML
+    private TableColumn<Request, Integer> requestIdColumn;
+
+    @FXML
+    private TableColumn<Request, String> requestSenderIdColumn;
+
+    @FXML
+    private TableColumn<Request, String> requestSenderNameColumn;
+
+    @FXML
+    private TableColumn<Request, String> requestSenderClassColumn;
+
+    @FXML
+    private TableColumn<Request, String> requestSubjectColumn;
+
+    @FXML
+    private TableColumn<Request, String> requestContentColumn;
+
+    @FXML
+    private TableColumn<Request, String> requestStatusColumn;
+
+    private ObservableList<Request> requestsList = FXCollections.observableArrayList();
+
 
 
 // Có thể thêm một TableColumn chứa Button mượn, bạn dùng cell factory để tạo nút
@@ -227,6 +261,7 @@ public class DashBoardControllerManager {
         googleBooks_form.setVisible(false);
         userInfoPane.setVisible(false);
         rankedBooks_form.setVisible(false);
+        requests_form.setVisible(false);
 
         if (event.getSource() == googleBooksButton) {
             googleBooks_form.setVisible(true);
@@ -243,6 +278,111 @@ public class DashBoardControllerManager {
         } else if (event.getSource() == rankBooksButton) {
             rankedBooks_form.setVisible(true);
             loadRankedBooks();
+        } else if (event.getSource() == manageRequestsButton) { // Nút quản lý yêu cầu
+            requests_form.setVisible(true);
+            loadRequests();
+        }
+    }
+
+    @FXML
+    public void loadRequests() {
+        requestsList.clear();
+        String query = "SELECT r.id, r.person_id, p.fullname, p.class, r.subject, r.content, r.status " +
+                "FROM requests r " +
+                "JOIN person p ON r.person_id = p.id";
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Request request = new Request(
+                        rs.getInt("id"),
+                        rs.getString("person_id"),
+                        rs.getString("fullname"),
+                        rs.getString("class"),
+                        rs.getString("subject"),
+                        rs.getString("content"),
+                        rs.getString("status")
+                );
+                requestsList.add(request);
+            }
+
+            requestsTableView.setItems(requestsList);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Không thể tải dữ liệu yêu cầu.");
+        }
+    }
+
+    /**
+     * Phương thức xử lý yêu cầu (cập nhật trạng thái).
+     */
+    @FXML
+    private void handleProcessRequest(ActionEvent event) {
+        Request selectedRequest = requestsTableView.getSelectionModel().getSelectedItem();
+        if (selectedRequest == null) {
+            showAlert("Vui lòng chọn yêu cầu để xử lý.");
+            return;
+        }
+
+        // Hiển thị xác nhận trước khi xử lý
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Xác Nhận Xử Lý");
+        confirmation.setHeaderText(null);
+        confirmation.setContentText("Bạn có chắc chắn muốn xử lý yêu cầu ID: " + selectedRequest.getId() + "?");
+        Optional<ButtonType> result = confirmation.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String updateQuery = "UPDATE requests SET status = 'Đã xử lý' WHERE id = ?";
+
+            try (Connection conn = ConnectionJDBCUtils.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+
+                pstmt.setInt(1, selectedRequest.getId());
+                int rowsUpdated = pstmt.executeUpdate();
+
+                if (rowsUpdated > 0) {
+                    showAlert("Yêu cầu đã được xử lý.");
+                    loadRequests();
+                } else {
+                    showAlert("Không thể xử lý yêu cầu.");
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert( "Đã xảy ra lỗi khi xử lý yêu cầu.");
+            }
+        }
+    }
+
+    /**
+     * Phương thức xóa các yêu cầu đã được xử lý.
+     */
+    @FXML
+    private void handleDeleteProcessedRequests(ActionEvent event) {
+        // Xác nhận trước khi xóa
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Xác Nhận Xóa");
+        confirmation.setHeaderText(null);
+        confirmation.setContentText("Bạn có chắc chắn muốn xóa tất cả các yêu cầu đã xử lý?");
+        Optional<ButtonType> result = confirmation.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String deleteQuery = "DELETE FROM requests WHERE status = 'Đã xử lý'";
+
+            try (Connection conn = ConnectionJDBCUtils.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
+
+                int rowsDeleted = pstmt.executeUpdate();
+                showAlert("Đã xóa " + rowsDeleted + " yêu cầu đã xử lý.");
+                loadRequests();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert( "Không thể xóa yêu cầu đã xử lý.");
+            }
         }
     }
 
@@ -337,6 +477,23 @@ public class DashBoardControllerManager {
         rankedBorrowCountColumn.setCellValueFactory(new PropertyValueFactory<>("borrowCount"));
         rankedAvailableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
 
+        // Cấu hình các cột quản lý yêu cầu
+        requestIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        requestSenderIdColumn.setCellValueFactory(new PropertyValueFactory<>("personId"));
+        requestSenderNameColumn.setCellValueFactory(new PropertyValueFactory<>("senderName"));
+        requestSenderClassColumn.setCellValueFactory(new PropertyValueFactory<>("senderClass"));
+        requestSubjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
+        requestContentColumn.setCellValueFactory(new PropertyValueFactory<>("content"));
+        requestStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        // Thêm Listener cho TableView yêu cầu để mở dialog khi double-click
+        requestsTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && !requestsTableView.getSelectionModel().isEmpty()) {
+                Request selectedRequest = requestsTableView.getSelectionModel().getSelectedItem();
+                showRequestDialog(selectedRequest);
+            }
+        });
+
         googleBooksTableView.setItems(googleBooksList);
         borrowedBooksTable.setItems(borrowedLoans);
 
@@ -347,6 +504,7 @@ public class DashBoardControllerManager {
         showForm("availableBooks_form");
 
         // Tải tất cả sách ban đầu
+        loadRequests();
         loadBooks();
         loadBorrowedLoans();
 
@@ -1302,6 +1460,34 @@ public class DashBoardControllerManager {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    /**
+     * Hiển thị dialog chi tiết yêu cầu.
+     *
+     * @param request Yêu cầu được chọn
+     */
+    private void showRequestDialog(Request request) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/libarymanagementsystem/RequestDetailDialog.fxml"));
+            Parent root = loader.load();
+
+            // Lấy controller của dialog
+            RequestDetailDialogController controller = loader.getController();
+            controller.setRequestDetails(request.getSubject(), request.getContent());
+
+            // Tạo và thiết lập Stage cho dialog
+            Stage stage = new Stage();
+            stage.setTitle("Chi Tiết Yêu Cầu");
+            stage.initModality(Modality.APPLICATION_MODAL); // Chặn tương tác với cửa sổ khác
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Đã xảy ra lỗi khi mở chi tiết yêu cầu.");
         }
     }
 }

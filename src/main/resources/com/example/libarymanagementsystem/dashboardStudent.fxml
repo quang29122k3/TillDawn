@@ -14,6 +14,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #fffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.StudentController">
    <children>
       <VBox alignment="CENTER" layoutY="-4.0" prefHeight="458.0" prefWidth="163.0" spacing="10.0" style="-fx-background-color: #03045e;">
@@ -61,6 +64,7 @@
             </Button>
             <Button fx:id="rankBooksButton" mnemonicParsing="false" text="Xếp Hạng Sách" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" textFill="WHITE" />
             <Button fx:id="savedBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Sách đã lưu" textFill="WHITE"/>
+            <Button fx:id="requestButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Yêu cầu" textFill="WHITE"/>
             <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #90e0ef;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Đăng Xuất">
                <font>
                   <Font name="Montserrat ExtraBold" size="12.0" />
@@ -103,6 +107,78 @@
                         <Font name="Montserrat ExtraBold" size="12.0" />
                      </font>
                   </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="request_form" prefHeight="450.0" prefWidth="639.0" style="-fx-background-color: #fb8500;" visible="false">
+               <children>
+                  <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                     <content>
+                        <VBox alignment="TOP_CENTER" spacing="20.0">
+                           <!-- Padding sử dụng thẻ Insets -->
+                           <padding>
+                              <Insets top="20" right="20" bottom="20" left="20" />
+                           </padding>
+
+                           <!-- Tiêu đề -->
+                           <Text text="Gửi Yêu Cầu">
+                              <font>
+                                 <Font name="Montserrat ExtraBold" size="18.0" />
+                              </font>
+                           </Text>
+
+                           <!-- TextField Chủ Đề -->
+                           <TextField fx:id="requestSubjectField" prefWidth="400.0" promptText="Chủ đề yêu cầu" style="-fx-background-radius: 30;">
+                              <font>
+                                 <Font name="Montserrat Medium" size="12.0" />
+                              </font>
+                           </TextField>
+
+                           <!-- TextArea Nội Dung -->
+                           <TextArea fx:id="requestContentArea" prefWidth="400.0" prefHeight="200.0" promptText="Nội dung yêu cầu" wrapText="true" style="-fx-background-radius: 30;">
+                              <font>
+                                 <Font name="Montserrat Medium" size="12.0" />
+                              </font>
+                           </TextArea>
+
+                           <!-- HBox Chứa Các Nút Gửi và Hủy -->
+                           <HBox spacing="20.0" alignment="CENTER">
+                              <children>
+                                 <Button fx:id="sendRequestButton" onAction="#handleSendRequest" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Gửi" textFill="WHITE">
+                                    <font>
+                                       <Font name="Montserrat ExtraBold" size="12.0" />
+                                    </font>
+                                 </Button>
+                                 <Button fx:id="cancelRequestButton" onAction="#handleCancelRequest" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 30; -fx-background-color: #ff0000;" text="Hủy" textFill="WHITE">
+                                    <font>
+                                       <Font name="Montserrat ExtraBold" size="12.0" />
+                                    </font>
+                                 </Button>
+                              </children>
+                           </HBox>
+
+                           <!-- Khu Vực Tìm Kiếm và Bảng Hiển Thị Yêu Cầu Đã Gửi -->
+                           <VBox spacing="10.0">
+                              <!-- HBox Tìm Kiếm -->
+                              <HBox spacing="10.0" alignment="CENTER">
+                                 <children>
+                                    <TextField fx:id="searchRequestField" promptText="Tìm kiếm ID hoặc Chủ đề yêu cầu" style="-fx-background-radius: 30;" />
+                                    <Button fx:id="searchRequestButton" text="Tìm kiếm" style="-fx-background-radius: 30; -fx-background-color: #023e8a; -fx-text-fill: white;" onAction="#handleSearchRequests"/>
+                                 </children>
+                              </HBox>
+
+                              <!-- TableView Hiển Thị Yêu Cầu Đã Gửi -->
+                              <TableView fx:id="requestsTableView" prefHeight="150.0" prefWidth="500.0">
+                                 <columns>
+                                    <TableColumn fx:id="requestIdColumn" text="ID Yêu Cầu" prefWidth="100.0"/>
+                                    <TableColumn fx:id="requestSubjectColumn" text="Chủ Đề" prefWidth="150.0"/>
+                                    <TableColumn fx:id="requestContentColumn" text="Nội Dung" prefWidth="200.0"/>
+                                    <TableColumn fx:id="requestStatusColumn" text="Trạng Thái" prefWidth="100.0"/>
+                                 </columns>
+                              </TableView>
+                           </VBox>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="savedBooks_form_new" prefHeight="450.0" prefWidth="639.0" style="-fx-background-color: #fb8500;" visible="false">

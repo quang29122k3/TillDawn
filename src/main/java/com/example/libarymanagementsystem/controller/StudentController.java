@@ -1,9 +1,6 @@
 package com.example.libarymanagementsystem.controller;
 
-import com.example.libarymanagementsystem.model.Book;
-import com.example.libarymanagementsystem.model.BookItem;
-import com.example.libarymanagementsystem.model.GetData;
-import com.example.libarymanagementsystem.model.Loan;
+import com.example.libarymanagementsystem.model.*;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import com.example.libarymanagementsystem.utils.GoogleBooksService;
 import javafx.collections.FXCollections;
@@ -129,6 +126,8 @@ public class StudentController {
     @FXML
     private Button savedBooksButton; // Nút "Sách đã lưu" mới
     @FXML
+    private Button requestButton;
+    @FXML
     private AnchorPane savedBooks_form_new; // AnchorPane mới cho "Sách đã lưu"
     @FXML
     private TableView<Book> savedBooksTableView; // TableView cho "Sách đã lưu"
@@ -142,6 +141,21 @@ public class StudentController {
     private TableColumn<Book, Integer> savedAvailableColumn;
     @FXML
     private TableColumn<Book, Void> savedUnpinColumn;
+
+    @FXML
+    private AnchorPane request_form;
+
+    @FXML
+    private TextField requestSubjectField;
+
+    @FXML
+    private TextArea requestContentArea;
+
+    @FXML
+    private Button sendRequestButton;
+
+    @FXML
+    private Button cancelRequestButton;
 
     // Dữ liệu cho bảng "Sách đã lưu"
     private ObservableList<Book> savedBooksList = FXCollections.observableArrayList();
@@ -198,14 +212,37 @@ public class StudentController {
         rankedBorrowCountColumn.setCellValueFactory(new PropertyValueFactory<>("borrowCount"));
         rankedAvailableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
 
+        requestIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        requestSubjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
+        requestContentColumn.setCellValueFactory(new PropertyValueFactory<>("content"));
+        requestStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+// Lắng nghe sự kiện double-click trên bảng requestsTableView
+        requestsTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && !requestsTableView.getSelectionModel().isEmpty()) {
+                Request selectedRequest = requestsTableView.getSelectionModel().getSelectedItem();
+                showRequestDialog(selectedRequest);
+            }
+        });
+
         // Gán danh sách vào bảng
         bookTableView.setItems(availableBooks);
+
+        // Thiết lập các AnchorPane ban đầu
+        availableBooks_form.setVisible(true);
+        savedBook_form.setVisible(false);
+        googleBooks_form.setVisible(false);
+        userInfoPane.setVisible(false);
+        rankedBooks_form.setVisible(false);
+        savedBooks_form_new.setVisible(false);
+        request_form.setVisible(false); // Ẩn trang Yêu cầu ban đầu
 
 
 
         // Tải dữ liệu ban đầu
         loadBooks();
         loadBorrowedLoans();
+        loadStudentRequests(null);
 
     }
 
@@ -398,11 +435,13 @@ public class StudentController {
         String query = "SELECT l.id AS loan_id, l.person_id, l.book_id, l.borrow_date, l.due_date, l.return_date, l.returned, l.status, b.title, b.author " +
                 "FROM loans l " +
                 "JOIN books b ON l.book_id = b.id " +
-                "WHERE l.returned = 0";
+                "WHERE l.returned = 0 AND l.person_id = ?"; // Thêm điều kiện lọc theo person_id
 
         try (Connection conn = ConnectionJDBCUtils.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, GetData.getUsername()); // Thêm tham số person_id
+            ResultSet rs = pstmt.executeQuery();
 
             LocalDate now = LocalDate.now();
             while (rs.next()) {
@@ -429,10 +468,7 @@ public class StudentController {
                 if (returned) {
                     displayStatus = "Đã Trả";
                 } else {
-                    // Kiểm tra null trước khi so sánh
                     if (dueDate == null) {
-                        // Nếu không có due_date, bạn có thể đặt trạng thái mặc định
-                        // Ví dụ: "Đang Mượn" hoặc "Chưa xác định"
                         displayStatus = "Đang Mượn";
                     } else {
                         if (now.isAfter(dueDate)) {
@@ -608,7 +644,13 @@ public class StudentController {
     private void handleReturnAction() {
         Loan selectedLoan = borrowedBooksTable.getSelectionModel().getSelectedItem();
         if (selectedLoan == null) {
-            showAlert("Loi","Vui lòng chọn lượt mượn sách để trả.");
+            showAlert("Lỗi", "Vui lòng chọn lượt mượn sách để trả.");
+            return;
+        }
+
+        // Kiểm tra xem loan.person_id có khớp với user hiện tại không
+        if (!selectedLoan.getPersonId().equals(GetData.getUsername())) {
+            showAlert("Lỗi", "Bạn không thể trả sách của người dùng khác.");
             return;
         }
 
@@ -619,24 +661,26 @@ public class StudentController {
             String returnQuery = "UPDATE loans SET returned = 1, return_date = ?, status = 'returned' WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(returnQuery)) {
                 stmt.setDate(1, Date.valueOf(LocalDate.now()));
-                stmt.setInt(2, selectedLoan.getId()); // Sử dụng getId() từ Loan thay cho getLoanId() của Book
+                stmt.setInt(2, selectedLoan.getId());
                 stmt.executeUpdate();
             }
 
             // Tăng số lượng sách có sẵn
             String updateBookQuery = "UPDATE books SET available = available + 1 WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateBookQuery)) {
-                stmt.setInt(1, selectedLoan.getBookId()); // Sử dụng getBookId() từ Loan thay cho selectedBook.getId()
+                stmt.setInt(1, selectedLoan.getBookId());
                 stmt.executeUpdate();
             }
 
             conn.commit();
             loadBooks();
-            loadBorrowedLoans(); // Gọi loadBorrowedLoans() thay cho loadBorrowedBooks()
+            loadBorrowedLoans();
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert("Lỗi", "Đã xảy ra lỗi khi trả sách.");
         }
     }
+
 
     /**
      * Phuong thuc tra ra canh bao.
@@ -667,6 +711,7 @@ public class StudentController {
         userInfoPane.setVisible(false);
         rankedBooks_form.setVisible(false);
         savedBooks_form_new.setVisible(false);
+        request_form.setVisible(false);
         if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {
@@ -684,6 +729,8 @@ public class StudentController {
         else if (event.getSource() == savedBooksButton) { // Nút "Sách đã lưu" mới
             savedBooks_form_new.setVisible(true);
             loadSavedBooksNew(); // Hàm load sách đã lưu mới
+        }else if (event.getSource() == requestButton) { // Nút "Yêu cầu"
+            request_form.setVisible(true);
         }
     }
 
@@ -1023,6 +1070,160 @@ public class StudentController {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @FXML
+    private void handleSendRequest(ActionEvent event) {
+        String subject = requestSubjectField.getText().trim();
+        String content = requestContentArea.getText().trim();
+
+        if (subject.isEmpty() || content.isEmpty()) {
+            showAlert("Lỗi", "Vui lòng điền đầy đủ chủ đề và nội dung yêu cầu.");
+            return;
+        }
+
+        String personId = GetData.getUsername();
+        String insertQuery = "INSERT INTO requests (person_id, subject, content) VALUES (?, ?, ?)";
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
+
+            pstmt.setString(1, personId);
+            pstmt.setString(2, subject);
+            pstmt.setString(3, content);
+
+            int rowsInserted = pstmt.executeUpdate();
+            if (rowsInserted > 0) {
+                showAlert("Thành công", "Yêu cầu đã được gửi tới admin.");
+                // Làm sạch các trường
+                requestSubjectField.clear();
+                requestContentArea.clear();
+                // Ẩn trang Yêu cầu
+                request_form.setVisible(true);
+            } else {
+                showAlert("Lỗi", "Không thể gửi yêu cầu. Vui lòng thử lại.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Đã xảy ra lỗi khi gửi yêu cầu.");
+        }
+    }
+
+    @FXML
+    private void handleCancelRequest(ActionEvent event) {
+        // Làm sạch các trường
+        requestSubjectField.clear();
+        requestContentArea.clear();
+        // Ẩn trang Yêu cầu
+        request_form.setVisible(true);
+    }
+
+    // Thuộc tính thêm
+    @FXML
+    private TableView<Request> requestsTableView;
+    @FXML
+    private TableColumn<Request, Integer> requestIdColumn;
+    @FXML
+    private TableColumn<Request, String> requestSubjectColumn;
+    @FXML
+    private TableColumn<Request, String> requestContentColumn;
+    @FXML
+    private TableColumn<Request, String> requestStatusColumn;
+    @FXML
+    private TextField searchRequestField;
+    @FXML
+    private Button searchRequestButton;
+
+    // Danh sách yêu cầu của student
+    private ObservableList<Request> studentRequests = FXCollections.observableArrayList();
+
+    private void loadStudentRequests(String keyword) {
+        studentRequests.clear();
+        String personId = GetData.getUsername();
+        String query;
+        boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
+
+        if (hasKeyword) {
+            // Tìm kiếm theo ID yêu cầu (nếu keyword là số) hoặc theo chủ đề
+            // Kiểm tra keyword có phải số không
+            boolean isNumber = keyword.matches("\\d+"); // true nếu là số
+            if (isNumber) {
+                // Tìm theo ID
+                query = "SELECT id, person_id, subject, content, status FROM requests WHERE person_id = ? AND (id = ? OR subject LIKE ?)";
+            } else {
+                // Tìm theo subject
+                query = "SELECT id, person_id, subject, content, status FROM requests WHERE person_id = ? AND (subject LIKE ?)";
+            }
+        } else {
+            // Không có từ khóa, load tất cả
+            query = "SELECT id, person_id, subject, content, status FROM requests WHERE person_id = ?";
+        }
+
+        try (Connection conn = ConnectionJDBCUtils.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, personId);
+
+            if (hasKeyword) {
+                boolean isNumber = keyword.matches("\\d+");
+                if (isNumber) {
+                    pstmt.setInt(2, Integer.parseInt(keyword));
+                    pstmt.setString(3, "%" + keyword + "%");
+                } else {
+                    pstmt.setString(2, "%" + keyword + "%");
+                }
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String pId = rs.getString("person_id");
+                String subject = rs.getString("subject");
+                String content = rs.getString("content");
+                String status = rs.getString("status");
+
+                Request request = new Request(id, pId, subject, content, status);
+                studentRequests.add(request);
+            }
+
+            requestsTableView.setItems(studentRequests);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể tải danh sách yêu cầu.");
+        }
+    }
+
+    @FXML
+    private void handleSearchRequests(ActionEvent event) {
+        String keyword = searchRequestField.getText().trim();
+        if (keyword.isEmpty()) {
+            // Nếu không gõ gì, vẫn trả ra tất cả yêu cầu
+            loadStudentRequests(null);
+        } else {
+            loadStudentRequests(keyword);
+        }
+    }
+
+    private void showRequestDialog(Request request) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/libarymanagementsystem/RequestDetailDialog.fxml"));
+            Parent root = loader.load();
+
+            RequestDetailDialogController controller = loader.getController();
+            controller.setRequestDetails(request.getSubject(), request.getContent());
+
+            Stage stage = new Stage();
+            stage.setTitle("Chi Tiết Yêu Cầu");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Đã xảy ra lỗi khi mở chi tiết yêu cầu.");
         }
     }
 }
