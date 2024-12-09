@@ -1,6 +1,8 @@
 package com.example.libarymanagementsystem.controller;
 
 import com.example.libarymanagementsystem.model.*;
+import com.example.libarymanagementsystem.service.BookService;
+import com.example.libarymanagementsystem.service.ServiceFactory;
 import com.example.libarymanagementsystem.utils.BookExists;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import com.example.libarymanagementsystem.utils.GoogleBooksService;
@@ -61,7 +63,7 @@ public class DashBoardControllerManager {
     private TableColumn<Book, Integer> totalCopiesColumn;
 
     @FXML
-    private TableColumn<Book, ImageView> imageColumn;
+    private TableColumn<Book, String> imageColumn;
     @FXML
     private AnchorPane availableBooks_form;
 
@@ -243,6 +245,10 @@ public class DashBoardControllerManager {
     private TableColumn<Request, String> requestStatusColumn;
 
     private ObservableList<Request> requestsList = FXCollections.observableArrayList();
+
+    // Khởi tạo Service Layer
+    private BookService bookService;
+    private ObservableList<Book> bookList;
 
 
 
@@ -439,13 +445,18 @@ public class DashBoardControllerManager {
 
     @FXML
     public void initialize() {
+        // Khởi tạo Service
+        bookService = ServiceFactory.getBookService();
+        // Khởi tạo ObservableList
+        bookList = FXCollections.observableArrayList();
+
         managerName.setText(GetData.getFullName());
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
         totalCopiesColumn.setCellValueFactory(new PropertyValueFactory<>("totalCopies"));
-        imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
+//        imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageView"));
 
         // Cấu hình bảng sách đã mượn với các cột mới
         bookImageColumn.setCellValueFactory(new PropertyValueFactory<>("bookImage"));
@@ -486,6 +497,35 @@ public class DashBoardControllerManager {
         requestContentColumn.setCellValueFactory(new PropertyValueFactory<>("content"));
         requestStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
+        imageColumn.setCellValueFactory(new PropertyValueFactory<>("imagePath"));
+
+// Thiết lập cellFactory để hiển thị hình ảnh dựa trên imagePath
+        imageColumn.setCellFactory(new Callback<TableColumn<Book, String>, TableCell<Book, String>>() {
+            @Override
+            public TableCell<Book, String> call(TableColumn<Book, String> param) {
+                return new TableCell<Book, String>() {
+                    private final ImageView imageView = new ImageView();
+
+                    @Override
+                    protected void updateItem(String imagePath, boolean empty) {
+                        super.updateItem(imagePath, empty);
+                        if (empty || imagePath == null || imagePath.trim().isEmpty()) {
+                            imageView.setImage(null);
+                            setGraphic(null);
+                        } else {
+                            try {
+                                Image image = new Image(imagePath, 50, 50, false, true);
+                                imageView.setImage(image);
+                            } catch (IllegalArgumentException e) {
+                                imageView.setImage(getDefaultImageView().getImage());
+                            }
+                            setGraphic(imageView);
+                        }
+                    }
+                };
+            }
+        });
+
         // Thêm Listener cho TableView yêu cầu để mở dialog khi double-click
         requestsTableView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2 && !requestsTableView.getSelectionModel().isEmpty()) {
@@ -502,6 +542,7 @@ public class DashBoardControllerManager {
 
 
         showForm("availableBooks_form");
+        bookTableView.setItems(bookList);
 
         // Tải tất cả sách ban đầu
         loadRequests();
@@ -539,6 +580,7 @@ public class DashBoardControllerManager {
                 return cell;
             }
         });
+
     }
 
     @FXML
@@ -643,58 +685,34 @@ public class DashBoardControllerManager {
     @FXML
     private void handleSearchAction() {
         String searchText = searchField.getText().trim();
-        ObservableList<Book> bookList = FXCollections.observableArrayList();
-
-        // Nếu thanh tìm kiếm trống, hiển thị tất cả sách
-        String query;
+        List<Book> bookList;
         if (searchText.isEmpty()) {
-            query = "SELECT * FROM books";
+            bookList = bookService.getAllBooks();
         } else {
-            query = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
+            bookList = bookService.searchBooks(searchText);
         }
+        ObservableList<Book> observableBooks = FXCollections.observableArrayList(bookList);
+        bookTableView.setItems(observableBooks);
 
-        try (Connection conn = ConnectionJDBCUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            if (!searchText.isEmpty()) {
-                pstmt.setString(1, "%" + searchText + "%");
-                pstmt.setString(2, "%" + searchText + "%");
-            }
-
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String title = rs.getString("title");
-                String author = rs.getString("author");
-                int available = rs.getInt("available");
-                int totalCopies = rs.getInt("total_copies");
-                String imagePath = rs.getString("image");
-
-                // Tạo ImageView từ imagePath
-                ImageView imageView = null;
-                if (imagePath != null && !imagePath.trim().isEmpty()) {
-                    try {
-                        Image image = new Image(imagePath, 50, 50, false, true);
-                        imageView = new ImageView(image);
-                    } catch (IllegalArgumentException e) {
-                        System.err.println("Invalid image URL for book ID " + id + ": " + imagePath);
-                        imageView = getDefaultImageView(); // Hình mặc định
-                    }
-                } else {
-                    imageView = getDefaultImageView(); // Hình mặc định
+        // Xử lý ImageView cho từng sách dựa trên imagePath
+        for (Book book : observableBooks) {
+            String imagePath = book.getImagePath();
+            ImageView imageView = null;
+            if (imagePath != null && !imagePath.trim().isEmpty()) {
+                try {
+                    Image image = new Image(imagePath, 50, 50, false, true);
+                    imageView = new ImageView(image);
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid image URL for book ID " + book.getId() + ": " + imagePath);
+                    imageView = getDefaultImageView();
                 }
-
-                // Tạo đối tượng Book
-                Book book = new Book(id, title, author, available, imageView);
-                book.setTotalCopies(totalCopies); // Gán totalCopies
-                bookList.add(book);
+            } else {
+                imageView = getDefaultImageView();
             }
 
-            // Đặt dữ liệu vào TableView
-            bookTableView.setItems(bookList);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+            // Cập nhật imagePath thành ImageView
+            book.setImagePath(imagePath); // Đảm bảo imagePath đã được set
+            // Bạn có thể thêm ImageView vào một cột khác hoặc xử lý tùy ý
         }
     }
 
@@ -889,51 +907,27 @@ public class DashBoardControllerManager {
      * Load sach.
      */
 
-    public void loadBooks() {
-        ObservableList<Book> bookList = FXCollections.observableArrayList();
+    private void loadBooks() {
+        List<Book> bookList = bookService.getAllBooks();
+        ObservableList<Book> observableBooks = FXCollections.observableArrayList(bookList);
+        bookTableView.setItems(observableBooks);
 
-        String query = "SELECT * FROM books";
-        try (Connection conn = ConnectionJDBCUtils.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String title = rs.getString("title");
-                String author = rs.getString("author");
-                int available = rs.getInt("available");
-                int totalCopies = rs.getInt("total_copies");
-                String imagePath = rs.getString("image"); // Đường dẫn hình ảnh
-
-                // Tạo ImageView từ imagePath
-                ImageView imageView = null;
-                if (imagePath != null && !imagePath.trim().isEmpty()) {
-                    try {
-                        Image image = new Image(imagePath, 50, 50, false, true);
-                        imageView = new ImageView(image);
-                    } catch (IllegalArgumentException e) {
-                        System.err.println("Invalid image URL for book ID " + id + ": " + imagePath);
-                        // Sử dụng hình ảnh mặc định nếu URL không hợp lệ
-                        imageView = getDefaultImageView();
-                    }
-                } else {
-                    // Sử dụng hình ảnh mặc định nếu không có imagePath
+        // Xử lý ImageView cho từng sách dựa trên imagePath
+        for (Book book : observableBooks) {
+            String imagePath = book.getImagePath();
+            ImageView imageView = null;
+            if (imagePath != null && !imagePath.trim().isEmpty()) {
+                try {
+                    Image image = new Image(imagePath, 50, 50, false, true);
+                    imageView = new ImageView(image);
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid image URL for book ID " + book.getId() + ": " + imagePath);
                     imageView = getDefaultImageView();
                 }
-
-                // Tạo đối tượng Book sử dụng constructor đúng
-                Book book = new Book(id, title, author, available, imageView);
-                // Thiết lập totalCopies
-                book.setTotalCopies(totalCopies); // set totalCopies riêng biệt
-
-                bookList.add(book);
+            } else {
+                imageView = getDefaultImageView();
             }
-
-            // Đặt dữ liệu vào TableView
-            bookTableView.setItems(bookList);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+            book.setImagePath(imagePath); // Đảm bảo imagePath đã được set
         }
     }
 
@@ -1055,7 +1049,6 @@ public class DashBoardControllerManager {
      */
 
     public void addBook(Book book) {
-        // Tạo đối tượng BookExists với tiêu đề sách cần kiểm tra
         BookExists bookChecker = new BookExists(book.getTitle());
 
         // Kiểm tra nếu sách đã tồn tại
@@ -1063,27 +1056,13 @@ public class DashBoardControllerManager {
             showAlert("Sách với tiêu đề \"" + book.getTitle() + "\" đã tồn tại trong hệ thống.");
             return;
         }
-
-        String query = "INSERT INTO books (title, author, available, total_copies, image) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection conn = ConnectionJDBCUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setString(1, book.getTitle());
-            pstmt.setString(2, book.getAuthor());
-            pstmt.setInt(3, book.getAvailable());
-            pstmt.setInt(4, book.getTotalCopies());
-            // Lấy đường dẫn hình ảnh từ ImageView
-            String imagePath = book.getImageView().getImage().getUrl();
-            pstmt.setString(5, imagePath);
-
-            pstmt.executeUpdate();
-
-            // Cập nhật TableView
+        try {
+            bookService.addBook(book);
+            showAlert("Thêm sách thành công.");
             loadBooks();
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Đã xảy ra lỗi khi thêm sách.");
         }
     }
 
@@ -1099,27 +1078,13 @@ public class DashBoardControllerManager {
             showAlert("Sách với tiêu đề \"" + book.getTitle() + "\" đã tồn tại trong hệ thống.");
             return;
         }
-        String query = "UPDATE books SET title = ?, author = ?, available = ?, total_copies = ?, image = ? WHERE id = ?";
-
-        try (Connection conn = ConnectionJDBCUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setString(1, book.getTitle());
-            pstmt.setString(2, book.getAuthor());
-            pstmt.setInt(3, book.getAvailable());
-            pstmt.setInt(4, book.getTotalCopies());
-            // Lấy đường dẫn hình ảnh từ ImageView
-            String imagePath = book.getImageView().getImage().getUrl();
-            pstmt.setString(5, imagePath);
-            pstmt.setInt(6, book.getId());
-
-            pstmt.executeUpdate();
-
-            // Cập nhật TableView
+        try {
+            bookService.updateBook(book);
+            showAlert("Cập nhật sách thành công.");
             loadBooks();
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Đã xảy ra lỗi khi cập nhật sách.");
         }
     }
 
@@ -1128,29 +1093,13 @@ public class DashBoardControllerManager {
      */
 
     public void deleteBook(int bookId) {
-        // Bước 1: Xóa các bản ghi trong bảng loans liên quan đến cuốn sách
-        String deleteLoansQuery = "DELETE FROM loans WHERE book_id = ?";
-
-        // Bước 2: Xóa sách khỏi bảng books
-        String deleteBookQuery = "DELETE FROM books WHERE id = ?";
-
-        try (Connection conn = ConnectionJDBCUtils.getConnection();
-             PreparedStatement pstmtDeleteLoans = conn.prepareStatement(deleteLoansQuery);
-             PreparedStatement pstmtDeleteBook = conn.prepareStatement(deleteBookQuery)) {
-
-            // Xóa các bản ghi trong bảng loans
-            pstmtDeleteLoans.setInt(1, bookId);
-            pstmtDeleteLoans.executeUpdate();
-
-            // Xóa cuốn sách trong bảng books
-            pstmtDeleteBook.setInt(1, bookId);
-            pstmtDeleteBook.executeUpdate();
-
-            // Cập nhật lại TableView (nếu có)
+        try {
+            bookService.deleteBook(bookId);
+            showAlert("Xóa sách thành công.");
             loadBooks();
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Đã xảy ra lỗi khi xóa sách.");
         }
     }
 

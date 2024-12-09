@@ -1,7 +1,6 @@
 package com.example.libarymanagementsystem.model;
 
 import javafx.scene.image.ImageView;
-
 import java.time.LocalDate;
 
 public class Book {
@@ -9,12 +8,13 @@ public class Book {
     private String title;
     private String author;
     private int available;
-    private ImageView imageView;
     private LocalDate borrowDate;
+    private ImageView imageView;
     private int totalCopies;
     private int loanId;
     private int borrowCount;
     private boolean isPinned;
+    private String imagePath; // Thêm thuộc tính imagePath
 
     // Constructor cho sách có sẵn (không có loanId, không ghim)
     public Book(int id, String title, String author, int available, ImageView imageView) {
@@ -23,6 +23,19 @@ public class Book {
         this.author = author;
         this.available = available;
         this.imageView = imageView;
+        this.borrowDate = null; // Khởi tạo với giá trị null
+        this.totalCopies = available; // Giả sử totalCopies ban đầu bằng available
+        this.loanId = 0; // 0 nghĩa là không có loanId
+        this.isPinned = false; // Mặc định chưa ghim
+    }
+
+    // Constructor cho sách có sẵn (không có loanId, không ghim)
+    public Book(int id, String title, String author, int available, String imagePath) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.available = available;
+        this.imagePath = imagePath;
         this.borrowDate = null; // Khởi tạo với giá trị null
         this.totalCopies = available; // Giả sử totalCopies ban đầu bằng available
         this.loanId = 0; // 0 nghĩa là không có loanId
@@ -42,6 +55,30 @@ public class Book {
         this.isPinned = false; // Mặc định chưa ghim
     }
 
+    // Constructor cho sách đang mượn (có loanId, không ghim)
+    public Book(int id, String title, String author, int available, int loanId, String imagePath) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.available = available;
+        this.loanId = loanId;
+        this.imagePath = imagePath;
+        this.borrowDate = null; // Khởi tạo với giá trị null
+        this.totalCopies = available; // Giả sử totalCopies ban đầu bằng available
+        this.isPinned = false; // Mặc định chưa ghim
+    }
+
+    // Constructor đầy đủ bao gồm isPinned (có thể dùng khi tải dữ liệu từ DB)
+    public Book(int id, String title, String author, int available, int borrowCount, boolean isPinned, String imagePath) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.available = available;
+        this.borrowCount = borrowCount;
+        this.isPinned = isPinned;
+        this.imagePath = imagePath;
+    }
+
     // Constructor đầy đủ bao gồm isPinned (có thể dùng khi tải dữ liệu từ DB)
     public Book(int id, String title, String author, int available, ImageView imageView, int loanId, int borrowCount, boolean isPinned) {
         this.id = id;
@@ -56,38 +93,59 @@ public class Book {
         this.isPinned = isPinned;
     }
 
+
     // Getters và Setters cho tất cả các thuộc tính
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) { this.id = id; }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public void setTitle(String title) { this.title = title; }
 
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+    public void setAuthor(String author) { this.author = author; }
 
     public int getAvailable() {
         return available;
     }
 
-    public void setAvailable(int available) {
-        this.available = available;
+    public void setAvailable(int available) { this.available = available; }
+
+    public LocalDate getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(LocalDate borrowDate) { this.borrowDate = borrowDate; }
+
+    public int getTotalCopies() {
+        return totalCopies;
+    }
+
+    public void setTotalCopies(int totalCopies) { this.totalCopies = totalCopies; }
+
+    public int getLoanId() {
+        return loanId;
+    }
+
+    public void setLoanId(int loanId) { this.loanId = loanId; }
+
+    public int getBorrowCount() {
+        return borrowCount;
+    }
+
+    public void setBorrowCount(int borrowCount) { this.borrowCount = borrowCount; }
+
+    public boolean isPinned() {
+        return isPinned;
     }
 
     public ImageView getImageView() {
@@ -98,45 +156,13 @@ public class Book {
         this.imageView = imageView;
     }
 
-    public LocalDate getBorrowDate() {
-        return borrowDate;
+    public void setPinned(boolean pinned) { isPinned = pinned; }
+
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setBorrowDate(LocalDate borrowDate) {
-        this.borrowDate = borrowDate;
-    }
-
-    public int getTotalCopies() {
-        return totalCopies;
-    }
-
-    public void setTotalCopies(int totalCopies) {
-        this.totalCopies = totalCopies;
-    }
-
-    public int getLoanId() {
-        return loanId;
-    }
-
-    public void setLoanId(int loanId) {
-        this.loanId = loanId;
-    }
-
-    public int getBorrowCount() {
-        return borrowCount;
-    }
-
-    public void setBorrowCount(int borrowCount) {
-        this.borrowCount = borrowCount;
-    }
-
-    public boolean isPinned() {
-        return isPinned;
-    }
-
-    public void setPinned(boolean pinned) {
-        isPinned = pinned;
-    }
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 
     // Phương thức để tăng số lượt mượn
     public void incrementBorrowCount() {
