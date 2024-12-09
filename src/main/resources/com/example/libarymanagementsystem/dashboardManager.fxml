@@ -15,6 +15,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.util.Callback?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.DashBoardControllerManager">
     <children>
         <AnchorPane fx:id="nav_form" layoutX="-8.0" layoutY="-8.0" prefHeight="462.0" prefWidth="177.0" styleClass="nav-form" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css">
@@ -99,11 +101,11 @@
                                         <Font name="Montserrat ExtraBold" size="12.0" />
                                     </font>
                                 </Button>
-                                <Button fx:id="borrowBookButton" layoutX="443.0" layoutY="10.0" onAction="#handleBorrowAction" prefHeight="26.0" prefWidth="57.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn" textFill="WHITE">
-                                    <font>
-                                        <Font name="Montserrat ExtraBold" size="12.0" />
-                                    </font>
-                                </Button>
+<!--                                <Button fx:id="borrowBookButton" layoutX="443.0" layoutY="10.0" onAction="#handleBorrowAction" prefHeight="26.0" prefWidth="57.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn" textFill="WHITE">-->
+<!--                                    <font>-->
+<!--                                        <Font name="Montserrat ExtraBold" size="12.0" />-->
+<!--                                    </font>-->
+<!--                                </Button>-->
                             </children>
                         </HBox>
                         <HBox alignment="CENTER" layoutX="-1.0" prefHeight="39.0" prefWidth="640.0" style="-fx-background-color: #023e8a;">
@@ -155,18 +157,85 @@
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" spacing="10.0" />
                         <TableView fx:id="borrowedBooksTable" editable="true" layoutX="92.0" layoutY="51.0" prefHeight="326.0" prefWidth="448.0" stylesheets="@tableDesign.css">
                             <columns>
-                                <TableColumn fx:id="loanBookTitleColumn" text="Tên Sách"/>
-                                <TableColumn fx:id="loanBookAuthorColumn" text="Tác Giả"/>
-                                <TableColumn fx:id="loanBorrowDateColumn" text="Ngày Mượn"/>
-                                <TableColumn fx:id="loanDueDateColumn" text="Ngày Hẹn Trả"/>
-                                <TableColumn fx:id="loanStatusColumn" text="Trạng Thái"/>
+                                <!-- Cột Ảnh Sách -->
+                                <TableColumn fx:id="bookImageColumn" prefWidth="80.0" text="Ảnh Sách">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="bookImage" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột ID Sách -->
+                                <TableColumn fx:id="bookIdColumn" prefWidth="60.0" text="ID Sách">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="bookId" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột Tên Sách -->
+                                <TableColumn fx:id="loanBookTitleColumn" prefWidth="100.0" text="Tên Sách">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="bookTitle" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột Tác Giả -->
+                                <TableColumn fx:id="loanBookAuthorColumn" prefWidth="100.0" text="Tác Giả">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="bookAuthor" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột ID Người Mượn -->
+                                <TableColumn fx:id="borrowerIdColumn" prefWidth="80.0" text="ID Người Mượn">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="personId" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột Tên Người Mượn -->
+                                <TableColumn fx:id="borrowerNameColumn" prefWidth="120.0" text="Tên Người Mượn">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="borrowerName" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột Lớp Người Mượn -->
+                                <TableColumn fx:id="borrowerClassColumn" prefWidth="80.0" text="Lớp">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="borrowerClass" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột Vai Trò Người Mượn -->
+                                <TableColumn fx:id="borrowerRoleColumn" prefWidth="100.0" text="Vai Trò">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="borrowerRole" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột Ngày Mượn -->
+                                <TableColumn fx:id="loanBorrowDateColumn" prefWidth="100.0" text="Ngày Mượn">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="borrowDate" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột Ngày Hẹn Trả -->
+                                <TableColumn fx:id="loanDueDateColumn" prefWidth="100.0" text="Ngày Hẹn Trả">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="dueDate" />
+                                    </cellValueFactory>
+                                </TableColumn>
+
+                                <!-- Cột Trạng Thái -->
+                                <TableColumn fx:id="loanStatusColumn" prefWidth="80.0" text="Trạng Thái">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="status" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="extendLoanColumn" prefWidth="100.0" text="Gia Hạn" />
                             </columns>
                         </TableView>
-                        <Button fx:id="returnButton" layoutX="229.0" layoutY="401.0" onAction="#handleReturnAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Trả sách" textFill="WHITE">
-                            <font>
-                                <Font name="Montserrat ExtraBold" size="12.0" />
-                            </font>
-                        </Button>
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="member_form" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fb8500;" visible="false">
@@ -261,7 +330,7 @@
                         </TableView>
 
                         <!-- Nút "Mượn" đặt bên ngoài TableView -->
-                        <Button fx:id="borrowButton1" text="Mượn" layoutX="20.0" layoutY="430.0" onAction="#handleBorrowFromRankedOutsideTable"/>
+<!--                        <Button fx:id="borrowButton1" text="Mượn" layoutX="20.0" layoutY="430.0" onAction="#handleBorrowFromRankedOutsideTable"/>-->
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="userInfoPane" prefHeight="450.0" prefWidth="642.0" visible="false">
