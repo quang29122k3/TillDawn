@@ -1101,6 +1101,8 @@ public class StudentController {
                 requestContentArea.clear();
                 // Ẩn trang Yêu cầu
                 request_form.setVisible(true);
+                // Tải lại danh sách yêu cầu để bao gồm yêu cầu mới
+                loadStudentRequests(null);
             } else {
                 showAlert("Lỗi", "Không thể gửi yêu cầu. Vui lòng thử lại.");
             }
