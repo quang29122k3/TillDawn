@@ -1,5 +1,6 @@
 package com.example.libarymanagementsystem.controller;
 
+import com.example.libarymanagementsystem.game.TicTacToeGame;
 import com.example.libarymanagementsystem.model.*;
 import com.example.libarymanagementsystem.utils.ConnectionJDBCUtils;
 import com.example.libarymanagementsystem.utils.GoogleBooksService;
@@ -156,6 +157,19 @@ public class StudentController {
 
     @FXML
     private Button cancelRequestButton;
+
+    @FXML
+    private Button gameButton; // Nút trò chơi trên thanh bên
+
+    @FXML
+    private AnchorPane game_form; // AnchorPane form game
+
+    @FXML
+    private Button startGameButton;
+
+    @FXML
+    private AnchorPane gameArea; // Khu vực chứa game XO
+
 
     // Dữ liệu cho bảng "Sách đã lưu"
     private ObservableList<Book> savedBooksList = FXCollections.observableArrayList();
@@ -731,7 +745,100 @@ public class StudentController {
             loadSavedBooksNew(); // Hàm load sách đã lưu mới
         }else if (event.getSource() == requestButton) { // Nút "Yêu cầu"
             request_form.setVisible(true);
+        }else if(event.getSource()==gameButton){
+            game_form.setVisible(true);
         }
+    }
+
+    @FXML
+    private ComboBox<String> difficultyComboBox; // Đảm bảo khai báo ComboBox này
+
+    @FXML
+    private void handleStartGame() {
+        // Lấy độ khó từ ComboBox
+        String selectedDifficulty = difficultyComboBox.getValue();
+        if (selectedDifficulty == null) {
+            showAlert("Chú ý", "Vui lòng chọn độ khó trước khi chơi!");
+            return;
+        }
+
+        // Clear nội dung cũ trong gameArea
+        gameArea.getChildren().clear();
+
+        // Chuyển đổi độ khó từ chuỗi thành enum Difficulty
+        TicTacToeGame.Difficulty difficultyEnum;
+        switch (selectedDifficulty) {
+            case "Dễ":
+                difficultyEnum = TicTacToeGame.Difficulty.EASY;
+                break;
+            case "Trung bình":
+                difficultyEnum = TicTacToeGame.Difficulty.MEDIUM;
+                break;
+            case "Khó":
+                difficultyEnum = TicTacToeGame.Difficulty.HARD;
+                break;
+            default:
+                difficultyEnum = TicTacToeGame.Difficulty.EASY;  // Giá trị mặc định nếu không có độ khó hợp lệ
+                break;
+        }
+
+        // Tạo game mới với độ khó
+        TicTacToeGame game = new TicTacToeGame(() -> resetGameUI(), difficultyEnum);
+        Parent gameUI = game.createContent();
+
+        // Fit gameUI vào gameArea
+        gameUI.setLayoutX(0);
+        gameUI.setLayoutY(0);
+        gameArea.getChildren().add(gameUI);
+    }
+
+    // Hàm này được gọi khi game cần reset giao diện
+    // (Nếu muốn tích hợp logic Resume bên ngoài, còn nếu Resume handle bên trong TicTacToeGame thì không cần)
+    private void resetGameUI() {
+        // Nếu TicTacToeGame có callback gọi khi resume, ta có thể xử lý ở đây.
+        // Hiện tại không cần gì đặc biệt, vì TicTacToeGame tự xử lý reset.
+    }
+
+    @FXML
+    private void handleEasyDifficulty() {
+        handleStartGameWithDifficulty("Easy");
+    }
+
+    @FXML
+    private void handleMediumDifficulty() {
+        handleStartGameWithDifficulty("Medium");
+    }
+
+    @FXML
+    private void handleHardDifficulty() {
+        handleStartGameWithDifficulty("Hard");
+    }
+
+    private void handleStartGameWithDifficulty(String difficulty) {
+        gameArea.getChildren().clear();
+
+        // Chuyển đổi độ khó thành enum Difficulty
+        TicTacToeGame.Difficulty difficultyEnum = TicTacToeGame.Difficulty.EASY;  // Giá trị mặc định
+        switch (difficulty) {
+            case "Dễ":
+                difficultyEnum = TicTacToeGame.Difficulty.EASY;
+                break;
+            case "Trung bình":
+                difficultyEnum = TicTacToeGame.Difficulty.MEDIUM;
+                break;
+            case "Khó":
+                difficultyEnum = TicTacToeGame.Difficulty.HARD;
+                break;
+            default:
+                break;
+        }
+
+        TicTacToeGame game = new TicTacToeGame(() -> resetGameUI(), difficultyEnum);
+        Parent gameUI = game.createContent();
+
+        gameUI.setLayoutX(0);
+        gameUI.setLayoutY(0);
+        gameArea.getChildren().add(gameUI);
     }
 
     private void loadSavedBooksNew() {

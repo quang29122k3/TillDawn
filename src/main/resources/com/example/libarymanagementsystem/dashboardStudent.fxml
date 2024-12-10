@@ -17,6 +17,9 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #fffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.StudentController">
    <children>
       <VBox alignment="CENTER" layoutY="-4.0" prefHeight="458.0" prefWidth="163.0" spacing="10.0" style="-fx-background-color: #03045e;">
@@ -55,6 +58,15 @@
                </VBox.margin>
             </Button>
             <Button fx:id="googleBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Tra cứu tài liệu" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat ExtraBold" size="12.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="gameButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0"
+                    style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Trò chơi" textFill="WHITE">
                <font>
                   <Font name="Montserrat ExtraBold" size="12.0" />
                </font>
@@ -179,6 +191,34 @@
                         </VBox>
                      </content>
                   </ScrollPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="game_form" prefHeight="450.0" prefWidth="639.0" style="-fx-background-color: #fb8500;" visible="false">
+               <children>
+                  <!-- Nút Bắt Đầu Trò Chơi -->
+                  <Button fx:id="startGameButton" text="Bắt đầu trò chơi" layoutX="250" layoutY="20"
+                          onAction="#handleStartGame"
+                          style="-fx-background-radius: 30; -fx-background-color: #023e8a;" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                     </font>
+                  </Button>
+
+                  <!-- ComboBox chọn độ khó -->
+                  <ComboBox fx:id="difficultyComboBox" layoutX="250" layoutY="60" prefWidth="130.0">
+                     <items>
+                        <FXCollections fx:factory="observableArrayList">
+                           <String fx:value="Dễ" />
+                           <String fx:value="Khó" />
+                        </FXCollections>
+                     </items>
+                  </ComboBox>
+
+                  <!-- AnchorPane chứa game XO -->
+                  <AnchorPane fx:id="gameArea" layoutX="70" layoutY="100" prefWidth="500" prefHeight="370"
+                              style="-fx-background-color: #ffffff; -fx-border-color: #000000;">
+                     <!-- Nội dung game sẽ được thêm vào code-behind -->
+                  </AnchorPane>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="savedBooks_form_new" prefHeight="450.0" prefWidth="639.0" style="-fx-background-color: #fb8500;" visible="false">
