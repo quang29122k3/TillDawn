@@ -15,6 +15,11 @@ public class BorrowDurationDialogController {
     @FXML
     private Button cancelButton;
 
+    @FXML
+    private Button closeButton; // Nút Đóng
+    @FXML
+    private Button minimizeButton; // Nút Thu nhỏ
+
     private int days = 0;
     private boolean confirmed = false;
 
@@ -37,6 +42,20 @@ public class BorrowDurationDialogController {
     private void handleCancel() {
         confirmed = false;
         closeWindow();
+    }
+
+    @FXML
+    private void handleClose() {
+        // Đóng cửa sổ
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void handleMinimize() {
+        // Thu nhỏ cửa sổ
+        Stage stage = (Stage) minimizeButton.getScene().getWindow();
+        stage.setIconified(true);
     }
 
     private void closeWindow() {

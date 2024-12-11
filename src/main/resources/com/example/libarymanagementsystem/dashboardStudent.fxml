@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,17 +19,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #fffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.StudentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="675.0" prefWidth="1200.0" style="-fx-background-color: #fffff;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.StudentController">
    <children>
-      <VBox alignment="CENTER" layoutY="-4.0" prefHeight="458.0" prefWidth="163.0" spacing="10.0" style="-fx-background-color: #03045e;">
+      <VBox alignment="CENTER" layoutY="-4.0" prefHeight="675.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #03045e;" AnchorPane.bottomAnchor="0.0">
          <children>
-            <Button fx:id="userIconButton" mnemonicParsing="false" onAction="#navButtonDesign">
+            <Button fx:id="userIconButton" mnemonicParsing="false" onAction="#navButtonDesign" prefWidth="0.0">
                <graphic>
                   <ImageView fitHeight="87.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -35,51 +34,59 @@
             </Button>
             <Text fx:id="userName" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên người dùng">
                <font>
-                  <Font name="Montserrat ExtraBold" size="15.0" />
+                  <Font name="System Bold" size="22.0" />
                </font>
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </Text>
-            <Button fx:id="availableBooks_btn" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" stylesheets="@buttonEffect.css" text="Sách Có Sẵn" textFill="WHITE">
+            <Button fx:id="availableBooks_btn" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="44.0" prefWidth="144.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Sách có sẵn" textFill="WHITE">
                <font>
-                  <Font name="Montserrat ExtraBold" size="12.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="savedBooks_btn" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Sách đã mượn" textFill="WHITE">
+            <Button fx:id="savedBooks_btn" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="44.0" prefWidth="144.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Sách đã mượn" textFill="WHITE">
                <font>
-                  <Font name="Montserrat ExtraBold" size="12.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="googleBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Tra cứu tài liệu" textFill="WHITE">
+            <Button fx:id="googleBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="44.0" prefWidth="144.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Tra cứu tài liệu" textFill="WHITE">
                <font>
-                  <Font name="Montserrat ExtraBold" size="12.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="gameButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0"
-                    style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Trò chơi" textFill="WHITE">
+            <Button fx:id="gameButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="44.0" prefWidth="144.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Trò chơi" textFill="WHITE">
                <font>
-                  <Font name="Montserrat ExtraBold" size="12.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="rankBooksButton" mnemonicParsing="false" text="Xếp Hạng Sách" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" textFill="WHITE" />
-            <Button fx:id="savedBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Sách đã lưu" textFill="WHITE"/>
-            <Button fx:id="requestButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Yêu cầu" textFill="WHITE"/>
-            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #90e0ef;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Đăng Xuất">
+            <Button fx:id="rankBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="44.0" prefWidth="144.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Xếp hạng sách" textFill="WHITE">
                <font>
-                  <Font name="Montserrat ExtraBold" size="12.0" />
+                  <Font name="System Bold" size="14.0" />
+               </font></Button>
+            <Button fx:id="savedBooksButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="44.0" prefWidth="144.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Sách đã lưu" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Button>
+            <Button fx:id="requestButton" mnemonicParsing="false" onAction="#navButtonDesign" prefHeight="44.0" prefWidth="144.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Yêu cầu" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Button>
+            <Button fx:id="logout" mnemonicParsing="false" onAction="#handleLogout" prefHeight="44.0" prefWidth="144.0" style="-fx-background-radius: 30; -fx-background-color: #90e0ef;" styleClass="nav-btn" stylesheets="@buttonEffect.css" text="Đăng xuất">
+               <font>
+                  <Font name="System Bold" size="14.0" />
                </font>
                <VBox.margin>
                   <Insets top="15.0" />
@@ -87,54 +94,55 @@
             </Button>
          </children>
       </VBox>
-      <StackPane layoutX="163.0" prefHeight="450.0" prefWidth="639.0">
+      <StackPane layoutX="163.0" prefHeight="675.0" prefWidth="1000.0" AnchorPane.leftAnchor="200.0">
          <children>
-            <AnchorPane fx:id="availableBooks_form" prefHeight="450.0" prefWidth="642.0" style="-fx-background-color: #fb8500;" visible="false">
+            <AnchorPane fx:id="availableBooks_form" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;" visible="false">
                <children>
-                  <HBox alignment="CENTER_LEFT" layoutX="28.0" layoutY="22.0" prefHeight="26.0" prefWidth="578.0" spacing="10.0">
-                     <children>
-                        <TextField fx:id="searchField" prefHeight="26.0" prefWidth="422.0" promptText="Nhập tên sách hoặc tác giả" style="-fx-background-radius: 30;">
-                           <font>
-                              <Font name="Montserrat Medium" size="12.0" />
-                           </font>
-                        </TextField>
-                        <Button fx:id="searchButton" onAction="#handleSearchAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Tìm kiếm" textFill="WHITE">
-                           <font>
-                              <Font name="Montserrat ExtraBold" size="12.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <TableView fx:id="bookTableView" editable="true" layoutX="61.0" layoutY="70.0" prefHeight="326.0" prefWidth="511.0" stylesheets="@tableDesign.css">
-                     <columns>
-                        <TableColumn fx:id="imageColumn" prefWidth="119.20001220703125" text="Hình Ảnh" />
-                        <TableColumn fx:id="titleColumn" prefWidth="153.60003662109375" text="Tiêu Đề" />
-                        <TableColumn fx:id="authorColumn" prefWidth="93.5999755859375" text="Tác Giả" />
-                        <TableColumn fx:id="availableColumn" prefWidth="140.0" text="Số Lượng Còn" />
-                        <TableColumn fx:id="pinColumn" prefWidth="50.0" text="Ghim"/>
-                     </columns>
-                  </TableView>
-                  <Button fx:id="borrowButton1" layoutX="230.0" layoutY="412.0" onAction="#handleBorrowAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn sách" textFill="WHITE">
+                  <Button fx:id="searchButton" layoutX="621.0" layoutY="60.0" onAction="#handleSearchAction" prefHeight="25.0" prefWidth="111.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Tìm kiếm" textFill="WHITE">
                      <font>
                         <Font name="Montserrat ExtraBold" size="12.0" />
                      </font>
                   </Button>
+                  <TableView fx:id="bookTableView" editable="true" layoutX="61.0" layoutY="70.0" prefHeight="569.0" prefWidth="932.0" stylesheets="@tableDesign.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="92.0">
+                     <columns>
+                        <TableColumn fx:id="imageColumn" prefWidth="224.0" text="Hình Ảnh" />
+                        <TableColumn fx:id="titleColumn" prefWidth="235.0" text="Tiêu Đề" />
+                        <TableColumn fx:id="authorColumn" prefWidth="184.0" text="Tác Giả" />
+                        <TableColumn fx:id="availableColumn" prefWidth="160.0" text="Số Lượng Còn" />
+                        <TableColumn fx:id="pinColumn" prefWidth="136.0" text="Ghim" />
+                     </columns>
+                  </TableView>
+                  <Button fx:id="borrowButton1" layoutX="746.0" layoutY="60.0" onAction="#handleBorrowAction" prefHeight="25.0" prefWidth="101.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn sách" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                     </font>
+                  </Button>
+                  <TextField fx:id="searchField" layoutX="34.0" layoutY="60.0" prefHeight="25.0" prefWidth="578.0" promptText="Nhập tên sách hoặc tác giả" style="-fx-background-radius: 30;">
+                     <font>
+                        <Font name="Montserrat Medium" size="12.0" />
+                     </font>
+                  </TextField>
+                  <Text layoutX="420.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SÁCH CÓ SẴN">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="request_form" prefHeight="450.0" prefWidth="639.0" style="-fx-background-color: #fb8500;" visible="false">
+            <AnchorPane fx:id="request_form" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;" visible="false">
                <children>
-                  <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                      <content>
                         <VBox alignment="TOP_CENTER" spacing="20.0">
                            <!-- Padding sử dụng thẻ Insets -->
                            <padding>
-                              <Insets top="20" right="20" bottom="20" left="20" />
+                              <Insets bottom="20" left="20" right="20" top="20" />
                            </padding>
 
                            <!-- Tiêu đề -->
                            <Text text="Gửi Yêu Cầu">
                               <font>
-                                 <Font name="Montserrat ExtraBold" size="18.0" />
+                                 <Font name="System Bold" size="24.0" />
                               </font>
                            </Text>
 
@@ -146,14 +154,14 @@
                            </TextField>
 
                            <!-- TextArea Nội Dung -->
-                           <TextArea fx:id="requestContentArea" prefWidth="400.0" prefHeight="200.0" promptText="Nội dung yêu cầu" wrapText="true" style="-fx-background-radius: 30;">
+                           <TextArea fx:id="requestContentArea" prefHeight="200.0" prefWidth="400.0" promptText="Nội dung yêu cầu" style="-fx-background-radius: 30;" wrapText="true">
                               <font>
                                  <Font name="Montserrat Medium" size="12.0" />
                               </font>
                            </TextArea>
 
                            <!-- HBox Chứa Các Nút Gửi và Hủy -->
-                           <HBox spacing="20.0" alignment="CENTER">
+                           <HBox alignment="CENTER" spacing="20.0">
                               <children>
                                  <Button fx:id="sendRequestButton" onAction="#handleSendRequest" prefHeight="30.0" prefWidth="100.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Gửi" textFill="WHITE">
                                     <font>
@@ -171,20 +179,20 @@
                            <!-- Khu Vực Tìm Kiếm và Bảng Hiển Thị Yêu Cầu Đã Gửi -->
                            <VBox spacing="10.0">
                               <!-- HBox Tìm Kiếm -->
-                              <HBox spacing="10.0" alignment="CENTER">
+                              <HBox alignment="CENTER" spacing="10.0">
                                  <children>
                                     <TextField fx:id="searchRequestField" promptText="Tìm kiếm ID hoặc Chủ đề yêu cầu" style="-fx-background-radius: 30;" />
-                                    <Button fx:id="searchRequestButton" text="Tìm kiếm" style="-fx-background-radius: 30; -fx-background-color: #023e8a; -fx-text-fill: white;" onAction="#handleSearchRequests"/>
+                                    <Button fx:id="searchRequestButton" onAction="#handleSearchRequests" style="-fx-background-radius: 30; -fx-background-color: #023e8a; -fx-text-fill: white;" text="Tìm kiếm" />
                                  </children>
                               </HBox>
 
                               <!-- TableView Hiển Thị Yêu Cầu Đã Gửi -->
-                              <TableView fx:id="requestsTableView" prefHeight="150.0" prefWidth="500.0">
+                              <TableView fx:id="requestsTableView" prefHeight="150.0" prefWidth="500.0" stylesheets="@tableDesign.css">
                                  <columns>
-                                    <TableColumn fx:id="requestIdColumn" text="ID Yêu Cầu" prefWidth="100.0"/>
-                                    <TableColumn fx:id="requestSubjectColumn" text="Chủ Đề" prefWidth="150.0"/>
-                                    <TableColumn fx:id="requestContentColumn" text="Nội Dung" prefWidth="200.0"/>
-                                    <TableColumn fx:id="requestStatusColumn" text="Trạng Thái" prefWidth="100.0"/>
+                                    <TableColumn fx:id="requestIdColumn" prefWidth="100.0" text="ID Yêu Cầu" />
+                                    <TableColumn fx:id="requestSubjectColumn" prefWidth="363.0" text="Chủ Đề" />
+                                    <TableColumn fx:id="requestContentColumn" prefWidth="333.0" text="Nội Dung" />
+                                    <TableColumn fx:id="requestStatusColumn" prefWidth="161.0" text="Trạng Thái" />
                                  </columns>
                               </TableView>
                            </VBox>
@@ -193,19 +201,17 @@
                   </ScrollPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="game_form" prefHeight="450.0" prefWidth="639.0" style="-fx-background-color: #fb8500;" visible="false">
+            <AnchorPane fx:id="game_form" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;" visible="false">
                <children>
                   <!-- Nút Bắt Đầu Trò Chơi -->
-                  <Button fx:id="startGameButton" text="Bắt đầu trò chơi" layoutX="250" layoutY="20"
-                          onAction="#handleStartGame"
-                          style="-fx-background-radius: 30; -fx-background-color: #023e8a;" textFill="WHITE">
+                  <Button fx:id="startGameButton" layoutX="250" layoutY="20" onAction="#handleStartGame" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Bắt đầu trò chơi" textFill="WHITE" AnchorPane.leftAnchor="465.0" AnchorPane.topAnchor="625.0">
                      <font>
                         <Font name="Montserrat ExtraBold" size="12.0" />
                      </font>
                   </Button>
 
                   <!-- ComboBox chọn độ khó -->
-                  <ComboBox fx:id="difficultyComboBox" layoutX="250" layoutY="60" prefWidth="130.0">
+                  <ComboBox fx:id="difficultyComboBox" layoutX="250" layoutY="60" prefWidth="130.0" AnchorPane.leftAnchor="450.0">
                      <items>
                         <FXCollections fx:factory="observableArrayList">
                            <String fx:value="Dễ" />
@@ -215,215 +221,179 @@
                   </ComboBox>
 
                   <!-- AnchorPane chứa game XO -->
-                  <AnchorPane fx:id="gameArea" layoutX="70" layoutY="100" prefWidth="500" prefHeight="370"
-                              style="-fx-background-color: #ffffff; -fx-border-color: #000000;">
+                  <AnchorPane fx:id="gameArea" layoutX="70" layoutY="100" prefHeight="517.0" prefWidth="881.0" style="-fx-background-color: #ffffff; -fx-border-color: #000000;">
                      <!-- Nội dung game sẽ được thêm vào code-behind -->
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="savedBooks_form_new" prefHeight="450.0" prefWidth="639.0" style="-fx-background-color: #fb8500;" visible="false">
+            <AnchorPane fx:id="savedBooks_form_new" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;" visible="false">
                <children>
-                  <TableView fx:id="savedBooksTableView" layoutX="20.0" layoutY="20.0" prefHeight="400.0" prefWidth="600.0" stylesheets="@tableDesign.css">
+                  <TableView fx:id="savedBooksTableView" layoutX="20.0" layoutY="20.0" prefHeight="569.0" prefWidth="932.0" stylesheets="@tableDesign.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="56.0">
                      <columns>
-                        <TableColumn fx:id="savedImageColumn" prefWidth="100.0" text="Hình Ảnh"/>
-                        <TableColumn fx:id="savedTitleColumn" prefWidth="150.0" text="Tiêu Đề"/>
-                        <TableColumn fx:id="savedAuthorColumn" prefWidth="100.0" text="Tác Giả"/>
-                        <TableColumn fx:id="savedAvailableColumn" prefWidth="100.0" text="Còn"/>
-                        <TableColumn fx:id="savedUnpinColumn" prefWidth="100.0" text="Hành Động"/>
+                        <TableColumn fx:id="savedImageColumn" prefWidth="193.0" text="Hình Ảnh" />
+                        <TableColumn fx:id="savedTitleColumn" prefWidth="233.0" text="Tiêu Đề" />
+                        <TableColumn fx:id="savedAuthorColumn" prefWidth="135.0" text="Tác Giả" />
+                        <TableColumn fx:id="savedAvailableColumn" prefWidth="158.0" text="Còn" />
+                        <TableColumn fx:id="savedUnpinColumn" prefWidth="212.0" text="Hành Động" />
                      </columns>
                   </TableView>
 
                   <!-- Nút "Bỏ Ghim" có thể đặt trong cột Hành Động của bảng -->
                   <!-- Nếu muốn, có thể thêm nút ở dưới bảng -->
                   <!-- Ví dụ: -->
-                  <Button fx:id="unpinButton" layoutX="250.0" layoutY="430.0"  prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #ff0000; -fx-background-radius: 30;" text="Bỏ Ghim" textFill="WHITE">
+                  <Button fx:id="unpinButton" layoutX="459.0" layoutY="635.0" prefHeight="11.0" prefWidth="70.0" style="-fx-background-color: #ff0000; -fx-background-radius: 30;" text="Bỏ Ghim" textFill="WHITE" AnchorPane.topAnchor="635.0">
                      <font>
                         <Font name="Montserrat ExtraBold" size="12.0" />
                      </font>
                   </Button>
+                  <Text layoutX="424.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SÁCH ĐÃ LƯU">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="savedBook_form" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fb8500;" visible="false">
+            <AnchorPane fx:id="savedBook_form" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;" visible="false">
                <children>
-                  <TableView fx:id="borrowedBooksTable" layoutX="22.0" layoutY="22.0" prefHeight="377.0" prefWidth="594.0" stylesheets="@tableDesign.css">
+                  <TableView fx:id="borrowedBooksTable" layoutX="22.0" layoutY="22.0" prefHeight="569.0" prefWidth="932.0" stylesheets="@tableDesign.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="56.0">
                      <columns>
-                        <TableColumn fx:id="loanBookTitleColumn" text="Tên Sách"/>
-                        <TableColumn fx:id="loanBookAuthorColumn" text="Tác Giả"/>
-                        <TableColumn fx:id="loanBorrowDateColumn" text="Ngày Mượn"/>
-                        <TableColumn fx:id="loanDueDateColumn" text="Ngày Hẹn Trả"/>
-                        <TableColumn fx:id="loanStatusColumn" text="Trạng Thái"/>
+                        <TableColumn fx:id="loanBookTitleColumn" prefWidth="208.0" text="Tên Sách" />
+                        <TableColumn fx:id="loanBookAuthorColumn" prefWidth="153.0" text="Tác Giả" />
+                        <TableColumn fx:id="loanBorrowDateColumn" prefWidth="231.0" text="Ngày Mượn" />
+                        <TableColumn fx:id="loanDueDateColumn" prefWidth="101.0" text="Ngày Hẹn Trả" />
+                        <TableColumn fx:id="loanStatusColumn" prefWidth="246.0" text="Trạng Thái" />
                      </columns>
                   </TableView>
-                  <Button fx:id="returnButton" layoutX="230.0" layoutY="412.0" onAction="#handleReturnAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Trả sách" textFill="WHITE">
+                  <Button fx:id="returnButton" layoutX="417.0" layoutY="636.0" onAction="#handleReturnAction" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Trả sách" textFill="WHITE">
                      <font>
                         <Font name="Montserrat ExtraBold" size="12.0" />
                      </font>
                   </Button>
+                  <Text layoutX="409.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SÁCH ĐÃ MƯỢN">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="googleBooks_form" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fb8500;" visible="false">
+            <AnchorPane fx:id="googleBooks_form" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;" visible="false">
                <children>
-                  <HBox alignment="CENTER_LEFT" layoutX="28.0" layoutY="14.0" prefHeight="26.0" prefWidth="578.0" spacing="10.0">
-                     <children>
-                        <TextField fx:id="googleBooksSearchField" prefHeight="26.0" prefWidth="422.0" promptText="Nhập tên sách hoặc tác giả" style="-fx-background-radius: 30;">
-                           <font>
-                              <Font name="Montserrat Medium" size="12.0" />
-                           </font>
-                        </TextField>
-                        <Button fx:id="googleBooksSearchButton" onAction="#handleGoogleBooksSearch" prefHeight="23.0" prefWidth="174.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Tìm kiếm" textFill="WHITE">
-                           <font>
-                              <Font name="Montserrat ExtraBold" size="12.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <TableView fx:id="googleBooksTableView" layoutX="15.0" layoutY="57.0" prefHeight="378.0" prefWidth="603.0" stylesheets="@tableDesign.css">
+                  <Button fx:id="googleBooksSearchButton" layoutX="623.0" layoutY="61.0" onAction="#handleGoogleBooksSearch" prefHeight="17.0" prefWidth="119.0" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Tìm kiếm" textFill="WHITE">
+                     <font>
+                        <Font name="Montserrat ExtraBold" size="12.0" />
+                     </font>
+                  </Button>
+                  <TableView fx:id="googleBooksTableView" layoutX="15.0" layoutY="57.0" prefHeight="569.0" prefWidth="932.0" stylesheets="@tableDesign.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="92.0">
                      <columns>
                         <TableColumn fx:id="googleBookTitleColumn" prefWidth="150.4000244140625" text="Tiêu Đề" />
-                        <TableColumn fx:id="googleBookAuthorsColumn" prefWidth="97.5999755859375" text="Tác Giả" />
-                        <TableColumn fx:id="googleBookPublisherColumn" minWidth="0.0" prefWidth="116.79998779296875" text="Nhà Xuất Bản" />
-                        <TableColumn fx:id="googleBookLinkColumn" prefWidth="380.79998779296875" text="Link" />
+                        <TableColumn fx:id="googleBookAuthorsColumn" prefWidth="163.0" text="Tác Giả" />
+                        <TableColumn fx:id="googleBookPublisherColumn" minWidth="0.0" prefWidth="194.0" text="Nhà Xuất Bản" />
+                        <TableColumn fx:id="googleBookLinkColumn" prefWidth="443.0" text="Link" />
                      </columns>
                   </TableView>
+                  <TextField fx:id="googleBooksSearchField" layoutX="34.0" layoutY="60.0" prefHeight="26.0" prefWidth="578.0" promptText="Nhập tên sách hoặc tác giả" style="-fx-background-radius: 30;">
+                     <font>
+                        <Font name="Montserrat Medium" size="12.0" />
+                     </font>
+                  </TextField>
+                  <Text layoutX="397.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TRA CỨU TÀI LIỆU">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="rankedBooks_form" visible="false" style="-fx-background-color: #fb8500;">
+            <AnchorPane fx:id="rankedBooks_form" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;" visible="false">
                <children>
-                  <TableView fx:id="rankedBooksTableView" prefHeight="400.0" prefWidth="600.0" layoutX="20.0" layoutY="20.0">
+                  <TableView fx:id="rankedBooksTableView" layoutX="20.0" layoutY="20.0" prefHeight="569.0" prefWidth="932.0" stylesheets="@tableDesign.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="56.0">
                      <columns>
-                        <TableColumn fx:id="rankedImageColumn" text="Hình Ảnh"/>
-                        <TableColumn fx:id="rankedTitleColumn" text="Tiêu Đề"/>
-                        <TableColumn fx:id="rankedAuthorColumn" text="Tác Giả"/>
-                        <TableColumn fx:id="rankedBorrowCountColumn" text="Lượt Mượn"/>
-                        <TableColumn fx:id="rankedAvailableColumn" text="Còn"/>
+                        <TableColumn fx:id="rankedImageColumn" prefWidth="229.0" text="Hình Ảnh" />
+                        <TableColumn fx:id="rankedTitleColumn" prefWidth="176.0" text="Tiêu Đề" />
+                        <TableColumn fx:id="rankedAuthorColumn" prefWidth="229.0" text="Tác Giả" />
+                        <TableColumn fx:id="rankedBorrowCountColumn" minWidth="0.0" prefWidth="189.0" text="Lượt Mượn" />
+                        <TableColumn fx:id="rankedAvailableColumn" prefWidth="116.0" text="Còn" />
                      </columns>
                   </TableView>
 
                   <!-- Nút "Mượn" đặt bên ngoài TableView -->
-                  <Button fx:id="borrowButton" text="Mượn" layoutX="20.0" layoutY="430.0" onAction="#handleBorrowFromRankedOutsideTable"/>
+                  <Button fx:id="borrowButton" layoutX="476.0" layoutY="636.0" onAction="#handleBorrowFromRankedOutsideTable" style="-fx-background-color: #023e8a; -fx-background-radius: 30;" text="Mượn" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Button>
+                  <Text layoutX="367.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BẢNG XẾP HẠNG SÁCH">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="userInfoPane" prefHeight="450.0" prefWidth="634.0" style="-fx-background-color: #fb8500;" visible="false">
+            <AnchorPane fx:id="userInfoPane" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;">
                <children>
-                  <VBox alignment="CENTER" prefHeight="450.0" prefWidth="633.0" spacing="20.0" style="-fx-background-color: #fb8500;">
-                     <children>
-                        <VBox prefHeight="450.0" prefWidth="615.0" spacing="20.0" style="-fx-background-color: #fb8500;">
-                           <children>
-                              <Text style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Thông Tin Người Dùng">
-                                 <font>
-                                    <Font name="Montserrat ExtraBold" size="12.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="165.0" top="10.0" />
-                                 </VBox.margin>
-                              </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ID người dùng">
-                                 <font>
-                                    <Font name="Montserrat Medium" size="13.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="-15.0" left="35.0" />
-                                 </VBox.margin>
-                              </Text>
-                              <TextField fx:id="userIdField" editable="false" prefHeight="26.0" prefWidth="280.0" promptText="ID" style="-fx-background-radius: 30;">
-                                 <font>
-                                    <Font name="Montserrat Light" size="12.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="30.0" right="30.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên">
-                                 <font>
-                                    <Font name="Montserrat Medium" size="13.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="-15.0" left="35.0" />
-                                 </VBox.margin>
-                              </Text>
-                              <TextField fx:id="fullNameField" prefWidth="280.0" promptText="fullname" style="-fx-background-radius: 30;" styleClass="text-field-return-with-icon" stylesheets="@signup.css">
-                                 <font>
-                                    <Font name="Montserrat Light" size="12.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="30.0" right="30.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Lớp">
-                                 <font>
-                                    <Font name="Montserrat Medium" size="13.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="-15.0" left="35.0" />
-                                 </VBox.margin>
-                              </Text>
-                              <TextField fx:id="classField" prefWidth="280.0" promptText="class" style="-fx-background-radius: 30;" stylesheets="@signup.css">
-                                 <font>
-                                    <Font name="Montserrat Light" size="12.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="30.0" right="30.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
-                                 <font>
-                                    <Font name="Montserrat Medium" size="13.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="-15.0" left="35.0" />
-                                 </VBox.margin>
-                              </Text>
-                              <TextField fx:id="emailField" prefWidth="280.0" promptText="email" style="-fx-background-radius: 30;">
-                                 <font>
-                                    <Font name="Montserrat Light" size="12.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="30.0" right="30.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vai trò">
-                                 <font>
-                                    <Font name="Montserrat Medium" size="13.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="-15.0" left="35.0" />
-                                 </VBox.margin>
-                              </Text>
-                              <TextField fx:id="roleField" editable="false" prefWidth="280.0" promptText="role" style="-fx-background-radius: 30;">
-                                 <font>
-                                    <Font name="Montserrat Light" size="12.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets left="30.0" right="30.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <HBox spacing="10">
-                                 <children>
-                                    <Button fx:id="editButton" onAction="#handleEditAction" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Chỉnh Sửa" textFill="WHITE">
-                                       <font>
-                                          <Font name="Montserrat Black" size="12.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="200.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="saveButton" disable="true" onAction="#handleSaveAction" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Lưu" textFill="WHITE">
-                                       <font>
-                                          <Font name="Montserrat Black" size="12.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                     <padding>
-                        <Insets left="50.0" />
-                     </padding>
-                  </VBox>
+                  <Button fx:id="saveButton" disable="true" layoutX="411.0" layoutY="559.0" onAction="#handleSaveAction" prefHeight="35.0" prefWidth="89.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Lưu" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <TextField fx:id="classField" layoutX="88.0" layoutY="389.0" prefHeight="35.0" prefWidth="850.0" promptText="  lớp" style="-fx-background-radius: 30;" stylesheets="@signup.css" AnchorPane.leftAnchor="88.0">
+                     <font>
+                        <Font name="Montserrat Light" size="12.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="userIdField" editable="false" layoutX="63.0" layoutY="310.0" prefHeight="35.0" prefWidth="850.0" promptText="   ID" style="-fx-background-radius: 30;" AnchorPane.leftAnchor="88.0">
+                     <font>
+                        <Font name="Montserrat Light" size="12.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="roleField" editable="false" layoutX="88.0" layoutY="464.0" prefHeight="35.0" prefWidth="850.0" promptText="   vai trò" style="-fx-background-radius: 30;">
+                     <font>
+                        <Font name="Montserrat Light" size="12.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="emailField" layoutX="55.0" layoutY="230.0" prefHeight="35.0" prefWidth="850.0" promptText="   email" style="-fx-background-radius: 30;" AnchorPane.leftAnchor="88.0">
+                     <font>
+                        <Font name="Montserrat Light" size="12.0" />
+                     </font>
+                  </TextField>
+                  <Text layoutX="104.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="104.0" layoutY="384.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lớp" wrappingWidth="36.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="fullNameField" layoutX="63.0" layoutY="147.0" prefHeight="35.0" prefWidth="850.0" promptText="   họ và tên" style="-fx-background-radius: 30;" styleClass="text-field-return-with-icon" stylesheets="@signup.css" AnchorPane.leftAnchor="88.0" AnchorPane.topAnchor="147.0">
+                     <font>
+                        <Font name="Montserrat Light" size="12.0" />
+                     </font>
+                  </TextField>
+                  <Text layoutX="104.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên" wrappingWidth="52.96826171875">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="104.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID người dùng" wrappingWidth="111.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="379.0" layoutY="65.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Thông Tin Người Dùng" wrappingWidth="263.666015625">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="104.0" layoutY="459.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vai trò">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="editButton" layoutX="529.0" layoutY="559.0" onAction="#handleEditAction" prefHeight="35.0" prefWidth="89.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Chỉnh Sửa" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
 

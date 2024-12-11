@@ -59,6 +59,24 @@
     -fx-background-size: contain;
     -fx-background-insets: 0 0 0 0;
 }
+.button {
+    -fx-background-color: rgba(255, 255, 255, 0.5); /* Màu nền trong suốt */
+    -fx-background-radius: 5; /* Góc bo tròn */
+    -fx-border-color: transparent; /* Không có viền */
+    -fx-cursor: hand; /* Con trỏ dạng tay */
+    -fx-padding: 5;
+    -fx-alignment: center;
+}
+
+/* Hiệu ứng hover */
+.button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.8); /* Màu nền sáng hơn */
+}
+
+/* Nút icon */
+.button .graphic {
+    -fx-fill: #000000; /* Màu của icon */
+}
 
 .text-field-add-with-icon {
     -fx-background-image: url("../../../images/addBook1.png");

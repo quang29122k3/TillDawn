@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.libarymanagementsystem.controller.BorrowDurationDialogController">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #e3e9f0;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libarymanagementsystem.controller.BorrowDurationDialogController">
     <children>
-        <Label text="Nhập số ngày muốn mượn:" layoutX="20" layoutY="20"/>
-        <TextField fx:id="daysField" layoutX="20" layoutY="50" promptText="Số ngày"/>
-        <Button fx:id="okButton" text="Xác nhận" layoutX="20" layoutY="90" onAction="#handleOk"/>
-        <Button fx:id="cancelButton" text="Hủy" layoutX="100" layoutY="90" onAction="#handleCancel"/>
+        <Label layoutX="100.0" layoutY="60.0" text="Nhập số ngày muốn mượn:">
+            <font>
+                <Font name="System Bold" size="15.0" />
+            </font>
+        </Label>
+        <TextField fx:id="daysField" layoutX="100.0" layoutY="100.0" prefWidth="200.0" promptText="Số ngày" style="-fx-background-radius: 30;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" />
+        <Button fx:id="okButton" layoutX="113.0" layoutY="151.0" onAction="#handleOk" prefHeight="30.0" prefWidth="87.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" stylesheets="@buttonEffect.css" text="Xác nhận" textFill="WHITE">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="cancelButton" layoutX="213.0" layoutY="151.0" onAction="#handleCancel" prefHeight="30.0" prefWidth="69.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Hủy" textFill="WHITE">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+
+        <!-- Thêm nút Đóng và Minimize -->
+        <Button fx:id="closeButton" layoutX="348.0" layoutY="10.0" onAction="#handleClose" prefHeight="25.0" prefWidth="46.0" style="-fx-background-radius: 15; -fx-background-color: #7fb3e0;" text="X" textFill="BLACK" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+        <Button fx:id="minimizeButton" layoutX="300.0" layoutY="10.0" onAction="#handleMinimize" prefHeight="21.0" prefWidth="46.0" style="-fx-background-radius: 30; -fx-background-color: #7fb3e0;" text="_" textFill="BLACK" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="0.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
     </children>
 </AnchorPane>
