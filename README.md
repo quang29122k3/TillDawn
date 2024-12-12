@@ -12,6 +12,8 @@ This application is written by Java and uses the JavaFX library.
 1. The application is designed to manage a library
 2. The application is written in Java and uses the JavaFX library.
 
+**UML diagram**
+![image](https://github.com/user-attachments/assets/a4bade4d-01e1-4055-a317-bc4c6e27bbb7)
 
 
 
@@ -30,6 +32,10 @@ This application is written by Java and uses the JavaFX library.
    - Search for a book: Enter the book title, author, or genre into the search bar and click Search to find matching books.
    - Google API books: can search for a book in the google api library
    - Change user information: click on the image on the left-corner in ther interface and user can change their information.
+   - Has a game tictactoe with 2 level
+   - Book Ranking: Shows the top 10 most borrowed books available, you can borrow books from them.
+   - Saved Books: Save books pinned to the available books table, you can unpin them here.
+   - Request: includes 2 fields: subject and request content, and sends to admin. This includes the request table, and the search bar for request id or topic.
 
      
 **2. In admin interface:**
@@ -41,7 +47,10 @@ This application is written by Java and uses the JavaFX library.
    - Search for books: Enter the book title, author, or genre into the search bar and click Search to find matching books.
    - Change user information: click on the image on the left-corner in ther interface and user can change their information.
    - Google API books: can search for a book in the google api library
-   - Block user: admin can blocking account of users
+   - Member: Search id, name, class of all accounts. Can block, unblock that account.
+   - Book ranking: shows top 10 most borrowed books available.
+   - Request management: Shows all requests of student accounts, can click the process button, and can delete processed requests.
+   - Document search: has a search bar for external search.
 
      
 **3. In login interface:**
@@ -51,7 +60,8 @@ This application is written by Java and uses the JavaFX library.
    - Login: Login in the library by click on the login button.
 
      
-**Demo:**![image](https://github.com/user-attachments/assets/12073ae9-7135-46d6-97c3-d90d5d9a81ce)
+**Demo:**![image](https://github.com/user-attachments/assets/981e0357-877e-4f0a-869b-4766396781e5)
+
 
 
 
@@ -74,3 +84,13 @@ The project is completed.
 **Notes:**
 
 The application is written for educational purposes.
+
+**Some images about this project:**
+Admin home:
+![image](https://github.com/user-attachments/assets/18b9f65c-ef89-4f7d-a267-106fb74b5a37)
+**User home:**
+![image](https://github.com/user-attachments/assets/79c2b15c-c308-4729-a1c9-a02324cb8df0)
+**Sending an email code for change password:**
+![image](https://github.com/user-attachments/assets/b8646f13-0725-4ad6-b89f-620942f2ad40)
+**Add book:**
+![image](https://github.com/user-attachments/assets/3af16146-9d5c-4329-9384-cc278195f9ec)
