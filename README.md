@@ -86,11 +86,19 @@ The project is completed.
 The application is written for educational purposes.
 
 **Some images about this project:**
-Admin home:
+
+**Admin home:**
+
 ![image](https://github.com/user-attachments/assets/18b9f65c-ef89-4f7d-a267-106fb74b5a37)
+
 **User home:**
+
 ![image](https://github.com/user-attachments/assets/79c2b15c-c308-4729-a1c9-a02324cb8df0)
+
 **Sending an email code for change password:**
+
 ![image](https://github.com/user-attachments/assets/b8646f13-0725-4ad6-b89f-620942f2ad40)
+
 **Add book:**
+
 ![image](https://github.com/user-attachments/assets/3af16146-9d5c-4329-9384-cc278195f9ec)
