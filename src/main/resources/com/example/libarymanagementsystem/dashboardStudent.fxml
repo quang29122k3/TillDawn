@@ -327,14 +327,14 @@
                   </Text>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="userInfoPane" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;">
+            <AnchorPane fx:id="userInfoPane" prefHeight="675.0" prefWidth="1000.0" style="-fx-background-color: #e3e9f0;" visible="false">
                <children>
                   <Button fx:id="saveButton" disable="true" layoutX="411.0" layoutY="559.0" onAction="#handleSaveAction" prefHeight="35.0" prefWidth="89.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Lưu" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <TextField fx:id="classField" layoutX="88.0" layoutY="389.0" prefHeight="35.0" prefWidth="850.0" promptText="  lớp" style="-fx-background-radius: 30;" stylesheets="@signup.css" AnchorPane.leftAnchor="88.0">
+                  <TextField fx:id="classField" layoutX="88.0" layoutY="389.0" prefHeight="35.0" prefWidth="850.0" promptText="  Lớp" style="-fx-background-radius: 30;" stylesheets="@signup.css" AnchorPane.leftAnchor="88.0">
                      <font>
                         <Font name="Montserrat Light" size="12.0" />
                      </font>
@@ -344,7 +344,7 @@
                         <Font name="Montserrat Light" size="12.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="roleField" editable="false" layoutX="88.0" layoutY="464.0" prefHeight="35.0" prefWidth="850.0" promptText="   vai trò" style="-fx-background-radius: 30;">
+                  <TextField fx:id="roleField" editable="false" layoutX="88.0" layoutY="464.0" prefHeight="35.0" prefWidth="850.0" promptText="   Vai trò" style="-fx-background-radius: 30;">
                      <font>
                         <Font name="Montserrat Light" size="12.0" />
                      </font>
@@ -364,7 +364,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="fullNameField" layoutX="63.0" layoutY="147.0" prefHeight="35.0" prefWidth="850.0" promptText="   họ và tên" style="-fx-background-radius: 30;" styleClass="text-field-return-with-icon" stylesheets="@signup.css" AnchorPane.leftAnchor="88.0" AnchorPane.topAnchor="147.0">
+                  <TextField fx:id="fullNameField" layoutX="63.0" layoutY="147.0" prefHeight="35.0" prefWidth="850.0" promptText="   Họ và tên" style="-fx-background-radius: 30;" styleClass="text-field-return-with-icon" stylesheets="@signup.css" AnchorPane.leftAnchor="88.0" AnchorPane.topAnchor="147.0">
                      <font>
                         <Font name="Montserrat Light" size="12.0" />
                      </font>
@@ -389,7 +389,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Text>
-                  <Button fx:id="editButton" layoutX="529.0" layoutY="559.0" onAction="#handleEditAction" prefHeight="35.0" prefWidth="89.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Chỉnh Sửa" textFill="WHITE">
+                  <Button fx:id="editButton" layoutX="529.0" layoutY="559.0" onAction="#handleEditAction" prefHeight="35.0" prefWidth="89.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" text="Chỉnh sửa" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

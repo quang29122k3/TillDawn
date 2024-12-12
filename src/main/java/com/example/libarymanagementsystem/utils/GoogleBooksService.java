@@ -53,6 +53,7 @@ public class GoogleBooksService {
                             String publisher = volumeInfo.optString("publisher", "N/A");
                             String infoLink = volumeInfo.optString("infoLink", "N/A");
 
+
                             googleBooksList.add(new BookItem(title, authors, publisher, infoLink));
                         }
                     }

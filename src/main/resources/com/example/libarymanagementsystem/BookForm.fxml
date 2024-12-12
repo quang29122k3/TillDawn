@@ -60,16 +60,16 @@
                                         <Insets left="37.0" top="10.0" />
                                     </VBox.margin>
                                 </Text>
-                                <TextField fx:id="authorField" prefHeight="26.0" prefWidth="364.0" promptText="title" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
-                                    <VBox.margin>
-                                        <Insets left="30.0" right="40.0" top="5.0" />
-                                    </VBox.margin>
+                                <TextField fx:id="titleField" prefHeight="26.0" prefWidth="364.0" promptText="Tên tác giả" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
                                     <padding>
                                         <Insets left="10.0" />
                                     </padding>
                                     <font>
                                         <Font name="Montserrat Regular" size="12.0" />
                                     </font>
+                                    <VBox.margin>
+                                        <Insets left="30.0" right="40.0" top="5.0" />
+                                    </VBox.margin>
                                 </TextField>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên sách">
                                     <VBox.margin>
@@ -79,16 +79,16 @@
                                         <Font name="Montserrat Medium" size="13.0" />
                                     </font>
                                 </Text>
-                                <TextField fx:id="titleField" prefHeight="26.0" prefWidth="364.0" promptText="author" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
+                                <TextField fx:id="authorField" prefHeight="26.0" prefWidth="364.0" promptText="Tên sách" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
+                                    <VBox.margin>
+                                        <Insets left="30.0" right="40.0" top="5.0" />
+                                    </VBox.margin>
                                     <padding>
                                         <Insets left="10.0" />
                                     </padding>
                                     <font>
                                         <Font name="Montserrat Regular" size="12.0" />
                                     </font>
-                                    <VBox.margin>
-                                        <Insets left="30.0" right="40.0" top="5.0" />
-                                    </VBox.margin>
                                 </TextField>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng còn">
                                     <font>
@@ -98,7 +98,7 @@
                                         <Insets left="37.0" right="190.0" top="15.0" />
                                     </VBox.margin>
                                 </Text>
-                                <TextField fx:id="availableField" prefHeight="26.0" prefWidth="364.0" promptText="avaiable" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
+                                <TextField fx:id="availableField" prefHeight="26.0" prefWidth="364.0" promptText="Nhập số lượng sách còn bao nhiêu" style="-fx-background-radius: 30;" styleClass="text-field-user-with-icon">
                                     <padding>
                                         <Insets left="10.0" />
                                     </padding>
@@ -117,7 +117,7 @@
                                         <Insets left="37.0" right="225.0" top="15.0" />
                                     </VBox.margin>
                                 </Text>
-                                <TextField fx:id="totalCopiesField" prefHeight="26.0" prefWidth="100.0" promptText="total copies" style="-fx-background-radius: 30;" styleClass="text-field-email-with-icon">
+                                <TextField fx:id="totalCopiesField" prefHeight="26.0" prefWidth="100.0" promptText="Tổng số sách" style="-fx-background-radius: 30;" styleClass="text-field-email-with-icon">
                                     <padding>
                                         <Insets left="10.0" />
                                     </padding>
@@ -147,7 +147,7 @@
                                 <Font name="Montserrat Medium" size="13.0" />
                             </font>
                             <HBox.margin>
-                                <Insets top="15.0" />
+                                <Insets left="5.0" top="15.0" />
                             </HBox.margin>
                         </Button>
                     </children>
@@ -161,9 +161,9 @@
                         <Image url="@../../../images/manager_avatar.png" />
                     </image>
                 </ImageView>
-                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Edit Book" textFill="WHITE">
+                <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="130.0" style="-fx-background-radius: 30; -fx-background-color: #023e8a;" styleClass="nav-btn" stylesheets="@../../../../../../../TillDawn/src/main/resources/com/example/libarymanagementsystem/dashboardDesign.css" text="Sửa sách" textFill="WHITE">
                     <font>
-                        <Font name="Montserrat ExtraBold" size="12.0" />
+                        <Font name="System Bold" size="12.0" />
                     </font>
                     <VBox.margin>
                         <Insets top="5.0" />

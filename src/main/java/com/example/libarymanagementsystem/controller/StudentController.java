@@ -726,6 +726,7 @@ public class StudentController {
         rankedBooks_form.setVisible(false);
         savedBooks_form_new.setVisible(false);
         request_form.setVisible(false);
+        game_form.setVisible(false);
         if (event.getSource() == availableBooks_btn) {
             availableBooks_form.setVisible(true);
         } else if (event.getSource() == savedBooks_btn) {

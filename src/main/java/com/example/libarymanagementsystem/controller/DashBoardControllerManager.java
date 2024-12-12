@@ -534,6 +534,8 @@ public class DashBoardControllerManager {
             }
         });
 
+
+
         googleBooksTableView.setItems(googleBooksList);
         borrowedBooksTable.setItems(borrowedLoans);
 
@@ -582,6 +584,7 @@ public class DashBoardControllerManager {
         });
 
     }
+
 
     @FXML
     private void handleExtendLoan(Loan loan) {

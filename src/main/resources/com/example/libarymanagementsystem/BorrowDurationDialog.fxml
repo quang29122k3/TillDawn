@@ -24,15 +24,5 @@
                 <Font size="14.0" />
             </font>
         </Button>
-
-        <!-- Thêm nút Đóng và Minimize -->
-        <Button fx:id="closeButton" layoutX="348.0" layoutY="10.0" onAction="#handleClose" prefHeight="25.0" prefWidth="46.0" style="-fx-background-radius: 15; -fx-background-color: #7fb3e0;" text="X" textFill="BLACK" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Button>
-        <Button fx:id="minimizeButton" layoutX="300.0" layoutY="10.0" onAction="#handleMinimize" prefHeight="21.0" prefWidth="46.0" style="-fx-background-radius: 30; -fx-background-color: #7fb3e0;" text="_" textFill="BLACK" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="0.0">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Button>
     </children>
 </AnchorPane>
